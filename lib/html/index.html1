@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
+		<title>全城遛娃</title>
+		<link rel="stylesheet" type="text/css" href="../css/reset.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/common.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/index_2.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/index_3.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/searchBar.css"/>
+		<!-- 添加桌面快捷方式 -->
+		<link href="img/logo.png" rel="apple-touch-icon-precomposed">
+		<link href="img/logo.png" sizes="114x114" rel="apple-touch-icon-precomposed">
+	</head>
+	<body>
+		<div class="select-out">
+		<div class="gray-p-wrap select-wrap" id="scanSelect">
+			<a href="javascript:void(0);" class="close-btn" id="selectClose">close</a>
+			<div class="container">
+				<h1>乐乐派有多个可用入场券乐乐派有多个可用入场券，请选择：</h1>
+				<div class="selecter">
+					<a href="#">【包月卡】自由畅玩：2016年3月9日当天有效</a>
+					<a href="#">【储值卡】自由畅玩：有效期至2016年5月9日</a>
+					<a href="#">【储值卡】自由畅玩：有效期至2016年6月1日</a>
+				</div>
+			</div>
+		</div>
+		</div>
+		<!-- searchBar -->
+		<div id="searchWrap">
+			<div class="searchBar">
+				<div class="col-1">
+					<input type="text" name="searchOutter" id="searchOutter" value="" placeholder="输入商家、分类、名称" />
+				</div>
+				<div class="col-2">
+					<!--<a href="">我的</a>-->
+					<a href="#" class="scan"></a>
+				</div>
+			</div>
+
+			<div class="searchBlock" id="searchBlock">
+				<div class="searchBarGray">
+					<div class="col-1">
+						<form action="" method="get" id="search">
+							<input type="text" name="keyword" id="keyword" value="" placeholder="输入商家、分类、名称" />
+							<input type="submit" value="搜索" id="submitBtn"/>
+						</form>
+					</div>
+					<div class="col-2">
+						<a href="" class="cancel-btn" id="cancelBtn">取消</a>
+					</div>
+				</div>
+			</div>
+			
+		</div>
+		
+
+		<!--new add html -->
+		<div class="slide" id="indexSlide">
+		    <ul></ul>
+		</div>
+		<!-- end -->
+		
+		<ul class="type-of-lesson section-border" id="lessonType"></ul>					
+		
+		<!--<div class="ad-wrapper section-border">-->
+			<!--<div class="index-banner" id="indexBanner">
+				<h1></h1>
+				<p></p>
+				<div class="shop-list" id="shop-name-list"></div>
+			</div>-->
+			<div class="tab-cells" id="custom">
+				<div class="cells-item">
+					<a href=""><img src="../img/pic-qc.png"></a>
+				</div>
+				<div class="cells-item">
+					<a href=""><img src="../img/pic-near.png"></a>
+				</div>
+			</div>
+		<!--</div>-->
+		
+		<script id="chosen-template" type="text/x-handlebars-template">
+		{{#showChosen this}}
+		<div class="section-chosen section-border">
+			<h1>{{title}}<i>{{slogan}}</i></h1>
+			<ul class="tab-3-cells">
+				{{#items}}
+				<li>
+					<a href="{{link}}">
+						<img src="{{img}}">
+						<i>{{title}}</i>
+					</a>
+				</li>
+				{{/items}}
+			</ul>
+		</div>
+		{{/showChosen}}
+		</script>
+		
+		<div class="list-wrapper" id="shop-list">
+			<h1 class="list-title icon-cnxh">猜你喜欢</h1>
+			<!--<h1 class="list-title icon-location-loading">正在定位...</h1>-->
+			
+			<div class="loading" id="loading">
+				<span class="icon-loading"></span>
+				<span class="text">加载中...</span>
+			</div>
+		</div>
+		
+		<div class="btm">
+			<p class="location-reload" id="reLocation">点击刷新定位</p>
+			<ul class="menu">
+				<li class="current">
+					<a href="#" class="index">首页</a>
+				</li>
+				<li>
+					<a href="#" class="near">附近</a>
+				</li>
+				<li>
+					<a href="#" class="orders">订单</a>
+				</li>
+				<li>
+					<a href="#" class="my">我</a>
+				</li>
+			</ul>
+		</div>
+		
+		
+		<!-- landing Page -->
+		<script id="slide-temp" type="text/x-handlebars-template">
+			<div class="gray-p-wrap" id="landingPage">
+				<input type="image" name="close" id="closeLandingPage" value="close" class="closeLandingPage" />
+				<div class="landingPageSlide" id="landingPageSlide">
+				    <ul>
+				    {{#each slide}}	
+				    	{{#item @index}}
+				    		<li><img src="{{img}}" alt="{{alt}}"></li>
+				    		{{else}}
+				    		<li><img src="{{img}}" alt="{{alt}}"><a href="#" class="btmButton" id="goTo">去遛娃</a></li>
+				    	{{/item}}
+				    {{/each}}
+				    </ul>
+				    {{dot slide}}
+				</div>
+			</div>
+		</script>
+		
+		<!-- end -->
+		
+		<!--<script src="../js/jquery-1.11.3.min.js" type="text/javascript" charset="utf-8"></script>-->
+		<script src="//cdn.bootcss.com/jquery/2.2.0/jquery.min.js"></script>
+		<!--<script src="../js/jquery.lazyload.js" type="text/javascript" charset="utf-8"></script>-->
+		<script src="//cdn.bootcss.com/jquery.lazyload/1.9.1/jquery.lazyload.min.js"></script>
+		<!--<script src="../js/handlebars-v3.0.3.js" type="text/javascript" charset="utf-8"></script>-->
+		<script src="//cdn.bootcss.com/handlebars.js/4.0.5/handlebars.min.js"></script>
+		<!--<script src="../js/fastclick.js" type="text/javascript" charset="utf-8"></script>-->
+		<script src="//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js"></script>
+		<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+		<script src="../js/UA.js" type="text/javascript" charset="utf-8"></script>
+		<!--<script src="js/top-notice.js" type="text/javascript" charset="utf-8"></script>-->
+		<!--new Import js -->
+		<script src="../js/swipeSlide.min.js"></script>
+		<script id="slide-template" type="text/x-handlebars-template">
+			{{#each this}}
+				<li>
+		            <a href="javascript:void(0);"  data-index={{index}}>
+		                <img src="{{img}}" alt="">
+		            </a>
+		        </li>
+	       	{{/each}}
+		</script>
+		<!-- end -->
+
+		<script id="lesson-type-template" type="text/x-handlebars-template">
+			{{#type}}
+				<li class="type-{{categoryId}}" data-url="{{url}}">
+					<span class="icon"></span>
+					<i class="name"></i>
+				</li>
+	       	{{/type}}
+		</script>
+		<script id="shop-list-template" type="text/x-handlebars-template">
+			{{#shops}}
+				<a href="#" class="pic-link" data-id="{{id}}">
+					<div class="top">
+						<h6 class="item-title">{{name}}{{branchName}}</h6>
+						{{#showDistance ../gotLocation}}
+						<span class="item-distance">{{distance}}Km</span>
+						{{else}}
+						{{/showDistance}}
+					</div>
+					<div class="shop-pic">
+						<img src="" data-original="{{image}}"/>
+						{{#showIcon level}}
+							<span class="vip-icon"></span>
+							{{else}}
+						{{/showIcon}}
+					</div>
+					<p class="comment">我是小编，我来说两句，这个东西蛮好的，大家都来用啊，用的多我提成就多，赶紧的~别墨迹</p>
+					<p class="condition">适合年龄：3-9岁</p>
+				</a>
+	       	{{/shops}}
+		</script>
+		<script id="banner-template" type="text/x-handlebars-template">
+			{{#shops}}
+				<span>{{name}}</span>	
+	       	{{/shops}}
+		</script>
+		<script type="text/javascript">
+			var _data = {
+						  gotLocation: 'false',
+				          type: [
+				            {
+				            	categoryId: 1,
+				            	url: "http://www.liuwa.cc",
+				            },
+				            {
+				            	categoryId: 2,
+				            	url: "http://www.baidu.com"
+				            },
+				            {
+				            	categoryId: 3,
+				            	url: "http://www.taobao.com"
+				            },
+				            {
+				            	categoryId: 7,
+				            	url: "http://www.imiaoxiu.com"
+				            },
+				            {
+				            	categoryId: 5,
+				            	url: "http://www.yihaodian.com"
+				            },
+//				            {
+//				            	categoryId: 8,
+//				            	url: "http://www.163.com"
+//				            },
+				            {
+				            	categoryId: 9,
+				            	url: "http://www.163.com"
+				            },
+				            {
+				            	categoryId: 4,
+				            	url: "http://www.jd.com"
+				            },
+//				            {
+//				            	categoryId: 0,
+//				            	url: "http://www.pconline.com.cn"
+//				            },
+				            {
+				            	categoryId: 0,
+				            	url: "http://www.pconline.com.cn"
+				            }
+				          ],
+				          shops: [
+			                    {
+			                        id: 769,
+			                        name: "乐乐派儿童室内游乐场",
+			                        branchName: "长风景畔广场店",
+			                        address: "普陀区大渡河路178号长风景畔广场3楼",
+			                        image: "http://7xkccn.com1.z0.glb.clouddn.com/9652f69d-1054-4bfc-8f5b-fb1241de157f",
+			                        distance: "4",
+			                        comment: "孜孜妈说：“地方离家很近，总体还是不错的，宝宝玩的很开心，下次还会再去。”",
+			                        ageRange: "24个月~6岁",
+			                        level: 1
+			                    }
+			                    ,
+			                    {
+			                        id: 770,
+			                        name: "乐乐派儿童室内游乐场",
+			                        branchName: "虹井路店",
+			                        address: "闵行区虹井路288号乐虹坊广场3楼(虹井路先锋街) ",
+			                        image: "http://7xkccn.com1.z0.glb.clouddn.com/998f88ae-a542-41c9-bf0a-2e651e8e9bdf",
+			                        distance: "4",
+			                        comment: "可可 妈说：“场地干净，设备质感好，工作人员也多，会维护小朋友的完全，很放心”",
+			                        ageRange: "24个月~6岁",
+			                        level: 1
+			                    }
+			                    ,
+			                    {
+			                        id: 774,
+			                        name: "乐乐派儿童室内游乐场",
+			                        branchName: "汇京店",
+			                        address: "徐汇区虹桥路777号汇京国际广场207-208(淮海西路)",
+			                        image: "http://7xkccn.com1.z0.glb.clouddn.com/d58b5700-de8e-4efb-b3c8-45c82929c015",
+			                        distance: "2",
+			                        comment: "刺刺妈说：“场地干净，设备质感好，工作人员也多，会维护小朋友的完全，很放心”",
+			                        ageRange: "24个月~6岁",
+			                        level: 1
+			                    }
+			                    ,
+			                    {
+			                        id: 334,
+			                        name: "世天乐乐城",
+			                        branchName: "",
+			                        address: "徐汇区钦州北路228号田尚坊215室",
+			                        image: "http://7xkccn.com1.z0.glb.clouddn.com/416ca83c-aece-4a02-b010-65c8dd59130b",
+			                        distance: "1",
+			                        comment: "悠悠妈说：“设施比较干净。里面的沙池是干净的半粗沙，不是细沙，不会粘在身上，挺好的。还配备了胶鞋。投影仪宝宝喜欢好玩，但是安装偏了，所以反映不太灵敏，光线不够强，所以投影清晰度不够”",
+			                        ageRange: "12个月~6岁",
+			                        level: 1
+			                    }
+			                    ,
+			                    {
+			                        id: 861,
+			                        name: "萌萌哒乐园",
+			                        branchName: "",
+			                        address: "泉口路34号(近林泉路)",
+			                        image: "http://7xkccn.com1.z0.glb.clouddn.com/f22c924f-2062-4c7c-9d52-a79e8306f0eb",
+			                        distance: "5",
+			                        comment: "森森妈说：“这是一个比较理想的亲子儿童乐园，项目比较丰富，老板是个萌妹子。”",
+			                        ageRange: "0个月~4岁",
+			                        level: 1
+			                    }
+			                    ,
+			                    {
+			                        id: 350,
+			                        name: "卡淘",
+			                        branchName: "",
+			                        address: "徐汇区浦北路9号近中星城B1层(近柳州路)",
+			                        image: "http://7xkccn.com1.z0.glb.clouddn.com/ecc66542-4b1b-4785-8416-ca2cdbc10d1c",
+			                        distance: "3",
+			                        comment: "布丁妈说：“夏天带宝宝来这里玩，里面比较大，玩的项目也很多，看上去比较卫生，干净。工作日孩子比较少，双休日就多了。一直带宝宝过来玩，她玩的很开心。",
+			                        ageRange: "12个月~6岁",
+			                        level: 1
+			                    }
+			                    ,
+			                    {
+			                        id: 357,
+			                        name: "金虹桥小农庄",
+			                        branchName: "",
+			                        address: "茅台路179号4楼",
+			                        image: "http://7xkccn.com1.z0.glb.clouddn.com/3f1aea34-4aa0-4a4a-b72e-a1dc7a2336fd",
+			                        distance: "3",
+			                        comment: "安安妈说：“又来了呢，这次换上种植课，正好遇到感恩节，在等待的时候店员教宝宝做了个晴天娃娃。天公不作美，又是雨天，但宝宝热情不减，在胡萝卜老师的指导下种了盆木耳菜，临走时还把围裙送给我们了，宝宝回到家一直穿着不肯脱了”",
+			                        ageRange: "12个月~8岁",
+			                        level: 1
+			                    }
+			                    ,
+			                    {
+			                        id: 386,
+			                        name: "嬉戏里(长宁店)",
+			                        branchName: "",
+			                        address: "长宁区宣化路300号华宁弘基生活中心3楼(近定西路)",
+			                        image: "http://7xkccn.com1.z0.glb.clouddn.com/c053da4c-9b4c-4080-b728-a14722f8bf4c",
+			                        distance: "3",
+			                        comment: "微微妈说：“还可以吧，上面也就那几个玩的地方～…“”基本上每次来都会过去”",
+			                        ageRange: "12个月~6岁",
+			                        level: 1
+			                    }
+			                    ,
+			                    {
+			                        id: 396,
+			                        name: "反斗乐园",
+			                        branchName: "月星环球港店",
+			                        address: "普陀区中山北路3300号月星环球港3楼3035",
+			                        image: "http://7xkccn.com1.z0.glb.clouddn.com/fc67f3ec-91d6-49cd-977a-d4717386b26b",
+			                        distance: "5",
+			                        comment: "文文妈说：“小朋友很爱过来玩，地方挺大的，滑滑梯很炫哟，儿子非常喜欢这小小的刺激，比较适合平时玩，双休日或者节假日人实在太多太多了。工作人员也很负责任”",
+			                        ageRange: "12个月~6岁",
+			                        level: 1
+			                    }
+			                    ,
+			                    {
+			                        id: 415,
+			                        name: "开心哈乐",
+			                        branchName: "田林店",
+			                        address: "田林东路75号汇阳广场2楼",
+			                        image: "http://7xkccn.com1.z0.glb.clouddn.com/83c84efc-0886-48a0-b56e-38f7ee675fdf",
+			                        distance: "3",
+			                        comment: "如如妈说：“游乐园不大，但服务的姐姐(挺漂亮的)还蛮好的。不限时间，地方有点小，设施也就三四个比较简单。但小朋友只要找到一起玩的就很开心。于是乎玩了一个下午。楼下就是超市，可以买些小点”",
+			                        ageRange: "12个月~3岁",
+			                        level: 1
+			                    }
+			              ],
+				          param: {
+				          	cityId: 1,
+						  	categoryIds: "不知道",
+						  	distance: 5,
+						  	date: "",
+						  	from: "",
+						  	to: "",
+						  	lat: "",
+						  	lng: "",
+						  	pageSize: 10,
+						  	currentId: null,          //shop-list  当前ID
+						  	currentUrl: null,         //lessonType 当前ID
+						  	postUrl: "../../mockData/index-data.json",  
+						  	postUrlExactly: "data/index-data-2.json",  //精确匹配地址
+						  	postType: "GET",
+						  	initNo: 0,
+						  	actionLessonType: function(){        //lessonType 方法
+//						  		console.log(this.currentUrl);
+						  		window.location.href = this.currentUrl;
+						  	},
+						  	actionShopList: function(){          //shop-list  方法
+						  		console.log(this.currentId);
+						  	},
+						  	actionBanner: function(){            //banner 跳转方法
+						  		window.location.href = "http://www.liuwa.cc";
+						  	}
+				          },
+				          noPopupView : true,
+				          chosen: {
+				          //本周精选
+				          		"title": "本周精选",
+				          		"slogan": "花都开好啦，全家一起去踏青吧！",
+				          		"items": [
+							          		{
+							          			"link": "http://www.liuwa.cc",
+							          			"img": "../img/temp.png",
+							          			"title": "辰山植物园1",
+							          			"androidClickEvent": function(){
+							          				alert("我是安卓的" + this.title);
+							          			},
+							          			"iosClickEvent": function(){
+							          				alert("我是苹果的" + this.title);
+							          			}
+							          		},
+							          		{
+							          			"link": "http://www.liuwa.cc",
+							          			"img": "../img/temp.png",
+							          			"title": "辰山植物园2",
+							          			"androidClickEvent": function(){
+							          				alert("我是安卓的" + this.title);
+							          			},
+							          			"iosClickEvent": function(){
+							          				alert("我是苹果的" + this.title);
+							          			}
+							          		},
+							          		{
+							          			"link": "http://www.liuwa.cc",
+							          			"img": "../img/temp.png",
+							          			"title": "辰山植物园3",
+							          			"androidClickEvent": function(){
+							          				alert("我是安卓的" + this.title);
+							          			},
+							          			"iosClickEvent": function(){
+							          				alert("我是苹果的" + this.title);
+							          			}
+							          		}
+				          		]
+				          }
+			        };
+
+			
+			var lessonTypeClickEvent = function(){
+				$("#lessonType").on("click","li",function(){
+					event.preventDefault();
+					_data.param.currentUrl = $(this).attr("data-url");
+					_data.param.actionLessonType();
+				});
+			};
+				
+			var shopListClickEvent = function(){
+				$("#shop-list").on("click","a",function(){
+					event.preventDefault();
+					_data.param.currentId = $(this).attr("data-id");
+					_data.param.actionShopList();
+				});	
+			};
+			
+			var bannerClickEvent = function(){
+				$(".index-banner").on("click",function(){
+					_data.param.actionBanner();
+				})
+			};
+
+		    var actionLoadMore = function(){
+		    	$(document).scrollTop(0);                           //初始化scrollTop
+		    	var $window = $(window),
+		    		$document = $(document);
+		    	
+		    	$window.on('scroll',function(){
+		    		if( ($document.scrollTop()+$window.height()) === $document.height() && isShowMore.result && _data.noPopupView){
+		    			getData();
+		    		}
+		    	})
+		    };
+			
+			
+			var isShowMore = {
+				check: function(total,dataLength){
+					var currentNo = $('#shop-list>a').length;
+					if(currentNo < _data.param.pageSize){
+						this.result = false;
+					}else if((currentNo+dataLength) < total){
+						this.result = true;
+					}else if((currentNo+dataLength) >= total){
+						this.result = false;
+					}
+				},
+				result: true
+			};
+			
+			var showLoading = function(){
+				var $loading = $("#loading");
+				$loading.appendTo($loading.parent());
+				if(isShowMore.result){
+					$loading.show();
+				}else{
+					$loading.hide();
+				}
+			};
+			
+			var getData = function(isExactly){
+				$.ajax({
+					type: _data.param.postType,
+					dataType: "text",
+					data:{
+							cityId: _data.param.cityId,
+							categoryIds: _data.param.categoryIds,
+							distance: _data.param.distance,
+							date: _data.param.date,
+							from: _data.param.from,
+							to: _data.param.to,
+							lat: _data.param.lat,
+							lng: _data.param.lng,
+							pageNo: isExactly?_data.param.initNo:_data.param.initNo+=1,
+							pageSize: _data.param.pageSize,
+					},
+					url: isExactly?_data.param.postUrlExactly:_data.param.postUrl,
+					success: function(data){
+						setTimeout(function(){
+							var dataObj=eval("("+data+")");
+							var _shopListTemplate = Handlebars.compile($("#shop-list-template").html());
+							var _bannerTemplate = Handlebars.compile($("#banner-template").html());
+							if(isExactly){
+								$("#indexBanner").show();
+								if( dataObj.data.totalCount >= _data.param.pageSize){
+									$('#indexBanner .index-banner h1').html("99元包月，想玩啥就玩啥");
+									$('#indexBanner .index-banner p').html("您周围"+_data.param.distance+"Km内的场馆").addClass('point');
+									$('#shop-name-list').html(_bannerTemplate(dataObj.data));
+								}else{
+									$('#indexBanner .index-banner h1').html("99元包月，想玩啥就玩啥");
+									$('#indexBanner .index-banner p').html("我也不知道啥，随便说两句");
+								}
+							}else{
+								isShowMore.check(dataObj.data.totalCount,dataObj.data.shops.length);
+								$('#shop-list').append(_shopListTemplate(dataObj.data));
+								$("#shop-list img").lazyload({
+										effect : "fadeIn"
+								});
+								showLoading();
+								if(!isShowMore.result){
+//									showLoading();
+									$('#shop-list').append('<div class=\'no-more-tips\'>没有更多了</div>');
+								}
+							}
+						},200);
+					}
+				});
+			}
+			
+			var getLocation = function(){
+				if(os.isWeiXin){
+//					wx.config({
+//					        debug: false,
+//					        appId: '${appId}',
+//					        timestamp: ${timeStamp},
+//					        nonceStr: '${noncestr}',
+//					        signature: '${sign}',
+//					        jsApiList: [
+//					            'getLocation'
+//					        ]
+//					    });
+					wx.ready(function () {
+						wx.getLocation({
+						    type: 'wgs84', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+						    success: function (res) {
+//						        var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
+//						        var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+//						        var speed = res.speed; // 速度，以米/每秒计
+//						        var accuracy = res.accuracy; // 位置精度						    	
+						    	_data.param.lat = res.latitude;
+						        _data.param.lng = res.longitude;
+//						        getData(true);   //初始化banner	
+								
+								$('#reLocation').slideDown();
+								$('#reLocation').on('click',function(){
+									window.location.reload();
+								})
+								
+
+								
+						    }
+						});
+					});
+				}else{
+					//其他设备坐标传入
+				}
+			}
+
+			
+			$(function(){
+				var lessonTypeTemplate,
+					shopListTemplate,
+					chosenTemp,
+					_storage;
+						
+				lessonTypeTemplate = Handlebars.compile($("#lesson-type-template").html());
+				shopListTemplate = Handlebars.compile($("#shop-list-template").html());
+				chosenTemp = Handlebars.compile($("#chosen-template").html());
+				_storage = window.localStorage;
+				
+				
+				/*------------landing page----------------*/
+				if(!_storage.getItem('isSkip')){
+					$.get("../config/landingPageConfig.json", function(result) {
+						var _template = Handlebars.compile($("#slide-temp").html());
+						Handlebars.registerHelper({
+							'dot': function(res, options) {
+								var outer = '<div class=\"dot\">';
+								for (var i = 0; i < res.length; i++) {
+									if (i === 0) {
+										outer += '<span class=\"cur\"></span>';
+									} else {
+										outer += '<span></span>';
+									}
+								}
+								outer += '</div>';
+								return new Handlebars.SafeString(outer);
+							},
+							'item': function(res, options) {
+								if (res == result.slide.length-1) {
+									return options.inverse(this);
+								} else {
+									return options.fn(this);
+								}
+							}
+						});
+	
+						$("body").append(_template(result));
+						
+						//close landing page & skip
+						$("#closeLandingPage, #goTo").on("click",function(){
+							$("#landingPage").hide();
+							_storage.setItem("isSkip",true);
+						});
+						
+						$('#landingPageSlide').swipeSlide({
+							autoSwipe: false,
+							continuousScroll: false,
+							lazyLoad: true,
+							transitionType: 'cubic-bezier(0.22, 0.69, 0.72, 0.88)',
+							firstCallback: function(i, sum, me) {
+								me.find('.dot').children().first().addClass('cur');
+							},
+							callback: function(i, sum, me) {
+								me.find('.dot').children().eq(i).addClass('cur').siblings().removeClass('cur');
+							}
+						});
+						
+					});
+				}
+				
+				
+				//Import Handlebars Helper  2015-11-05 
+				Handlebars.registerHelper({
+					'showIcon': function(res , options){
+									if(res == 1){
+										return options.fn(this);
+									}else{
+										return options.inverse(this);
+									}		 
+					},
+					'showDistance': function(res , options){
+									if(res == 'true'){
+										return options.fn(this);
+									}else{
+										return options.inverse(this);
+									}		 
+					},
+					'showChosen': function(res,options){
+						if(res.items.length == 3){
+							return options.fn(this);
+						}else{
+							console.log("检查chosen.items.length 是否为 3")
+						}
+						
+					}
+				});
+				
+				
+				
+				//init DOM
+				FastClick.attach(document.body);                    //初始化FastLink 解决IOS click事件延迟300ms问题
+				getLocation();                                      //初始化坐标
+				$('#lessonType').html(lessonTypeTemplate(_data));   //初始化课程分类
+				$("#shop-list").append(shopListTemplate(_data));    //初始化商铺列表
+				isShowMore.check();                                 //是否加载更多
+				showLoading();
+				lessonTypeClickEvent();                             //初始化课程分类click事件
+				shopListClickEvent();                               //初始化商铺列表click事件
+				bannerClickEvent();                                 //初始化bannerclick事件
+				actionLoadMore();                                   //初始化loadMore
+//				getData(true);
+				$("#custom").after(chosenTemp(_data.chosen));       //初始化每日精选
+				
+				//每日精选click事件绑定
+				$(".section-chosen").on("click", "a", function(e){
+					var _index = $(this).parent('li').index();
+					if(!os.isWeiXin){
+						e.preventDefault();
+						if(os.isPhone){
+							_data.chosen.items[_index].iosClickEvent();
+						}else if(os.isAndroid){
+							_data.chosen.items[_index].androidClickEvent();
+						}
+					}
+				});
+				
+				//indxSlider Banner
+				var bannerPics = [
+//					{
+//						"img" : "img/index_banner_1.png",
+//						'index' : 1,
+//						'click' : function(){
+//							alert('我是1')
+//						}
+//					},
+//					{
+//						"img":"img/index_banner_2.png",
+//						'index' : 2,
+//						'click' : function(){
+//							alert('我是2')
+//						}
+//					}
+				];
+
+				//绑定点击事件
+				$('#indexSlide').on('click','a',function(){
+					var index = $(this).attr('data-index');
+					bannerPics[index-1].click();
+				});
+				
+
+			var Dot = function(){
+				var wrap = $("<div class='dot'></div>");
+				for(var i=0 ; i<bannerPics.length ; i++){
+					wrap.append($('<span/>'));
+				}
+				return wrap;
+			}
+			
+			var sliderTemplate = Handlebars.compile($("#slide-template").html());
+			
+			$("#shop-list img").lazyload({
+				effect : "fadeIn"
+			});
+
+			
+			$("#indexSlide>ul").html(sliderTemplate(bannerPics)); 
+			$("#indexSlide").append(Dot()); 
+			
+			if(bannerPics.length == 0){
+				$("#indexSlide").hide();
+			}else{
+					$('#indexSlide').swipeSlide({
+			    	autoSwipe : true, 
+			        continuousScroll: true,
+			        lazyLoad : true,
+			        transitionType : 'cubic-bezier(0.22, 0.69, 0.72, 0.88)',
+			        firstCallback : function(i,sum,me){
+			            me.find('.dot').children().first().addClass('cur');
+			        },
+			        callback : function(i,sum,me){
+			            me.find('.dot').children().eq(i).addClass('cur').siblings().removeClass('cur');
+			        }
+			    });
+			}
+
+			
+			//searchBox
+			
+			if(os.isWeiXin){
+				$('#searchWrap, .btm').show();
+//				$('#indexSlide').css('margin-top','2.8rem');
+				
+				$('#searchOutter').on('click',function(){
+					$('#searchBlock').show();
+					$('#keyword').focus();
+					$('#keyword').val('');
+					$('body, html').css({'overflow':'hidden'});
+					_data.noPopupView = false;
+				});
+
+				$('#cancelBtn').on('click',function(){
+					event.preventDefault();
+					$('#searchBlock').hide();
+					$('#keyword').val('');
+					$('body, html').css('overflow','initial');
+					_data.noPopupView = true;
+				});
+				
+				$("#search").submit(function(e){
+				  	if($('#keyword').val() == '' || $('#keyword').val() == null){
+						event.preventDefault();
+					}
+				});
+			}
+			
+				//scan
+				$(".scan").on("click", function(){
+					$("#scanSelect").height("100%");
+				});
+				
+				$(".selecter a").on("click", function(){
+					event.preventDefault();
+					alert($(this).index());
+				});
+			});	
+		</script>
+	</body>
+</html>

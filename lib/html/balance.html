@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
+		<title>我的余额</title>
+		<link rel="stylesheet" type="text/css" href="../css/less/balance.css"/>
+	</head>
+	<body>
+		<!-- 页面外框 -->
+		<div class="wrap">
+			<!-- 页面  content-->
+			<div class="content">
+				<div class="zhye">账户余额</div>
+				<div class="m-zj">
+					<div class="wzs"><img  src="../img/icon-balance.png"/></div>
+					<div class="wzs"><span class="price"><em id="ye">0.00</em></span></div>
+				</div>
+				<input type="button" id="submitBtn" value="去充值" class="next-btn" />
+			</div>
+			<p class="bot-p"><a href="czk_tk.html" >退款</a></p>
+		</div>
+		<script src="../js/jquery-2.2.3.min.js"></script>
+		<script src="../js/jquery.lazyload.min.js"></script>
+		<script src="../js/handlebars.runtime-v4.0.5.js"></script>
+		<script src="../js/fastclick.min.js"></script>
+		<script src="../js/main.js"></script>
+		<script src="../js/helper.js"></script>
+		<script type="text/javascript">
+		var _initPageParam = {
+			// 获取首页带入参数(仅首页)
+			getInit: function(){
+				return _method.toQueryParams.call(location.href);
+			}(),
+			// 存入本地存储(仅首页)
+			setSS: function(){
+				_method.SS._set("queryParams", this.getInit);
+			},
+			// 每次载入页面获取当前页面的初始化参数
+			getSS: function(){
+				return _method.SS._get("queryParams");
+			}
+		}
+		// 加载页面参数(仅首页)
+		if(!_initPageParam.getSS()){
+			// 为空直接写入
+			_initPageParam.setSS();
+		}
+		var _localParam = _method.deepCopy(_initPageParam.getSS());
+        var _balanceData = {
+					"sign": _localParam.sign,//skuCatData.sign,
+					"userId": _localParam.userId//skuCatData.userId
+		}
+		$.ajax({
+			type: "post",
+			url: "http://www.imiaoxiu.com/babypass-server/cardUser/balance",
+			data: JSON.stringify(_balanceData),
+			contentType: "application/json",
+			dataType: "json",
+			success: function(data) {
+				var ye = data.data.balance;
+                $("#ye").text(ye.toFixed(2));
+			},
+             error: function(XMLHttpRequest, textStatus, errorThrown) {
+             	window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx3fa0c56bd36c7469&redirect_uri=http%3a%2f%2fwww.imiaoxiu.com%2fbabypass-server%2fuser%2fbind%3fcityId%3d1&response_type=code&scope=snsapi_base&state=123#wechat_redirect"
+//				alert("未知用户！");
+		     }
+		});
+		
+        $("#submitBtn").on("click",function () {
+        	//去充值
+        	window.location = "chongzhi.html";
+        });
+		$(function(){
+			// add fastClick
+			FastClick.attach(document.body);
+		});
+		</script>
+	</body>
+</html>

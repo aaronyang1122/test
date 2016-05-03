@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
+		<title>退款成功</title>
+		<link rel="stylesheet" type="text/css" href="../css/less/balance.css"/>
+	</head>
+	<body>
+		<!-- 页面外框 -->
+		<div class="wrap">
+			<!-- 页面  content-->
+			<div class="content">
+				<div class="zhye">账户余额</div>
+				<div class="m-zj">
+					<div class="wzs"><img  src="../img/icon-balance.png"/></div>
+					<div class="wzs"><span class="price" id="ye"><em>0.00</em></span></div>
+				</div>
+				<div class="tips">
+					<p>* 退款处理中，请于5-10个工作日后查收</p>
+			    </div>
+			</div>
+		</div>
+		<script src="../js/jquery-2.2.3.min.js"></script>
+		<script src="../js/jquery.lazyload.min.js"></script>
+		<script src="../js/handlebars.runtime-v4.0.5.js"></script>
+		<script src="../js/fastclick.min.js"></script>
+		<script src="../js/main.js"></script>
+		<script src="../js/helper.js"></script>
+		<script src="../js/layer.m.js"></script>
+		<script type="text/javascript">
+		// 注册页面参数
+		var _initPageParam = {
+			// 每次载入页面获取当前页面的初始化参数
+			getSS: function(){
+				return _method.SS._get("queryParams");
+			}
+		}
+		var _localParam = _initPageParam.getSS()?_initPageParam.getSS():{};
+		var _balanceData = {
+			"sign": _localParam.sign,//skuCatData.sign,
+			"userId": _localParam.userId//skuCatData.userId
+		}
+		$.ajax({
+			type: "post",
+			url: "http://www.imiaoxiu.com/babypass-server/cardUser/balance",
+			data: JSON.stringify(_balanceData),
+			contentType: "application/json",
+			dataType: "json",
+			success: function(data) {
+				$("#balanceFlagBtn").text(data.data.balance);
+                $("#ye").html(data.data.balance);
+			},
+             error: function(XMLHttpRequest, textStatus, errorThrown) {
+				alert("未知用户！");
+		     }
+		});
+		$(function(){
+			// add fastClick
+			FastClick.attach(document.body);
+		});
+		</script>
+	</body>
+</html>

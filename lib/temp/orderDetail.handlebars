@@ -1,0 +1,62 @@
+<div class="order-header">
+	<div>
+		<div class="order-dingdan-title">
+			<p class="dingdan-calendar">{{#showChangci skuCat.isMerchantAlwaysOK}}{{formatDate date}}{{else}}有效期2个月{{/showChangci}}</p>
+		</div>
+
+		<div class="dingdan-item">
+			<section class="sec-1">
+				<div class="col-1">
+					<p class="icon-p">订单编号：{{order.serial}}</p>
+					<p class="icon-p">
+						<!--<span class="icon-choice">预约成功</span>-->
+						{{czkStatus status}}
+						<span class="icon-chengren">成人{{adultNum}}人</span>
+						<span class="icon-ertong">儿童{{childNum}}人</span>
+					</p>
+				</div>
+				<div class="col-2">
+					<p class="icon-p-right">{{serial}}</p>
+				</div>
+			</section>
+
+			<dl>
+				<br />
+				<dt class="shop-title">预约商户：</dt>
+			</dl>
+
+			<div class="order-shop-name">
+				{{skuCat.shop.name}}<a href="tel:{{showPhoneNum skuCat.shop.appointmentPhone}}" class="icon-order-phone"></a>
+			</div>
+
+		</div>
+
+		<div class="address-item">
+
+			<dl>
+				<dt class="address-title">商户地址：</dt>
+			</dl>
+
+			<div class="order-dingdan-location">
+				<a href="#" class="icon-dingdan-location" id="showMap" data-lat="{{skuCat.shop.lat}}" data-lng="{{skuCat.shop.lng}}">{{skuCat.shop.address}}</a>
+			</div>
+
+		</div>
+	</div>
+</div>
+
+<div class="btm-div">
+	
+	<p>
+		<input type="button" value="打卡" class="btn-base" id="btnPay" />
+	</p>
+	{{#showChangci skuCat.isMerchantAlwaysOK}}
+	<p>
+		<input type="button" value="返回" class="btn-base" id="goBack" />
+	</p>
+	{{else}}
+	<p>
+		<input type="button" value="取消订单" class="btn-base" id="cancelAppointment" />
+	</p>
+	{{/showChangci}}
+</div>

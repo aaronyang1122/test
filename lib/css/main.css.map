@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AACQ,0BAAe,CACvB,CAAC,CACG,KAAK,CCHI,GAAI,CDIb,SAAS,CCHD,IAAI,CDKhB,IAAI,CACA,SAAS,CCND,IAAI,CDQhB,GAAG,CACC,KAAK,CCVI,GAAI",
+"sources": ["scss/main.scss","scss/new_file.scss"],
+"names": [],
+"file": "main.css"
+}

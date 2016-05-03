@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
+		<title>模拟窗口切换</title>
+		<link rel="stylesheet" type="text/css" href="../css/less/temp_2.css"/>
+	</head>
+	<body>
+		<!-- 页面 -->
+		<div class="wrap">
+			<!-- 页面 header -->
+			<header>
+				<div class="container">我是头</div>
+			</header>
+			
+			<!-- 页面  content-->
+			<div class="content">
+				<p>我要疯了我要疯了我要疯了我要疯了我要疯了我要疯了我要疯了我要疯了我要疯了我要疯了我要疯了我要疯了我要疯了我要疯了我要疯了我要疯了我要疯了我要疯了我要疯了我要疯了我要疯了我要疯了我要疯了</p>
+				<a href="#" class="btn-base" id="showPop">点我切换页面</a>
+			</div>
+			
+			<!-- 页面 footer -->
+			<footer>
+				<div class="container">我是尾</div>
+			</footer>
+		</div>
+		
+		<!-- 弹出框 -->
+		<div id="popCate" class="popCate">
+			<div id="J_pop" class="J_pop">
+				<a href="#" class="btn-base" id="hidePop">点我回去</a>
+			</div>
+		</div>
+		
+		<script src="//cdn.bootcss.com/jquery/2.2.0/jquery.min.js"></script>
+		<script src="//cdn.bootcss.com/jquery.lazyload/1.9.1/jquery.lazyload.min.js"></script>
+		<script src="//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js"></script>
+		<script src="../js/main.js"></script>
+		
+		<script>
+			// 注册click事件
+			var _event = {
+				showPop: function(){
+					$("#showPop").on("click", function(){
+						_method.pop_show();
+					});
+				},
+				hidePop: function(){
+					$("#hidePop").on("click", function(){
+						_method.pop_hide();
+					});
+				}
+			}
+			
+			$(function(){
+			// add fastClick
+			FastClick.attach(document.body);
+			// 加载click事件
+			for(var x in _event){
+				_event[x]();
+			}
+		});
+		</script>
+		
+		
+	</body>
+</html>

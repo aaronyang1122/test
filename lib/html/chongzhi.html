@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
+		<title>充值</title>
+		<link rel="stylesheet" type="text/css" href="../css/reset.css" />
+		<link rel="stylesheet" type="text/css" href="../css/common.css" />
+		<link rel="stylesheet" type="text/css" href="../css/chongzhi.css" />
+		<link rel="stylesheet" type="text/css" href="../css/less/book.css" />
+		
+	</head>
+
+	<body>
+		<div class="wrap">
+			<script src="//cdn.bootcss.com/handlebars.js/4.0.5/handlebars.min.js"></script>
+			<script src="//cdn.bootcss.com/jquery/2.2.0/jquery.min.js"></script>
+			<script src="//cdn.bootcss.com/jquery.lazyload/1.9.1/jquery.lazyload.min.js"></script>
+			<script src="//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js"></script>
+			<script src="../js/main.js"></script>
+			<script id="product-template" type="text/x-handlebars-template">
+				{{#each data}}
+					{{#if @first}}
+						<div class="package-item selected" data-packageName="{{name}}" data-packageValue="{{price}}" data-packageId="{{id}}">
+							<div class="package-price"><span>充￥{{price}}</span><span>送￥
+			                		{{giftAmount}}</span></div>
+							<div class="selecter-status">
+								<span></span>
+							</div>
+						</div>
+					{{else}}
+						<div class="package-item" data-packageName="{{name}}" data-packageValue="{{price}}" data-packageId="{{id}}">
+						<div class="package-price"><span>充￥{{price}}</span><span>送￥
+		                		{{giftAmount}}</span></div>
+						<div class="selecter-status">
+							<span></span>
+						</div>
+					</div>
+					{{/if}}
+				
+				{{/each}}
+			</script>
+			<script>
+				var _productListTemplate = Handlebars.compile($("#product-template").html());
+				var products;
+				$(function() {
+					$.ajax({
+						type: "get",
+						url: "http://www.imiaoxiu.com/babypass-server/shop_center/cardProducts",
+						contentType: "application/json",
+						dataType: "json",
+						success: function(res) {
+							$('#product-list').append(_productListTemplate(res));
+							$("#packageId").val(res.data[0].id);
+							$("#charge").val(res.data[0].price);
+							$("#packageName").val(res.data[0].name);
+							$("#charge").text(res.data[0].price);
+						}
+					});
+					
+				});
+			</script>
+
+			<div class="userHeader" id="head_hint">
+				<br>
+				<span class="container">您的账户余额不足</span><br/><br>
+				<p class="default">您仍需支付：<span id="needPay">30</span>元</p><br />
+				<p class="default_small">充值后订单将自动完成</p>
+			</div>
+			
+			<div class="list-wrapper" id="product-list">
+			</div>
+
+			<div class="order-item">
+				<dl id="useCoupon">
+					<dt>支付金额</dt>
+					<dd>
+						<span class="price">￥</span><span id="charge" class="price">0</span>
+					</dd>
+				</dl>
+				<dl id="useCoupon">
+					<dt>
+						<p>* 储值卡金额终身有效</p><br />
+						<a class="i" href="use_rule.html">* 查看可用范围及使用规则</a>
+					</dt>
+				</dl>
+			</div>
+
+		</div> </br>
+		<input type="button" id="submitBtn" value="下一步" class="btn-base" />
+
+		<form action="../order/payByWxAccount" method="get" id="package">
+			<input type="hidden" name="packageName" id="packageName" />
+			<input type="hidden" name="productId" id="packageId" />
+			<input type="hidden" name="cityId" id="cityId" value="${cityId}" />
+		</form>
+
+		<script src="//cdn.bootcss.com/jquery/2.2.0/jquery.min.js"></script>
+		<script src="//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js"></script>
+		<script type="text/javascript">
+			$(function() {
+				if(_method.SS._get("needPay") != null) {
+					var needPayAmount = _method.SS._get("needPay").toFixed(2);
+					if(needPayAmount != null && needPayAmount>=0) {
+						$('#needPay').text(needPayAmount);
+					} else {
+						$('#head_hint').hide();
+					}
+				} else {
+						$('#head_hint').hide();
+				}
+				FastClick.attach(document.body);
+				var tranValue = function() {
+					$(".package-item").each(function() {
+						if ($(this).hasClass("selected")) {
+							$("#flagBtn").text($(this).attr("data-packageValue"));
+							$("#charge").text($(this).attr("data-packageValue"));
+							$("#packageId").val($(this).attr("data-packageId"));
+							$("#charge").val($(this).attr("data-packageValue"));
+							$("#packageName").val($(this).attr("data-packageName"));
+						}
+					})
+				};
+				$(".wrap").on("click", ".package-item", function() {
+					$(".package-item").removeClass("selected");
+					$(this).addClass("selected");
+					tranValue();
+				});
+				$("#submitBtn").on("click", function() {
+					_method.SS._set("productId", $("#packageId").val());
+					_method.SS._set("chargeAmount", $("#charge").val());
+					_method.SS._set("productName", $("#packageName").val());
+					window.location.href = "../../../../babypass-server/order/order.html";
+				});
+				//init
+				tranValue();
+			});
+		</script>
+	</body>
+
+</html>

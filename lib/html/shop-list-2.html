@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
+		<title>全城遛娃储值卡</title>
+		<link rel="stylesheet" type="text/css" href="../css/reset.css" />
+		<link rel="stylesheet" type="text/css" href="../css/common.css" />
+		<link rel="stylesheet" type="text/css" href="../css/index_2.css" />
+		<link rel="stylesheet" type="text/css" href="../css/index_3.css" />
+		<link rel="stylesheet" type="text/css" href="../css/sortBar.css" />
+		<link rel="stylesheet" type="text/css" href="../css/searchBar.css" />
+	</head>
+
+	<body>
+		<div class="sortBar" id="sortBar">
+			<div id="searchWrap">
+				<div class="shopListSearch">
+					<div class="outter">
+						<input type="text" name="searchOutter" id="searchOutter" value="" placeholder="输入商家、分类、名称" />
+					</div>
+					<div class="_btns" id="_btns">
+						<a href="#" class="icon-login" id="_btnLogin">登录</a>
+						<a href="#" class="icon-chongzhi" id="_btnChongzhi">充值</a>
+						<a href="#" class="icon-xufei" id="_btnXufei">余额</a>
+					</div>
+				</div>
+				<div class="searchBlock" id="searchBlock">
+					<div class="searchBarGray">
+						<div class="col-1">
+							<form action="" method="get" id="search">
+								<input type="hidden" name="cityId" id="cityId" value="" />
+								<input type="hidden" name="lat" id="lat" value="" />
+								<input type="hidden" name="lng" id="lng" value="" />
+								<input type="hidden" name="distance" id="distance" value="5" />
+								<input type="hidden" name="sort" id="sort" value="0" />
+								<input type="hidden" name="openId" id="openId" value="" />
+								<input type="hidden" name="appId" id="appId" value="" />
+								<input type="hidden" name="pageSize" id="pageSize" value="" />
+								<input type="hidden" name="keyURI" id="keyURI" value="" />
+								<input type="text" name="keyword" id="keyword" value="" placeholder="输入商家、分类、名称" />
+								<input type="submit" value="搜索" id="submitBtn" />
+							</form>
+						</div>
+						<div class="col-2">
+							<a href="" class="cancel-btn" id="cancelBtn">取消</a>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<ul class="btns">
+				<li class="initDistance">3km</li>
+				<li class="initSort">智能排序</li>
+			</ul>
+			<ul class="container">
+				<li class="_distance">
+					<a href="#" data-distance="3">3km</a>
+					<a href="#" data-distance="5">5km</a>
+					<a href="#" data-distance="10">10km</a>
+					<a href="#" data-distance="20">20km</a>
+					<a href="#" data-distance="30">30km</a>
+				</li>
+				<li class="_sort">
+					<a href="#" data-sort="0">智能排序</a>
+					<a href="#" data-sort="1">离我最近</a>
+				</li>
+			</ul>
+		</div>
+		<div class="sortMask" id="sortMask"></div>
+		<!-- end -->
+
+		<div class="list-wrapper" id="shop-list">
+			<div class="loading-2" id="loading">
+				<span class="icon-loading"></span>
+				<span class="text">加载中...</span>
+			</div>
+		</div>
+
+		<script id="btm-template" type="text/x-handlebars-template">
+			{{#isLogin this}} {{#isCharge this}}
+			<div class="btmTips">
+				<div class="col-1">
+					<p class="tixing">充值享折上折，请充值后查看折扣价</p>
+				</div>
+				<div class="col-2">
+					<input type="button" id="chongZhiBtm" class="btn" value="去充值" />
+				</div>
+			</div>
+			{{else}}
+			<div class="btmTips">
+				<div class="col-1">
+					<p class="tixing">全城畅通无阻,请登陆后查看折扣</p>
+				</div>
+				<div class="col-2">
+					<input type="button" id="loginBtm" class="btn" value="去登录" />
+				</div>
+			</div>
+			{{/isCharge}} {{/isLogin}}
+		</script>
+
+		<!--
+        	作者：aaronyang1122@gmail.com
+        	时间：2016-03-18
+        	描述：弹出框
+    -->
+		<div class="mBox" id="czkIntro">
+			<div class="head-pic"></div>
+			<div class="content">
+				<input type="button" name="gotoShopList" id="gotoShopList" value="去看看可用商户" class="goto-shop-list">
+				<input type="button" name="removePop" id="removePop" value="朕知道了，不再提示" class="remove-pop">
+			</div>
+			<a href="javascript:void(0);" class="close-btn" id="mBoxClose">close</a>
+		</div>
+
+		<script src="//cdn.bootcss.com/jquery/2.2.0/jquery.min.js"></script>
+		<script src="//cdn.bootcss.com/jquery.lazyload/1.9.1/jquery.lazyload.min.js"></script>
+		<script src="//cdn.bootcss.com/handlebars.js/4.0.5/handlebars.min.js"></script>
+		<script src="//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js"></script>
+		<script src="../js/sortBar.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/UA.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/main.js" type="text/javascript" charset="utf-8"></script>
+		<script id="shop-2-template" type="text/x-handlebars-template">
+			{{#noResult list}}
+			<div class="noData" id="noData">
+				啊哦，没有符合你要求的商户哦~
+			</div>
+			{{else}} {{#list}}
+			<a href="store.html?shopId={{id}}&lat={{../lat}}&lng={{../lng}}&openId={{../openId}}&appId={{../appId}}" class="shop-items" data-shopid="0">
+				<div class="shop-col-1">
+					<span class="shop-pic">
+						<img src="" data-original="{{image}}">
+					</span>
+				</div>
+				<div class="shop-col-2">
+					<div class="content">
+						<div class="row row-1">
+							<div class="col-1">
+								<h1 class="shop-name">{{name}}</h1>
+							</div>
+							<div class="col-2">
+								<em class="storeprice">￥{{storeprice}}</em>
+								<em class="discount">{{#showDiscount ../this}}{{discount}}{{/showDiscount}}折</em>
+							</div>
+						</div>
+						<div class="row row-2">
+							<div class="col-1">
+								<p class="center intro">{{feature}}</p>
+							</div>
+							<div class="col-2">
+								<p class="center">{{appointedTimes}}已玩</p>
+							</div>
+						</div>
+						<div class="row row-3">
+							<div class="col-1">
+								<p class="address">{{address}}</p>
+							</div>
+							<div class="col-2">
+								<p>{{diffDistance}}km</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</a>
+			{{/list}} {{/noResult}}
+		</script>
+		<script type="text/javascript">
+			var _shopListTemplate = Handlebars.compile($("#shop-2-template").html());
+			var _btmTemplate = Handlebars.compile($("#btm-template").html());
+			var _data = {
+				param: {
+					postUrl: "/babypass-server/shopcard/list",
+					postType: "POST",
+					actionShopList: function() { //shop-list  方法
+						console.log(this.currentId);
+					},
+					appId: _method.getQueryString("appId"),
+					keyURI: _method.getQueryString("keyURI"),
+					noPopupView : true
+				},
+				ajaxData: {
+					cityId: _method.getQueryString("cityId"),
+					lat: _method.getQueryString("lat"),
+					lng: _method.getQueryString("lng"),
+					distance: _method.getQueryString("distance"),
+					sort: _method.getQueryString("sort"),
+					openId: _method.getQueryString("openId"),
+					pageNo: 1,
+					pageSize: _method.getQueryString("pageSize"),
+					keyword: _method.getQueryString("keyword")
+				},
+				isLogin: false,
+				isCharge: false
+			};
+			var initFromData = function() {
+				$('#cityId').val(_method.getQueryString("cityId"));
+				$('#lat').val(_method.getQueryString("lat"));
+				$('#lng').val(_method.getQueryString("lng"));
+				$('#pageSize').val(_method.getQueryString("pageSize"));
+				$('#appId').val(_method.getQueryString("appId"));
+			}
+			var clickBind = function() {
+				//登录按钮跳转
+				$("#_btnLogin, #loginBtm").on("click", function() {
+					event.preventDefault();
+//					alert('去登录');
+					var cityId = _data.ajaxData.cityId;
+					var lat = _data.ajaxData.lat;
+					var lng =  _data.ajaxData.lng;
+					var openId = _data.ajaxData.openId;
+					//var distance = _data.ajaxData.distance;
+					//var sort = _data.ajaxData.sort;
+					//var appId = _data.param.appId;
+					//var pageNo = _data.ajaxData.pageNo;
+					//var pageSize = _data.ajaxData.pageSize;
+                    
+					var param = cityId + "|" + lat + "|" + lng + "|" + openId + "|5|0|" + _data.param.appId;
+                   
+					//var sourceurl = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + _data.param.appId + "&redirect_uri=http%3a%2f%2f"+ //window.location.host +"%2fstatic%2frebuild%2flib%2fhtml%2fshop-list-2.html%3fparam%3d"+ param + //"&response_type=code&scope=snsapi_base&state=123#wechat_redirect";"
+					//var url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + _data.param.appId + "&redirect_uri=http%3a%2f%2f"+ window.location.host //+"%2fbabypass-server%2fwxlogin%3fsourceUrl%3d"+ sourceurl + "&response_type=code&scope=snsapi_base&state=123#wechat_redirect";
+					var url = "http://" + window.location.host + "/babypass-server/wxlogin?param=" + param;
+			        window.location.href = url;				   
+				});
+				//充值按钮跳转
+				$("#_btnChongzhi, #chongZhiBtm").on("click", function() {
+					event.preventDefault();
+					window.location.href="/babypass-server/product/queryCard?cityId="+ _data.ajaxData.cityId;
+				});
+				//充值按钮跳转
+				$("#_btnXufei").on("click", function() {
+					event.preventDefault();
+					//alert('查余额');
+					window.location.href="https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + _data.param.appId + "&redirect_uri=http%3a%2f%2f"+ window.location.host +"%2fbabypass-server%2fuser%2fstorageCard%3fcityId%3d"+ _data.ajaxData.cityId + "&response_type=code&scope=snsapi_base&state=123#wechat_redirect";
+				});
+			}
+			var actionLoadMore = function() {
+				$('body').scrollTop(0); //初始化scrollTop
+				var $window = $(window),
+					$document = $(document);
+				$window.on('scroll', function() {
+					if (($document.scrollTop() + $window.height()) == $document.height() && isShowMore.result && _data.param.noPopupView) {
+						getData(clickBind);
+					}
+				})
+			};
+			var isShowMore = {
+				check: function(total, dataLength) {
+					if (total == dataLength) {
+						this.result = true;
+					} else if (total > dataLength) {
+						this.result = false;
+					}
+				},
+				result: true
+			};
+			var _loading = {
+				'$loading': "#loading",
+				'showLoading': function() {
+					$(this.$loading).show();
+					$(this.$loading).appendTo($(this.$loading).parent());
+				},
+				'removeLoading': function() {
+					$(this.$loading).remove();
+				}
+			}
+			var getData = function(callback) {
+				//				_loading.showLoading();
+				$.ajax({
+					type: _data.param.postType,
+					dataType: "json",
+					timeout: 5000,
+					data: _data.ajaxData,
+					url: _data.param.postUrl,
+					success: function(res) {
+						setTimeout(function() {
+							res.lat = _data.ajaxData.lat;
+							res.lng = _data.ajaxData.lng;
+							res.openId = _data.ajaxData.openId;
+							res.appId = _data.param.appId;
+							//更新登录&支付状态
+							_data.isLogin = res.isLogin;
+							_data.isCharge = res.isCharge;
+//							res.isLogin = true;
+//							res.isCharge = true;
+							$('#shop-list').append(_shopListTemplate(res));
+							//初次加载时渲染
+							if (_data.ajaxData.pageNo == 1) {
+								$('#shop-list').after(_btmTemplate(res));
+								callback();
+							}
+							//img lazyload
+							$("#shop-list img").lazyload({
+								effect: "fadeIn"
+							});
+							if (res.isLogin && res.isCharge) {
+								$('#_btnXufei').siblings('a').hide();
+								$('#_btnXufei').show();
+							} else if (res.isLogin) {
+								$('#_btnChongzhi').siblings('a').hide();
+								$('#_btnChongzhi').show();
+							}
+							//判断load more
+							isShowMore.check(_data.ajaxData.pageSize, res.list.length);
+							if (isShowMore.result) {
+								_data.ajaxData.pageNo += 1; //pageNo +1
+								_loading.showLoading(); //加载loading
+							} else {
+								_loading.removeLoading(); //移除loading
+								$('#shop-list').append('<div class=\'no-more-tips no-more-tips-2\'>没有更多了</div>');
+							}
+						}, 200);
+					},
+					error: function(XMLHttpRequest, textStatus, errorThrown) {
+						_loading.removeLoading(); //移除loading
+						isShowMore.result = false;
+						$('#shop-list').append('<div class=\'noData\'>网络错误，请检查您的网络连接</div>'); //显示错误
+						console.log(XMLHttpRequest.status);
+						console.log(errorThrown);
+					}
+				});
+			}
+			$(function() {
+				FastClick.attach(document.body);
+				
+				if(!window.localStorage.getItem('isShowPop')){
+					$("#czkIntro").show();
+				}
+				
+				$("#mBoxClose, #gotoShopList, #removePop").on("click", function(){
+					if($(this).prop("id") == "removePop"){
+						window.localStorage.setItem('isShowPop',true);
+					}
+					$("#czkIntro").remove();	
+				});
+				
+				//Handlebars Helper
+				Handlebars.registerHelper({
+					'showIcon': function(res, options) {
+						if (res == 2) {
+							return options.fn(this);
+						} else {
+							return options.inverse(this);
+						}
+					},
+					'noResult': function(res, options) {
+						if ((res == null || res.length == 0) && _data.ajaxData.pageNo == 1) {
+							$("#loading").hide();
+							return options.fn(this);
+						} else {
+							return options.inverse(this);
+						}
+					},
+					'isLogin': function(res, options) {
+						if (res.isLogin && res.isCharge) {
+							$('#shop-list').css('padding-bottom', 0);
+							return options.inverse(this);
+						} else {
+							$('#shop-list').css('padding-bottom', '3rem');
+							return options.fn(this);
+						}
+					},
+					'isCharge': function(res, options) {
+						if (!res.isCharge && !res.isLogin) {
+							return options.inverse(this);
+						} else if (res.isLogin) {
+							return options.fn(this);
+						}
+					},
+					'showDiscount': function(res, options) {
+						if (res.isLogin && res.isCharge) {
+							return options.fn(this);
+						} else {
+							return '?';
+						}
+					},
+					'showStoreprice': function(res, options) {
+						if (!res.isLogin || (res.isLogin && res.isCharge)) {
+							return options.fn(this);
+						} else {
+							return '?';
+						}
+					}
+				});
+				//初始化distance 数据
+				$("#sortBar ._distance a").each(function() {
+					if ($(this).attr("data-distance") == _method.getQueryString("distance")) {
+						$(this).siblings().removeClass('currentItem');
+						$(this).addClass('currentItem');
+						$(".initDistance").text($(this).attr("data-distance") + "Km");
+					}
+				});
+				//初始化sort 数据
+				$("#sortBar ._sort a").each(function() {
+					if ($(this).attr("data-sort") == _method.getQueryString("sort")) {
+						$(this).siblings().removeClass('currentItem');
+						$(this).addClass('currentItem');
+						$(".initSort").text($(this).text());
+					}
+				});
+				//select distance
+				$("#sortBar ._distance").on("click", "a", function() {
+					$("#distance").val($(this).attr("data-distance"));
+					$("#search").submit();
+				});
+				//select sort
+				$("#sortBar ._sort").on("click", "a", function() {
+					$("#sort").val($(this).attr("data-sort"));
+					$("#search").submit();
+				});
+				//init DOM
+				actionLoadMore(); //初始化loadMore
+				getData(clickBind);
+				initFromData();
+				
+				if(_data.param.keyURI != null && _data.param.keyURI !=''){
+					console.log(_data.param.keyURI)
+						$('#searchOutter').prop("placeholder", decodeURI(_data.param.keyURI));
+					}
+				
+				$("#keyword").on("change",function(){
+						$("#keyURI").val(encodeURI($(this).val()));
+					})
+				
+				//searchBox
+				if (os.isWeiXin) {
+					$('#searchWrap').show();
+					$('#shop-list').css('margin-top', '5.6rem');
+					$('#searchOutter').on('click', function() {
+						$('#searchBlock').show();
+						$('#keyword').focus();
+						$('#keyword').val('');
+						$('body, html').css({'overflow':'hidden'});
+						_data.param.noPopupView = false;
+					});
+					$('#cancelBtn').on('click', function() {
+						event.preventDefault();
+						$('#searchBlock').hide();
+						$('#keyword').val('');
+						$('body, html').css('overflow','initial');
+						_data.param.noPopupView = true;
+					});
+					
+					
+					$("#search").submit(function(e) {
+						if ($('#keyword').val() == '' || $('#keyword').val() == null) {
+							event.preventDefault();
+						}
+						
+					});
+					
+					
+				}
+			});
+		</script>
+	</body>
+
+</html>

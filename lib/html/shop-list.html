@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
+		<title>shop list</title>
+		<link rel="stylesheet" type="text/css" href="../css/reset.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/common.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/index_2.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/index_3.css"/>
+		<!--new Import css -->
+		<link rel="stylesheet" type="text/css" href="../css/sortBar.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/ion.rangeSlider.css" />
+    	<link rel="stylesheet" type="text/css" href="../css/ion.rangeSlider.skinHTML5.css" />
+    	<link rel="stylesheet" type="text/css" href="../css/searchBar.css"/>
+    	<!-- end -->
+	</head>
+	<body>	
+		<!--new add html -->
+		<div class="sortBar" id="sortBar">
+			<div id="searchWrap">
+				<div class="shopListSearch">
+					<div class="outter">
+						<input type="text" name="searchOutter" id="searchOutter" value="" placeholder="关键词XXX" />
+					</div>
+				</div>
+				<div class="searchBlock" id="searchBlock">
+					<div class="searchBarGray">
+						<div class="col-1">
+							<form action="" method="get">
+								<input type="text" name="keyword" id="keyword" value="" placeholder="输入商家、分类、名称" />
+								<input type="submit" value="搜索" id="submitBtn"/>
+							</form>
+						</div>
+						<div class="col-2">
+							<a href="" class="cancel-btn" id="cancelBtn">取消</a>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<ul class="btns">
+				<li>浦江镇</li>
+				<!--<li>亲子游泳</li>-->
+				<li>离我最近</li>
+				<!--<li>筛选</li>-->
+			</ul>
+			<ul class="container">
+				<li>
+					<div class="rangeSelecterMenu">
+						<ul class="col-1">
+							<li>附近</li>
+							<li>商区</li>
+						</ul>
+						<div class="col-2">
+							<ul class="menuList">
+								<li><a href="">3km</a></li>
+								<li>5km</li>
+								<li>10km</li>
+								<li>20km</li>
+								<li>30km</li>
+							</ul>
+							
+							<ul class="menuList">
+								<li>全部商区</li>
+								<li>中山公园</li>
+								<li><a href="">浦江镇</a></li>
+								<li>虹桥</li>
+								<li>七宝</li>
+								<li>莘庄</li>
+								<li>全部商区</li>
+								<li>中山公园</li>
+								<li>浦江镇</li>
+								<li>虹桥</li>
+								<li>七宝</li>
+								<li>莘庄</li>
+								<li>中山公园</li>
+								<li>浦江镇</li>
+								<li>虹桥</li>
+								<li>七宝</li>
+								<li>莘庄</li>
+								<li>全部商区</li>
+								<li>中山公园</li>
+								<li>浦江镇</li>
+								<li>虹桥</li>
+								<li>七宝</li>
+								<li>莘庄</li>
+							</ul>
+						</div>
+					</div>
+				</li>
+				<!--<li>
+					<a href="">全部分类</a>
+					<a href="">游乐场</a>
+					<a href="">亲子游泳</a>
+					<a href="">综合早教</a>
+					<a href="">音乐舞蹈</a>
+					<a href="">少儿英语</a>
+					<a href="">武术运动</a>
+					<a href="">绘画手工</a>
+					<a href="">国学书法</a>
+				</li>-->
+				<li>
+					<a href="">智能排序</a>
+					<a href="">离我最近</a>
+				</li>
+				<!--<li>
+					<form action="filter" method="get" id="filter">
+						<input type="hidden" name="ageFrom" id="ageFrom" value="" />
+						<input type="hidden" name="ageTo" id="ageTo" value="" />
+						<input type="hidden" name="startTime" id="startTime" value="" />
+						<input type="hidden" name="endTime" id="endTime" value="" />
+						<input type="hidden" name="packages" id="packages" value="" />
+					</form>
+					<section class="filterItem">
+						<h1>套餐选择</h1>
+						<ul class="packages-select" id="packageSelect">
+							<li>99元包月</li>
+							<li>299元包月</li>
+							<li>399元包月</li>
+							<li>499元包月</li>
+							<li>599元包月</li>
+						</ul>
+					<section class="filterItem rangePadding">
+						<h1>宝贝年龄</h1>
+						<input type="text" id="ageRange" value="" name="ageRange" />
+					</section>
+					<section class="filterItem rangePadding">
+						<h1>课程时间</h1>
+						<input type="text" id="timeRange" value="" name="timeRange" />
+					</section>
+					<button class="submit-btn" id="submit">确定</button>
+				</li>-->
+			</ul>
+		</div>
+		<div class="sortMask" id="sortMask"></div>
+		<!-- end -->
+		
+		
+		<div class="list-wrapper" id="shop-list" >
+			<div class="loading" id="loading">
+				<span class="icon-loading"></span>
+				<span class="text">加载中...</span>
+			</div>
+		</div>
+		
+		<script src="//cdn.bootcss.com/jquery/2.2.0/jquery.min.js"></script>
+		<script src="//cdn.bootcss.com/jquery.lazyload/1.9.1/jquery.lazyload.min.js"></script>
+		<script src="//cdn.bootcss.com/handlebars.js/4.0.5/handlebars.min.js"></script>
+		<script src="//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js"></script>
+		<!--new Import js -->
+		<script src="../js/sortBar.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/ion.rangeSlider.min.js" type="text/javascript" charset="utf-8"></script>
+		<!-- end -->
+		
+		<script src="../js/UA.js" type="text/javascript" charset="utf-8"></script>
+		<script id="shop-list-template" type="text/x-handlebars-template">
+			{{#noResult shops}}
+				<div class="noData" id="noData">
+					没有预约哦~
+				</div>
+				{{else}}
+				{{#shops}}
+					<a href="#" class="pic-link" data-id="{{id}}">
+						<div class="top">
+							<h6 class="item-title">{{name}}{{branchName}}</h6>
+							<span class="item-distance">{{distance}}KM</span>
+						</div>
+						<div class="shop-pic">
+							<img src="" data-original="{{image}}"/>
+							{{#showIcon level}}
+								<span class="vip-icon"></span>
+								{{else}}
+							{{/showIcon}}
+						</div>
+						<p class="comment">我是小编，我来说两句，这个东西蛮好的，大家都来用啊，用的多我提成就多，赶紧的~别墨迹</p>
+						<p class="condition">适合年龄：3-9岁</p>
+					</a>
+		       	{{/shops}}
+	       	{{/noResult}}
+		</script>
+		<script type="text/javascript">
+			var _data = {
+				          shops: [
+            
+            {
+                id: 290,
+                name: "快乐·童年儿童乐园",
+                branchName: "",
+                address: "徐汇区华济路1号(龙吴路)",
+                image: "http://7xjetq.dl1.z0.glb.clouddn.com/快乐童年.jpg?imageMogr2/thumbnail/414x/size-limit/40k!",
+                distance: "4",
+                comment: "叮叮妈说：“环境还不错设施也都齐全，玩的东西也很多宝贝都不肯定走了”",
+                ageRange: "12个月~4岁",
+                level: 1
+            }
+            ,
+            {
+                id: 385,
+                name: "嬉戏里儿童乐园(上南路）",
+                branchName: "",
+                address: "浦东新区上南路4467号金谊广场3楼(近永泰路)",
+                image: "http://7xkccn.com1.z0.glb.clouddn.com/03204058-b281-4580-b086-1c8da9c42dca?imageMogr2/thumbnail/414x/size-limit/40k!",
+                distance: "2",
+                comment: "皮蛋妈说：“第一次去感觉还不错！游玩的孩子也很多！因为离娘家比较近带孩子去娘家玩就顺便带宝宝去玩了！里面还算干净！各方面设施也算比较新的！下次可能还会带宝宝去玩吧！不过听里面的工作人员说以后不能用大众点评了不合作了！不知道什么情况！总体还行！广场里面本身就有很多好吃的好玩的！值得去的”",
+                ageRange: "12个月~6岁",
+                level: 1
+            }
+            ,
+            {
+                id: 388,
+                name: "梦幻谷儿童主题乐园",
+                branchName: "",
+                address: "浦东新区上南路4467号金谊广场2楼",
+                image: "http://7xkccn.com1.z0.glb.clouddn.com/547a8049-b686-4c66-a2bd-294373b5d82e?imageMogr2/thumbnail/414x/size-limit/40k!",
+                distance: "2",
+                comment: "婷婷妈说：“下班快去的，玩了一个小时，娃没有尽兴，但是设施还是挺不错的，就是离家太远”",
+                ageRange: "12个月~5岁",
+                level: 1
+            }
+            ,
+            {
+                id: 464,
+                name: "安格斯童话王国",
+                branchName: "（江榉路店）",
+                address: "江榉路588弄万科早城6栋（江榉路浦锦路）",
+                image: "http://7xkccn.com1.z0.glb.clouddn.com/a1ff04c9-8674-4d2f-825a-8e89aa51a726?imageMogr2/thumbnail/414x/size-limit/40k!",
+                distance: "5",
+                comment: "磊磊妈说：“地方大，滑滑梯就有三个，关键人少，服务态度也好，周末还有巧虎出来跳舞”",
+                ageRange: "0个月~8岁",
+                level: 1
+            }
+            ,
+            {
+                id: 112,
+                name: "哈动园莲花国际店",
+                branchName: "",
+                address: "沪闵路7866号莲花国际广场三楼",
+                image: "http://7xjetq.dl1.z0.glb.clouddn.com/IMG_2676.JPG?imageView2/0/w/200/h/200/q/40?imageMogr2/thumbnail/414x/size-limit/40k!",
+                distance: "9",
+                comment: "欢欢妈说：“好处就是比起爱乐游人少很多，过家家的东西少，地方不算特别大。”",
+                ageRange: "24个月~6岁",
+                level: 1
+            }
+            ,
+            {
+                id: 31,
+                name: "星期8家园",
+                branchName: "",
+                address: "闵行区中春路8889弄万科2049城花商业中心三楼",
+                image: "http://7xjetq.dl1.z0.glb.clouddn.com/webwxgetmsgimg_meitu_1.jpg?imageView2/0/w/200/h/200/q/40?imageMogr2/thumbnail/414x/size-limit/40k!",
+                distance: "15",
+                comment: "昊昊妈说：“玩具蛮多的，工作人员也很负责，宝宝玩得很好”",
+                ageRange: "3岁~8岁",
+                level: 1
+            }
+            ,
+            {
+                id: 46,
+                name: "摩趣邦乐园",
+                branchName: "",
+                address: "莲花南路1500弄11号楼107室(近银都路)",
+                image: "http://7xjetq.dl1.z0.glb.clouddn.com/webwxgetmsgimg%20(2)_meitu_6.jpg?imageView2/0/w/200/h/200/q/40?imageMogr2/thumbnail/414x/size-limit/40k!",
+                distance: "9",
+                comment: "西西妈说：“非常有趣的地方，设施种类很多，也很注重卫生，会帮宝宝用免洗消毒液擦手。”",
+                ageRange: "24个月~8岁",
+                level: 2
+            }
+            ,
+            {
+                id: 120,
+                name: "奔奔乐园",
+                branchName: "九亭店",
+                address: "闵行区涞演路摩立盛汇广场22号",
+                image: "http://7xjetq.dl1.z0.glb.clouddn.com/319193450_meitu_6.jpg?imageMogr2/thumbnail/414x/size-limit/40k!",
+                distance: "16",
+                comment: "来来妈说：“环境相对还算干净。小朋友不少。可玩的也还算有一些。偶尔带小朋友去玩玩不错。”",
+                ageRange: "8个月~8岁",
+                level: 1
+            }
+            ,
+            {
+                id: 149,
+                name: "小飞飞攀岩馆",
+                branchName: "",
+                address: "上海市松江区沪松公路1108号",
+                image: "http://7xjetq.dl1.z0.glb.clouddn.com/388206822_meitu_1.jpg?imageMogr2/thumbnail/414x/size-limit/40k!",
+                distance: "16",
+                comment: "丹丹妈说：“教练非常热情，第一次玩攀岩，非常好玩儿，岩壁造型丰富，线路很有意思，下次还要来，太赞了”",
+                ageRange: "3岁6个月~8岁",
+                level: 1
+            }
+            ,
+            {
+                id: 151,
+                name: "乐逗吧",
+                branchName: "",
+                address: "上海市闵行区沪星路105号名车生活欢乐港3F01",
+                image: "http://7xjetq.dl1.z0.glb.clouddn.com/webwxgetmsgimg41EHEQ3Q_meitu_1.jpg?imageMogr2/thumbnail/414x/size-limit/40k!",
+                distance: "14",
+                comment: "小乐妈说：“环境不错，玩的东西很多宝宝玩的挺开心的”",
+                ageRange: "0个月~8岁",
+                level: 1
+            }
+        ],
+				          param: {
+				          	cityId: 1,
+						  	categoryIds: "不知道",
+						  	distance: 5,
+						  	date: "",
+						  	from: "",
+						  	to: "",
+						  	lat: "",
+						  	lng: "",
+						  	pageSize: 10,
+						  	currentId: null,          //shop-list  当前ID
+						  	currentUrl: null,         //lessonType 当前ID
+						  	postUrl: "data/index-data.json",  
+						  	postUrlExactly: "data/index-data-2.json",  //精确匹配地址
+						  	postType: "GET",
+						  	initNo: 0,
+						  	actionShopList: function(){          //shop-list  方法
+						  		console.log(this.currentId);
+						  	}
+				          }
+			        };
+
+			var shopListClickEvent = function(){
+				$("#shop-list").on("click","a",function(){
+					event.preventDefault();
+					_data.param.currentId = $(this).attr("data-id");
+					_data.param.actionShopList();
+				});	
+			};
+
+		    var actionLoadMore = function(){
+		    	$(document).scrollTop(0);                           //初始化scrollTop
+		    	var $window = $(window),
+		    		$document = $(document);
+		    	
+		    	$window.on('scroll',function(){
+		    		if( ($document.scrollTop()+$window.height()) === $document.height() && isShowMore.result){
+		    			getData();
+		    		}
+		    	})
+		    };
+			
+			var isShowMore = {
+				check: function(total,dataLength){
+					var currentNo = $('#shop-list>a').length;
+					if(currentNo < _data.param.pageSize){
+						this.result = false;
+					}else if((currentNo+dataLength) < total){
+						this.result = true;
+					}else if((currentNo+dataLength) >= total){
+						this.result = false;
+					}
+				},
+				result: true
+			};
+			
+			var showLoading = function(){
+				var $loading = $("#loading");
+				$loading.appendTo($loading.parent());
+				if(isShowMore.result){
+					$loading.show();
+				}else{
+					$loading.hide();
+				}
+			};
+			
+			var getData = function(isExactly){
+				$.ajax({
+					type: _data.param.postType,
+					dataType: "text",
+					data:{
+							cityId: _data.param.cityId,
+							categoryIds: _data.param.categoryIds,
+							distance: _data.param.distance,
+							date: _data.param.date,
+							from: _data.param.from,
+							to: _data.param.to,
+							lat: _data.param.lat,
+							lng: _data.param.lng,
+							pageNo: isExactly?_data.param.initNo:_data.param.initNo+=1,
+							pageSize: _data.param.pageSize,
+					},
+					url: isExactly?_data.param.postUrlExactly:_data.param.postUrl,
+					success: function(data){
+						setTimeout(function(){
+							var dataObj=eval("("+data+")");
+							var _shopListTemplate = Handlebars.compile($("#shop-list-template").html());
+							
+							isShowMore.check(dataObj.data.totalCount,dataObj.data.shops.length);
+							$('#shop-list').append(_shopListTemplate(dataObj.data));
+							
+							$("#shop-list img").lazyload({
+								effect : "fadeIn"
+							});
+							
+							showLoading();
+							if(!isShowMore.result){
+								$('#shop-list').append('<div class=\'no-more-tips\'>没有更多了</div>');
+							}	
+							
+						},200);
+					}
+				});
+			}			
+			
+			$(function(){
+				FastClick.attach(document.body);
+				
+				var shopListTemplate;
+				//Import Handlebars Helper  2015-11-05
+		        Handlebars.registerHelper('showIcon',function(res , options){
+		            if(res == 2){
+		                return options.fn(this);
+		            }else{
+		                return options.inverse(this);
+		            }
+		        });
+				
+				Handlebars.registerHelper('noResult',function(res , options){
+						if(res == null || res.length == 0 ){
+							return options.fn(this);
+						}else{
+							return options.inverse(this);
+						}		 
+				});
+				
+				shopListTemplate = Handlebars.compile($("#shop-list-template").html());
+
+				//init DOM
+				$("#shop-list").append(shopListTemplate(_data));    //初始化商铺列表
+				isShowMore.check();                                 //是否加载更多	
+				showLoading();
+				shopListClickEvent();                               //初始化商铺列表click事件
+				actionLoadMore();                                   //初始化loadMore
+
+				//init age range
+				$("#ageRange").ionRangeSlider({
+					type: 'double',
+		            min: 0,
+		            max: 8,
+		            from: 0,
+		            to: 8,
+		            step: 1,
+		            postfix: "岁",
+		            hide_min_max: true,
+		            keyboard: true,
+		            grid: false,
+		            onStart: function (data) {
+		            	$('#ageFrom').val(data.from);
+		            	$('#ageTo').val(data.to);
+				    },
+				    onFinish: function (data) {
+				    	$('#ageFrom').val(data.from);
+				    	$('#ageTo').val(data.to);
+				    }
+		        });
+				
+				//init time range
+				$("#timeRange").ionRangeSlider({
+					type: "double",
+					from: 0,
+					to: 28,
+				    values: [
+				        "8:00", 
+				        "8:30", 
+				        "9:00",
+				        "9:30",
+				        "10:00",
+				        "10:30",
+				        "11:00",
+				        "11:30", 
+				        "12:00", 
+				        "12:30",
+				        "13:00",
+				        "13:30",
+				        "14:00",
+				        "14:30",
+				        "15:00",
+				        "15:30",
+				        "16:00",
+				        "16:30",
+				        "17:00",
+				        "17:30",
+				        "18:00",
+				        "18:30",
+				        "19:00",
+				        "19:30",
+				        "20:00",
+				        "20:30",
+				        "21:00",
+				        "21:30",
+				        "22:00"
+				    ],
+		            hide_min_max: true,
+		            keyboard: true,
+		            grid: false,
+		            onStart: function (data) {
+		            	$('#startTime').val(data.from_value);
+		            	$('#endTime').val(data.to_value);
+				    },
+				    onFinish: function (data) {
+				    	$('#startTime').val(data.from_value);
+				    	$('#endTime').val(data.to_value);
+				    }
+		        });
+		        
+		        
+		        //searchBox
+		        if(UA() == 1){
+		        	$('#searchWrap').show();
+					$('#shop-list').css('margin-top','5.6rem');
+					
+					$('#searchOutter').on('click',function(){
+						$('#searchBlock').show();
+						$('#keyword').focus();
+					});
+	
+					$('#cancelBtn').on('click',function(){
+						event.preventDefault();
+						$('#searchBlock').hide();
+						$('#keyword').val('');
+					});
+					
+					$("#search").submit(function(e){
+					  	if($('#keyword').val() == '' || $('#keyword').val() == null){
+							event.preventDefault();
+						}
+					});
+				}
+		        
+		        //lazy load img
+		        $("#shop-list img").lazyload({
+					effect : "fadeIn"
+				});
+				
+			});	
+		</script>
+	</body>
+</html>

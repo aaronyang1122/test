@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
+		<title>会员注册</title>
+		<link rel="stylesheet" type="text/css" href="../css/less/login.css"/>
+	</head>
+	<body>
+		<div class="wrap">
+			<div class="logo"></div>
+			<form class="form-table" id="giftCard" action="" method="get">
+				<input type="text" placeholder="立即绑定手机号码" class="phone-num" alt="手机号码" name="phoneNum" autocomplete="off" id="mobileNo" />
+				<div class="col-2-wrap">
+					<div class="col-1">
+						<input type="text" class="yanzhengma" alt="您的验证码" name="codeVal" id="code" autocomplete="off" id="code" />
+					</div>
+					<div class="col-2">
+						<a href="#" id="getYanZhengMa" class="get-yanzhengma">获取验证码</a>
+					</div>
+				</div>
+			</form>
+			<footer>
+				<div class="container">
+					<input type="button" id="submit" class="login-btn" value="立即绑定" />
+				</div>
+			</footer>
+		</div>
+		
+		<script src="../js/jquery-2.2.3.min.js"></script>
+		<script src="../js/main.js"></script>
+		<script src="../js/layer.m.js"></script>
+		<script>
+			// 注册页面参数
+		var _initPageParam = {
+			// 每次载入页面获取当前页面的初始化参数
+			getSS: function(){
+				return _method.SS._get("queryParams");
+			}
+		}
+//	var _localParam = _method.objSort(["cityId","lat","lng","pageNo","pageSize","sortType","yearsFrom","yearsTo"],_initPageParam.getSS());
+		var _localParam = _initPageParam.getSS()?_initPageParam.getSS():{};
+		
+		if(!_localParam.openId){
+			if(!_method.getQueryString("openId")){
+				layer.open({
+					shade: true,
+					className: 'toast',
+					style:'width:100%;max-width:240px;font-size:14px;text-align:center;padding:0;border:none',
+				    content: '<p>openId为空</p>',
+				    shadeClose: true,
+				    time: 1
+				});
+			}else{
+				_localParam.openId = _method.getQueryString("openId");
+			}
+		}
+		
+		var _goto = function(){
+			if(document.referrer == ""){
+				window.location.href = "index.html";
+			}else{
+				window.location.href = document.referrer;
+			}
+		}
+		
+			$(function(){
+				$("#submit").on("click",function(){
+					var checkFilled = false;
+					var verifyCode = true;
+					
+					//验证空值
+					$("#giftCard input").each(function(){
+						if( $(this).val()==null || $(this).val()=='' ){
+							checkFilled = false;
+							layer.open({
+									shade: true,
+									className: 'toast',
+									style:'width:100%;max-width:240px;font-size:14px;text-align:center;padding:0;border:none',
+								    content: '<p>请填写'+$(this).attr('alt')+'</p>',
+								    shadeClose: true,
+								    time: 2
+								});
+							return false;
+						}else{
+							checkFilled = true;
+						}
+					});
+					
+					//验证手机号码有效性
+					if(checkFilled){
+						if(_method.checkPhoneNum($(".phone-num"))){
+							$.ajax({
+								type: "POST",
+								dataType: "json",
+								contentType: "application/json",
+								timeout: 5000,
+								data: JSON.stringify({
+									mobileNo: $("#mobileNo").val(),
+									code: $("#code").val(),
+									openId: _localParam.openId
+								}),
+								url: "http://www.imiaoxiu.com/babypass-server/main/wxLogin",
+								success: function(res) {
+									_localParam.sign = res.data.data.sign;
+									_localParam.userId = res.data.data.userId;
+									_method.SS._set("queryParams", _localParam);
+									
+									_method._hasMemShip._data = _method.deepCopy({
+										cityId: _method.getQueryString("cityId")?_method.getQueryString("cityId"):1,
+										sign: _localParam.sign,
+										userId: _localParam.userId,
+										openId: _localParam.openId?_localParam.openId:_method.getQueryString("openId")
+									});
+									// 请求用户信息 存入 sessionStorage
+									_method._hasMemShip._query(_goto);
+								},
+								error: function(XMLHttpRequest, textStatus, errorThrown) {
+									console.log(XMLHttpRequest.status);
+									console.log(errorThrown);
+								}
+							});
+						}else{
+							layer.open({
+									shade: true,
+									className: 'toast',
+									style:'width:100%;max-width:240px;font-size:14px;text-align:center;padding:0;border:none',
+								    content: '<p>正确格式手机号码</p>',
+								    shadeClose: true,
+								    time: 1
+								});
+						
+						}		
+					}
+				});
+				
+				//发送验证码
+				var settime = {
+					//修改时长
+					currentTime: 60,
+					startTime: 60,
+					action: function(res){
+						var _this = this,
+								_timer;
+						if (this.currentTime == 0) {
+							clearTimeout(_timer);
+							res.text("获取验证码");
+							this.currentTime = this.startTime;
+							return;
+						} else {
+							res.text(this.currentTime+"s");
+							this.currentTime--;
+						}
+						_timer = setTimeout(function() {
+							_this.action(res);
+						}, 1000);
+					}
+				}
+
+				$("#getYanZhengMa").on("click", function(){
+					event.preventDefault();
+					if($(".phone-num").val()){
+						if(_method.checkPhoneNum($(".phone-num"))){
+							if(settime.currentTime == settime.startTime){
+								settime.action($(this));
+								//获取验证码的代码---------放这里↓↓↓↓↓↓↓↓↓↓↓
+								sendCode();
+							}
+						}
+						else{
+							// 手机号格式不对
+							layer.open({
+								shade: true,
+								className: 'toast',
+								style:'width:100%;max-width:240px;font-size:14px;text-align:center;padding:0;border:none',
+							    content: '<p>正确格式手机号码</p>',
+							    shadeClose: true,
+							    time: 1
+							});
+						}
+					}else{
+						// 没有输入手机号
+						layer.open({
+							shade: true,
+							className: 'toast',
+							style:'width:100%;max-width:240px;font-size:14px;text-align:center;padding:0;border:none',
+						    content: '<p>请输入手机号码</p>',
+						    shadeClose: true,
+						    time: 1
+						});
+					}
+						
+				});
+				
+			});
+			function sendCode() {
+				var mobileNo = $("#mobileNo").val();
+
+				$.ajax({
+					'url': "http://www.imiaoxiu.com/babypass-server/main/sendByWx",
+					'data': JSON.stringify({'mobileNo': mobileNo}),
+					'dataType': 'json',
+					'contentType': "application/json",
+					'type': 'POST',
+					'success': function (res) {
+						console.log(res);
+					}
+				});
+			}
+		</script>
+		
+	</body>
+</html>

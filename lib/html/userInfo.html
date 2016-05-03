@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
+		<title>个人信息</title>
+		<link rel="stylesheet" type="text/css" href="../css/less/userInfo.css"/>
+	</head>
+	<body>
+		<div class="wrap">
+			<div class="user-head-pic">
+				<!--<a href="" class="btn-take-photo">拍照</a>-->
+				<div class="photo">
+					<img src="../img/pic-boy.png" />
+				</div>
+			</div>
+			<form class="form-table" id="giftCard" action="/babypass-server/gift/verify" method="get">
+				<div class="col-2-wrap">
+					<div class="col-1">
+						<select name="" class="selectSex">
+							<option value="1" selected="true">男宝宝</option>
+							<option value="2">女宝宝</option>
+						</select>
+					</div>
+					<div class="col-2">
+						<input type="text" placeholder="宝宝昵称" class="nicName" alt="宝宝昵称" name="nicName" autocomplete="off" id="nickName" />
+					</div>
+				</div>
+				<div class="bb-birthday">
+					<input type="month" placeholder="宝宝生日" alt="宝宝生日" name="" autocomplete="off" value="2013-01" data-birthday="2013-01-01" id="birthday" />
+				</div>
+			</form>
+			<footer>
+				<div class="container">
+					<input type="button" id="submit" class="login-btn" value="完成" />
+				</div>
+			</footer>
+		</div>
+		
+		<script src="../js/jquery-2.2.3.min.js"></script>
+		<script src="../js/main.js"></script>
+		<script src="../js/layer.m.js"></script>
+		<script>
+			// 注册页面参数
+		var _initPageParam = {
+			// 每次载入页面获取当前页面的初始化参数
+			getSS: function(){
+				return _method.SS._get("queryParams");
+			}
+		}
+		var _localParam = _initPageParam.getSS()?_initPageParam.getSS():{};
+		
+		var _goto = function(){
+			window.location.href = "index.html";
+		}
+		
+				var _callBack = function(){
+				// 如果已存在用户信息
+				if(_localParam.user){
+					// 初始化用户性别
+					
+					if(_localParam.user.sex == 1){
+						$(".selectSex").find("option[value='1']").attr("selected",true);
+						$(".photo").html("<img src=\"../img/pic-boy.png\" />");
+					}else if(_localParam.user.sex == 2){
+						$(".selectSex").find("option[value='2']").attr("selected",true);
+						$(".photo").html("<img src=\"../img/pic-girl.png\" />");
+					}else{
+						$(".selectSex").find("option[value='1']").attr("selected",true);
+						$(".photo").html("<img src=\"../img/pic-boy.png\" />");
+					}
+					
+					// 初始化昵称
+					if(_localParam.user.nickName){
+						$("#nickName").val(_localParam.user.nickName);
+					}
+					
+					// 初始化宝宝生日
+					if(_localParam.user.birthday){
+						var _birthday = _method._formatDate.call(_localParam.user.birthday);
+						var _birthdayMonth = _method._formatDateToMonth.call(_localParam.user.birthday);
+						$("#birthday").attr("data-birthday","_birthday");
+						$("#birthday").val(_birthdayMonth);
+					}
+				}
+				
+				$(".selectSex").on("change",function(){
+					var _currentValue = $(this).find("option:selected").attr("value");
+					if(_currentValue == 1){
+						$(".photo").html("<img src=\"../img/pic-boy.png\" />")
+					}else if(_currentValue == 2){
+						$(".photo").html("<img src=\"../img/pic-girl.png\" />")
+					}
+				})
+				
+				$("#birthday").on("change",function(){
+					$(this).attr("data-birthday",$(this).val()+"-01");
+				})
+				
+				$("#submit").on("click",function(){
+					var checkFilled = false;
+					//验证空值
+					$("#giftCard input").each(function(){
+						if( $(this).val()==null || $(this).val()=='' ){
+							checkFilled = false;
+							layer.open({
+									shade: true,
+									className: 'toast',
+									style:'width:100%;max-width:240px;font-size:14px;text-align:center;padding:0;border:none',
+								    content: '<p>请填写'+$(this).attr('alt')+'</p>',
+								    shadeClose: true,
+								    time: 2
+								});
+							return false;
+						}else{
+							checkFilled = true;
+						}
+					});
+					if(checkFilled){
+						updateInfo._query();
+					}
+				});
+				
+				
+				// 提交用户信息
+				var updateInfo = {
+					_url: "http://www.imiaoxiu.com/babypass-server/cardUser/updateInfo",
+					_type: "POST",
+					_data: {
+						"userId": _localParam.userId,
+						"sign": _localParam.sign,
+					  "birthday": $("#birthday").val(),
+					  "nickName": $("#nickName").val(),
+					  "sex": function(){
+					  	return $(".selectSex").find("option:selected").attr("value");
+					  }()
+					},
+					_callback: {
+						success: function(res){
+							
+							_method._hasMemShip._data = _method.deepCopy({
+								cityId: _localParam.cityId,
+								sign: _localParam.sign,
+								userId: _localParam.userId,
+								openId: _localParam.openId
+							});
+							// 请求用户信息 存入 sessionStorage
+							_method._hasMemShip._query(_goto);
+						},
+						failed: function(XMLHttpRequest, textStatus, errorThrown){
+		//			console.log(XMLHttpRequest, textStatus, errorThrown);
+						}
+					},
+					_query: function(){
+//						if(_localParam.sign && _localParam.userId){
+							// 已登录
+							console.log($("#birthday").attr("data-birthday"));
+							
+							this._data.userId = _localParam.userId;
+							this._data.sign = _localParam.sign;
+							this._data.birthday = $("#birthday").val()+"-01";
+							this._data.nickName = $("#nickName").val();
+							this._data.sex = function(){
+					  	return $(".selectSex").find("option:selected").attr("value");
+					  	}();
+
+							_method.getData(this._url,this._callback,this._type,this._data)
+//						}else{
+							// 未登录
+//						}
+					}
+				}
+			}
+		
+		
+		if(!_localParam.user){
+			// 判断用户
+			var _hasMemShip = {
+				_url: "http://www.imiaoxiu.com/babypass-server/cardUser/userStatus",
+				_type: "POST",
+				_data: {
+					"userId": _method.getQueryString("userId"),
+					"sign": _method.getQueryString("sign")
+				},
+				_callback: {
+					success: function(res){
+						// 把获取的新信息存入ss
+						_localParam.userId = _method.getQueryString("userId"),
+						_localParam.sign = _method.getQueryString("sign"),
+						_localParam.user = res.data.user;
+						_callBack();
+					},
+					failed: function(XMLHttpRequest, textStatus, errorThrown){
+	//			console.log(XMLHttpRequest, textStatus, errorThrown);
+					}
+				},
+				_query: function(){
+					_method.getData(this._url,this._callback,this._type,this._data);
+				}
+			}
+			_hasMemShip._query();
+		}else{
+			_callBack();
+		}
+
+			
+		</script>
+		
+	</body>
+</html>

@@ -1,0 +1,44 @@
+@import "reset.less";
+@import "common.less";
+@import "header.less";
+@import "menu.less";
+@img: "../../img";
+@newHeight: 30px; //header默认值3.6rem ，这里可以重定义高度
+
+body{
+    background: @base-bg;
+}
+
+header{
+    .container{
+        background-color: #37B629;
+        color: #FFF;
+        height: @newHeight;
+        line-height: @newHeight;
+        width: @full-width;
+        text-align: center;
+    }
+    &:after{
+        content: "";
+        display: block;
+        height: @newHeight; 
+    }
+}
+footer{
+    .container{
+        background-color: #9742D8;
+        color: #FFF;
+        &:extend(footer .menu);
+        display: block;
+        height: @newHeight;
+        line-height: @newHeight;
+        width: @full-width;
+        text-align: center;
+        padding: 0;
+    }
+    &:after{
+        content: "";
+        display: block;
+        height: @newHeight;
+    }
+}

@@ -1,0 +1,239 @@
+body{
+	background-color: #ececec;
+}
+div{
+	tap-highlight-color: rgba(0,0,0,0);  
+	focus-ring-color: rgba(0, 0, 0, 0);  
+	-webkit-tap-highlight-color: rgba(0,0,0,0);  
+	-webkit-focus-ring-color: rgba(0, 0, 0, 0);  
+	-moz-tap-highlight-color: rgba(0,0,0,0);  
+	-moz-focus-ring-color: rgba(0, 0, 0, 0);
+}
+.package-item, .order-item dl{
+	display:-moz-box;
+	display:-webkit-box;
+	display:box;
+	-moz-box-align:center;
+	-webkit-box-align:center;
+	-o-box-align:center;
+
+	/*display: -webkit-box;
+	display: box;
+	-webkit-align-items: center;
+    align-items: center;*/
+	background-color: #FFFFFF;
+	padding: 1.2rem 0;
+	border-bottom: 1px solid #ECECEC;
+}
+.package-item:last-child{
+	border-bottom: none;
+}
+.package-price{
+	-moz-box-flex:1;
+	-webkit-box-flex:1;
+	box-flex:1;
+	width: 75%;
+	padding:0 1rem;
+}
+.package-price .price{
+	color: #FF5D6C;
+	padding: 0 0.2rem;
+}
+.package-price em{
+	font-size: 1.8rem;
+}
+.selecter-status{
+	-moz-box-flex:1;
+	-webkit-box-flex:1;
+	box-flex:1;
+	width: 25%;
+}
+.selecter-status span{
+	display: block;
+	width: 2rem;
+	height: 0;
+	padding-top: 2rem;
+	overflow: hidden;
+	margin: 0 auto;
+	background: url(../img/icon-unselected.png) no-repeat 0 0;
+	background-size: cover;
+}
+.selected .selecter-status span{
+	background: url(../img/icon-selected.png) no-repeat 0 0;
+	background-size: cover;
+}
+.next-btn{
+	position: fixed;
+	width: 96%;
+	height: 3rem;
+	line-height: 3rem;
+	bottom: 0;
+	border: none;
+	border-radius: 0.6rem;
+	background-color: #FF5D6C;
+	font-size: 1.2rem;
+	color: #FFFFFF;
+	margin: 0 2% 0.5rem;
+	outline: none;
+}
+.next-btn:active{
+	outline: none;
+	background-color: #d14d59;
+}
+
+
+/*-----------order------------*/
+.order-item{
+	background-color: #FFFFFF;
+	margin-bottom: 1rem;
+	color: #999999;
+	position: relative;
+	margin-top: 1rem;
+}
+.order-item dl{
+	padding: 1rem;
+}
+.order-item dl:last-of-type{
+	border-bottom: none;
+}
+.order-item dt{
+	-moz-box-flex:1;
+	-webkit-box-flex:1;
+	box-flex:1;
+	width: 65%;
+}
+.order-item dd{
+	-moz-box-flex:1;
+	-webkit-box-flex:1;
+	box-flex:1;
+	width: 35%;
+	text-align: right;
+}
+.order-item .price{
+	color: #FF5D6C;
+}
+.price em{
+	font-size: 2rem;
+}
+.validity, .order-item h6, .order-item h5{
+	color: #666666;
+}
+.order-item h5{
+	font-size: 1.4rem;
+}
+.order-item .tips{
+	display: inline-block;
+	margin-top: 0.4rem;
+}
+.icon-zfb, .icon-wx{
+	display: inline-block;
+	width: 3rem;
+	height: 0;
+	padding-top: 3rem;
+	background: url(../img/icon-zfb.png) no-repeat 0 0;
+	background-size: cover;
+	vertical-align: middle;
+	margin-right: 0.5rem;
+}
+.icon-wx{
+	background: url(../img/icon-wx.png) no-repeat 0 0;
+	background-size: cover;
+}
+.order-item .selecter-status{
+	display: inline-block;
+	width: 2rem;
+	height: 0;
+	padding-top: 2rem;
+	overflow: hidden;
+	background: url(../img/icon-selecter.png) no-repeat 0 0;
+	background-size: cover;
+}
+.order-item .selected .selecter-status{
+	background-position: 0 100%;
+}
+
+.btn-pay{
+	position:  absolute;
+	width: 96%;
+	height: 3rem;
+	line-height: 3rem;
+	bottom: 0;
+	left: 0;
+	border: none;
+	border-radius: 0.6rem;
+	font-size: 1.2rem;
+	margin: 0 2% 1rem;
+	outline: none;
+}
+.btn-useCoupon{
+	border: none;
+	background-color: #2bd463;
+	color: #FFFFFF;
+	padding: 0.3rem 1rem;
+	border-radius: 0.4rem;
+}
+#couponNum{
+	height: 2rem;
+	line-height: 2rem;
+	border: 1px solid #DDDDDD;
+	width: 90%;
+	-webkit-appearance: none;
+}
+#couponBox .alert{
+	display: none;
+	font-size: 0.9rem;
+	color: #FF0000;
+	margin-top: 0.3rem;
+}
+.order-item .couponBoxHidden{
+	display: none;
+}
+#useCoupon{
+}
+#useCoupon dl{
+	border-bottom: none;
+}
+.popup-failed span:last-child{
+	color: #FF5D6C;
+}
+/*new add css 2015-11-02*/
+.item-left-arr{
+	position: relative;
+}
+.item-left-arr:after{
+	content:"";
+	display: inline-block;
+	width: 1.4rem;
+	height: 0;
+	padding-top: 1.4rem;
+	overflow: hidden;
+	background: url(../img/icon-arr.png) no-repeat right 0;
+	background-size: 100%;
+	position: absolute;
+	top: 50%;
+	margin-top: -0.7rem;
+	right: -1.5rem;
+}
+.tips{
+	padding: 0.5rem 1rem;
+	color: #6a6a6a;
+}
+.tips p{
+	margin-bottom: 0.5rem;
+}
+.tips .i:after{
+	content: "i";
+	display: inline-block;
+	width: 1rem;
+	height: 1rem;
+	border-radius: 0.5rem;
+	overflow: hidden;
+	text-align: center;
+	margin-left: 0.5rem;
+	margin-top: -0.3rem;
+	vertical-align: middle;
+	font-size: 0.8rem;
+	line-height: 1rem;
+	color: #FFF;
+	background-color: #FF5D6C;
+}

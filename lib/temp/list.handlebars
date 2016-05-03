@@ -1,0 +1,47 @@
+{{#noResult data}}
+			<div class="noData" id="noData">
+				啊哦，没有符合你要求的商户哦~
+			</div>
+			{{else}} 
+			{{#each data}}
+			<a href="detail.html?skuId={{id}}&distance={{distance}}" class="shop-items">
+				<div class="shop-col-1">
+					<span class="shop-pic">
+						<img src="" data-original="{{image}}">
+						<em>{{appointedTimes}}已购</em>
+					</span>
+				</div>
+				<div class="shop-col-2">
+					<div class="content">
+						<div class="row row-1">
+							<div class="col-1">
+								<h1 class="shop-name">{{shopName}}{{name}}</h1>
+							</div>
+							<div class="col-2">
+								<div class="discount-price"><i>￥</i>{{discountPrice}}0</div>
+								<div class="store-price">原价：￥{{storePrice}}0</div>
+							</div>
+						</div>
+						<div class="row row-2">
+							<div class="col-1">
+								<p class="center intro">{{feature}}</p>
+							</div>
+						</div>
+						<div class="row row-3">
+							<div class="col-1">
+								{{#showTags tags}}
+								<ul class="tag-color">
+									{{#tags}}<li style="border-color:#{{color}};color:#{{color}}">{{title}}</li>{{/tags}}
+								</ul>
+								{{/showTags}}
+								{{textTag this}}
+							</div>
+							<div class="col-2">
+								<p><span class="icon-location"></span>{{distance}}km</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</a>
+			{{/each}}
+{{/noResult}}

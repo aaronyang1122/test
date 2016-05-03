@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
+		<title>全城遛娃</title>
+		<link rel="stylesheet" type="text/css" href="../css/less/index.css"/>
+		<link href="img/logo.png" rel="apple-touch-icon-precomposed">
+		<link href="img/logo.png" sizes="114x114" rel="apple-touch-icon-precomposed">
+	</head>
+	<body>
+		<div class="wrap">
+			<!-- 搜索  -->
+			<div class="searchBar">
+				<div class="col-1">
+					<input type="text" name="searchOutter" id="searchOutter" value="" placeholder="搜索您喜欢的商户或分类" readonly />
+				</div>
+				<div class="col-2">
+					<a href="#" class="scan" id="wxscan"></a>
+				</div>
+			</div>
+			<!-- 轮播  -->
+			<div id="indexSlide"></div>
+			
+			<!-- 自定义模块  -->
+			<div id="custom">
+				<div class="custom">
+					<div class="col-1">
+						<a href="" id="pic1"></a>
+					</div>
+					<div class="col-2">
+						<div class="row">
+							<a href="" id="pic2"></a>
+						</div>
+						<div class="row">
+							<div class="col">
+								<a href="" id="pic3"></a>
+							</div>
+							<div class="col">
+								<div class="zhye" id="zhye"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- 本周热门  -->
+			<section id="remen">
+				<h1><span>本周热门</span></h1>
+			</section>
+		
+			<!-- 精选商户  -->
+			<section id="shopList">
+				<h1><span>精选活动</span></h1>
+			</section>
+			<div class="loading" id="loading">
+				<span class="icon-loading"></span>
+				<span class="text">加载中...</span>
+			</div>
+		</div>
+		
+		<div id="popCate" class="popCate">
+			<div id="J_pop" class="J_pop">
+				<div class="searchBar">
+					<div class="col-2">
+						<a href="#" class="back" id="popClose"></a>
+					</div>
+					<div class="col-1">
+						<input type="text" name="searchBox" id="searchBox" value="" placeholder="搜索您喜欢的商户或分类" />
+					</div>
+					<div class="col-2">
+						<a href="#" class="search" id="searchBtn"></a>
+					</div>
+				</div>
+				<div class="content">
+					<h1>热门搜索：</h1>
+					<ul class="hotwords" id="hotWords"></ul>
+				</div>
+			</div>
+		</div>
+		
+		<!--<script src="//cdn.bootcss.com/jquery/2.2.0/jquery.min.js"></script>
+		<script src="//cdn.bootcss.com/jquery.lazyload/1.9.1/jquery.lazyload.min.js"></script>
+		<script src="//cdn.bootcss.com/handlebars.js/4.0.5/handlebars.runtime.min.js"></script>
+		<script src="//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js"></script>-->
+		<script src="../js/jquery-2.2.3.min.js"></script>
+		<script src="../js/jquery.lazyload.min.js"></script>
+		<script src="../js/handlebars.runtime-v4.0.5.js"></script>
+		<script src="../js/fastclick.min.js"></script>
+		<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+		<script src="../js/main.js"></script>
+		<script src="../js/swipeSlide.min.js"></script>
+		<script src="../js/helper.js"></script>
+		<script src="../js/layer.m.js"></script>
+		<script src="../js/slide.hbs.js"></script>
+		<script src="../js/remen.hbs.js"></script>
+		<script src="../js/list.hbs.js"></script>
+		<script src="../js/menu.hbs.js"></script>
+		<script src="../js/custom.hbs.js"></script>
+		<script src="../js/hotwords.hbs.js"></script>
+		<script src="../js/zhye.hbs.js"></script>
+		<script type="text/javascript">
+		var _localParam = {}; // 本地变量_localParam，所有请求参数均从此调用
+	
+		// 微信签名获取	
+		var url_top = window.location;
+    var u = "http://www.imiaoxiu.com/babypass-server/shop_center/jsapi?&cityId=1&urls=" + url_top;
+    if(_method.os.isWeiXin){
+	    $.get(u,function(result){
+	      wx.config({
+	        debug: false,
+	        appId: result.data.appId,
+	        timestamp: result.data.timestamp,
+	        nonceStr: result.data.nonceStr,
+	        signature: result.data.signature,
+	        jsApiList: [
+	          'getLocation',
+	          'scanQRCode'
+	        ]
+	      })
+	    });
+    }
+    // 注册页面内容
+		var _init = {
+			list: {
+				//查询课程列表
+				"_url": "http://www.imiaoxiu.com/babypass-server/cardShop/querySku",
+				"_type": "POST",
+				"_data": {},
+				"_callback": {
+					"_tag": "#shopList",
+					"tempName": "list",
+					"success": function(res){
+						$(this._tag).append(Handlebars.templates[this.tempName](res));
+						_method.isShowMore.check(_init.list._data.pageSize, res.data.length);
+							if (_method.isShowMore.result) {
+								_init.list._data.pageNo += 1; //pageNo +1
+							} else {
+								if(_init.list._data.pageNo == 1){
+									_method._loading.removeLoading(); //移除loading
+								}else{
+									_method._loading.removeLoading(); //移除loading
+									$("#shopList").after('<div class=\'no-more-tips no-more-tips-2\'>没有更多了</div>');
+								}	
+							}
+						//img lazyload
+						$("section img").lazyload({
+							effect : "fadeIn"
+						});
+					},
+					"failed": function(XMLHttpRequest, textStatus, errorThrown){
+//						console.log(XMLHttpRequest, textStatus, errorThrown);
+					}
+				}
+			},
+			index: {
+				//首页模块接口服务 
+				"_url": "http://www.imiaoxiu.com/babypass-server/oprt/shopRecommend",
+				"_type": "POST",
+				"_data": {},
+				"_callback": {
+					"_tag": [
+						{
+							tagId: "#indexSlide",
+							tempName: "slide",
+							type: 1,
+							callback: function(){
+								//slide init
+								$('.slide').swipeSlide({
+									autoSwipe: true,
+									continuousScroll: true,
+									lazyLoad: true,
+									transitionType: 'cubic-bezier(0.22, 0.69, 0.72, 0.88)',
+									firstCallback: function(i, sum, me) {
+										me.find('.dot').children().first().addClass('cur');
+									},
+									callback: function(i, sum, me) {
+										me.find('.dot').children().eq(i).addClass('cur').siblings().removeClass('cur');
+									}
+								});
+							}
+						},
+						{
+							tagId: "#custom",
+							type: 2,
+							callback: function(res){
+								var _arr = res.list;
+								if(!_arr){
+									// 为空
+									$("#pic1, #pic2, #pic3").on("click",function(){
+										event.preventDefault();
+									})
+								}else{
+									for(var i = 0; i < _arr.length; i++){
+										switch(_arr[i].position)
+										{
+											case 1:
+											$("#pic1").prop("href",_arr[i].url).html("<img src=\""+_arr[i].imgUrl+"\">")
+											break;
+											case 2:
+											$("#pic2").prop("href",_arr[i].url).html("<img src=\""+_arr[i].imgUrl+"\">")
+											break;
+											case 3:
+											$("#pic3").prop("href",_arr[i].url).html("<img src=\""+_arr[i].imgUrl+"\">")
+											break;
+										}
+									}
+								}
+								
+							}
+						},
+						{
+							tagId: "#remen",
+							tempName: "remen",
+							type: 3,
+							callback: function(){
+								$("section img").lazyload({
+									effect : "fadeIn"
+								});
+							}
+						}
+					],
+					"success": function(res){
+						var _res = res.data.listDTO;
+						for(var i=0; i<this._tag.length; i++){
+							if(this._tag[i].type == 2){
+								// custom
+								this._tag[i].callback(_res[this._tag[i].type-1]);
+							}else{
+								// slide remen
+								$(this._tag[i].tagId).append(Handlebars.templates[this._tag[i].tempName](_res[this._tag[i].type-1]));
+								// run slide callback
+								if(this._tag[i].callback && _res[this._tag[i].type-1].list){
+									this._tag[i].callback();
+								}
+							}	
+						}
+					},
+					"failed": function(XMLHttpRequest, textStatus, errorThrown){
+//						console.log(XMLHttpRequest, textStatus, errorThrown);
+					}
+				}
+			},
+			hotwords: {
+				//获取搜索页关键字数据
+				"_url": "http://www.imiaoxiu.com/babypass-server/cardShop/getCardHotwords",
+				"_callback": {
+					"_tag": "#hotWords",
+					"tempName": "hotwords",
+					"success": function(res){
+						$(this._tag).append(Handlebars.templates[this.tempName](res));
+					},
+					"failed": function(XMLHttpRequest, textStatus, errorThrown){
+//						console.log(XMLHttpRequest, textStatus, errorThrown);
+					}
+				}
+			}
+		}
+		// 注册click事件
+		var _event = {
+			searchOutter: function(){
+				$("#searchOutter").on("click", function(){
+					$("#searchBox").val("");
+					_method.pop_show();
+				});
+			},
+			popClose: function(){
+				$("#popClose").on("click", function(){
+					_method.pop_hide();
+				});
+			},
+			hotWords: function(){
+				$("#hotWords").on("click","li",function(){
+					window.location.href = "list_keyword.html?keyword="+$(this).text();
+				});
+			},
+			searchBtn: function(){
+				$("#searchBtn").on("click",function(){
+					event.preventDefault();
+					if($("#searchBox").val() != ""){
+						window.location.href = "list_keyword.html?keyword=" + $("#searchBox").val();
+					}
+				});
+			},
+			menuItemFx: function(){
+				$(".wrap").on("click",".menu-item-fx",function(){
+					// 屏蔽当前页面重复点击
+					event.preventDefault();
+				});
+			},
+			wxscan: function(){
+					// 点击扫码按钮
+					$("#wxscan").on("click",function(){
+						if(_localParam.sign && _localParam.userId){
+							// 扫描打卡
+							_method._wxScan();
+						}else{
+							layer.open({
+								style: "width:100%;max-width:240px;font-size:16px;text-align:center;padding:1rem 0 0;",
+							    content: "<p>您还没登录</p>",
+							    btn: ["返回"],
+							    shadeClose: true
+							});
+						}
+					})
+			}
+		}
+		// 注册底部菜单
+		var _menu = {
+			config: {
+				"hasBYK": false,
+				"current": 2
+			},
+			creatMenu: function(){
+				$.get("../config/menuConfig.json", $.proxy(function(result) {
+					_menu.config.hasBYK = (_localParam.sign && _localParam.userId)?_localParam.hasMemShip:false;
+					var _res = _method.isBYK(result.menu,this.config.hasBYK);
+					_res.menu[this.config.current].current = true;
+					$(".wrap").append(Handlebars.templates.menu(_res));
+				},this));
+			}
+		}
+		// 判断用户余额
+		var _userBalance = {
+			_url: "http://www.imiaoxiu.com/babypass-server/cardUser/balance",
+			_type: "POST",
+			_tagId: "#zhye",
+			_tempName: "zhye",
+			_data: {
+				"userId": _localParam.userId,
+				"sign": _localParam.sign
+			},
+			_callback: {
+				success: function(res){
+					// 渲染已登录状态
+					$(_userBalance._tagId).append(Handlebars.templates.zhye(res));
+				},
+				failed: function(XMLHttpRequest, textStatus, errorThrown){
+//			console.log(XMLHttpRequest, textStatus, errorThrown);
+				}
+			},
+			_query: function(){
+				var _data = {};
+				if(_localParam.sign && _localParam.userId){
+					// 已登录
+					_userBalance._data.userId = _localParam.userId;
+					_userBalance._data.sign = _localParam.sign;
+					_method.getData(this._url,this._callback,this._type,this._data)
+				}else{
+					// 未登录 写入空对象，渲染未登录状态
+					$(this._tagId).append(Handlebars.templates.zhye(_data));
+				}
+			}
+		}
+		
+		// 请把页面渲染所需要的事件、方法已经click事件、方法放入_start 这个匿名函数里
+		var _start = function(){
+			// 渲染底部菜单
+			_menu.creatMenu();
+			// 渲染账户余额
+			_userBalance._query();
+			// 加载页面内容
+			for(var x in _init){
+				switch(x)
+				{
+					case "list":
+						_init[x]._data = _method.objSort(["cityId","lat","lng","pageNo","pageSize","sortType","yearsFrom","yearsTo","categoryIds"],_localParam)
+						break;
+					case "index":
+						_init[x]._data = _method.objSort(["cityId"],_localParam)
+						break;
+				}
+				_method.getData(_init[x]._url, _init[x]._callback , _init[x]._type, _init[x]._data);
+			}
+			// 加载click事件
+			for(var x in _event){
+				_event[x]();
+			}
+			// 滚动条加载更多事件
+			_method.scrollLoad(_init.list);
+		};
+		
+		// DOM ready
+		$(function(){
+			// add fastClick
+			FastClick.attach(document.body);
+			if(_method.SS._get("queryParams")){
+				// 如果sessionStorage 里有 “queryParams” ,把queryParams所有参数赋值到_localParam
+				_localParam = _method.deepCopy(_method.SS._get("queryParams"));
+				// 执行页面渲染
+				_start();
+			}else{
+				// 如果sessionStorage 里没有 “queryParams”
+				// 判断url 有没有带入 cityId、sign、userId、 openId四个参数
+				_method._hasMemShip._data = _method.deepCopy({
+					cityId: _method.getQueryString("cityId")?_method.getQueryString("cityId"):1,
+					sign: _method.getQueryString("sign")?_method.getQueryString("sign"):0,
+					userId: _method.getQueryString("userId")?_method.getQueryString("userId"):0,
+					openId: _method.getQueryString("openId")?_method.getQueryString("openId"):0
+				});
+				// 请求用户信息
+				_method._hasMemShip._query(_start);
+			}
+		});
+		
+		// 百度统计
+		var _hmt = _hmt || [];
+		(function() {
+		  var hm = document.createElement("script");
+		  hm.src = "//hm.baidu.com/hm.js?6bca83d24b166e6e0fa2637dbfe868e8";
+		  var s = document.getElementsByTagName("script")[0]; 
+		  s.parentNode.insertBefore(hm, s);
+		})();
+		</script>
+	</body>
+</html>

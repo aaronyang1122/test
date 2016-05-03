@@ -1,0 +1,10 @@
+{{#if list}}
+<div class="slide">
+	<ul>
+		{{#list}}
+		  <li><a href="{{url}}"><img src="{{imgUrl}}" alt="{{title}}"></a></li>
+		{{/list}}
+		</ul>
+		{{dot list}}
+</div>
+{{/if}}

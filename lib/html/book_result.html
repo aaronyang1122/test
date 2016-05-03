@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
+    <title>全城遛娃</title>
+    <link rel="stylesheet" type="text/css" href="/babypass-server/css/reset.css"/>
+    <link rel="stylesheet" type="text/css" href="/babypass-server/css/common.css"/>
+    <link rel="stylesheet" type="text/css" href="/babypass-server/css/verify.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/less/book.css"/>
+    <script src="../js/jquery-1.11.3.min.js"></script>
+    <script src="../js/layer.m.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/main.js"></script>
+	<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+    <link rel="stylesheet" type="text/css" href="/babypass-server/css/popup-campaign.css"/>
+    
+</head>
+<body>
+<div class="wrap">
+	<div class="userHeader">
+		<div class="head-pic"></div>
+		<p class="desc">支付成功</p>
+	</div>
+	<div class="gray-wrap">
+	    <span>实付：￥</span><span id="_pay" class="price"></span> <br/><br/>
+	    <span class="price">订单编号：</span><span id="_orderId"></span><br/><br/>
+	    <span class="price">下单时间：</span><span id="_payTime"></span>
+	</div>
+	<div id="no-book">
+		<div class="padding-wrap">
+		    <h2><img src="../img/icon-calendar-dark.png"/> 有效期至<span id="_toTime"></span></h2><br/>
+	    
+	    		<p>* 本次活动无需预约，请在有效期之前使用，避免过期</p>
+	    </div>
+	    
+		<div class="userHeader">
+			<p class="title">验证码</p>
+	        <p class="desc" id="_serial">321345</p>
+		</div>
+	</div>
+    <div id="need-book">
+    		<div class="padding-wrap">
+		    <h2><img src="../img/icon-calendar-dark.png"/> 课程日期：<span id="_orderTime"></span></h2><br/>
+	    
+	    		<p>* 本次活动需预约，请耐心等待商户确认，预约成功后将会通过微信通知您，请注意查看状态更新信息</p>
+	    		</br>
+	    		<p>如有疑问请<a href="tel:{{showPhoneNum 400-935-022}}" class="phone-call">拨打客服电话：400-935-022</a></p>
+	    </div>
+    </div>
+    <p>
+		<input type="button" value="打卡" class="btn-base" id="btnPay" />
+    </p>
+</div>
+<script>
+		var _localParam = {}; // 本地变量_localParam，所有请求参数均从此调用
+		var appoint = _method.SS._get("appoint");
+		$("#_pay").text(appoint.order.amount);
+		$("#_orderId").text(appoint.order.serial);
+		$("#_serial").text(appoint.serial);
+		$("#_payTime").text(appoint.bookTime);
+		
+		$(function(){
+			// add fastClick
+			FastClick.attach(document.body);
+			if(_method.SS._get("queryParams")){
+				// 如果sessionStorage 里有 “queryParams” ,把queryParams所有参数赋值到_localParam
+				_localParam = _method.deepCopy(_method.SS._get("queryParams"));
+				// 执行页面渲染
+				_start();
+			}else{
+				// 如果sessionStorage 里没有 “queryParams”
+				// 判断url 有没有带入 cityId、sign、userId 三个参数
+				_method._hasMemShip._data = _method.deepCopy({
+					cityId: _method.getQueryString("cityId")?_method.getQueryString("cityId"):1,
+					sign: _method.getQueryString("sign")?_method.getQueryString("sign"):0,
+					userId: _method.getQueryString("userId")?_method.getQueryString("userId"):0,
+					openId: _method.getQueryString("openId")?_method.getQueryString("openId"):0
+				});
+				// 请求用户信息
+				_method._hasMemShip._query(_start);
+			}
+		});
+		var skuCatData = _method.SS._get("skuCatData");
+		if(skuCatData.isMerchantAlwaysOK == 1){
+			$("#_toTime").text(appoint.toTime.substring(0, 10));
+			$("#no-book").show();
+			$("#need-book").hide();
+			document.getElementById("btnPay").value="打卡";
+			$("#btnPay").on("click", function() {
+				var url_top = window.location;
+				//var urls = encodeURI(url_top);
+			    var u = "http://www.imiaoxiu.com/babypass-server/shop_center/jsapi?&cityId=1&urls=" + url_top;
+			    if(_method.os.isWeiXin){
+				    $.get(u,function(result){
+				      wx.config({
+				        debug: false,
+				        appId: result.data.appId,
+				        timestamp: result.data.timestamp,
+				        nonceStr: result.data.nonceStr,
+				        signature: result.data.signature,
+				        jsApiList: [
+				          'getLocation',
+				          'scanQRCode'
+				        ]
+				      })
+				    });
+    				}
+			    _method._wxScan(_localParam.userId,_localParam.sign,_localParam.cityId,2);
+			});
+		} else {
+			$("#_orderTime").text(appoint.date.substring(0, 10) + " " + appoint.skuTime.from);
+			$("#no-book").hide();
+			$("#need-book").show();
+			document.getElementById("btnPay").value="查看宝贝日程";
+			
+			$("#btnPay").on("click", function() {
+				window.location.href = "baobeiricheng.html";	
+			});
+		}
+</script>
+</body>
+</html>

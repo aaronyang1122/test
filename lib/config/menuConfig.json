@@ -1,0 +1,36 @@
+{
+	"menu": [
+				{
+					"value": "储值卡",
+					"url": "czk.html",
+					"className": "menu-item-czk"
+				},
+				[
+					{
+						"value": "包月卡",
+						"url": "#",
+						"className": "menu-item-byk"
+					},
+					{
+						"value": "热门",
+						"url": "remen.html",
+						"className": "menu-item-hot"
+					}
+				],
+				{
+					"value": "发现",
+					"url": "index.html",
+					"className": "menu-item-fx"
+				},
+				{
+					"value": "宝贝日程",
+					"url": "baobeiricheng.html",
+					"className": "menu-item-schedule"
+				},
+				{
+					"value": "我的",
+					"url": "my.html",
+					"className": "menu-item-my"
+				}
+			]
+}

@@ -1,0 +1,289 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="../css/reset.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/common.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/store.css"/>
+	</head>
+	<body>
+		<div class="loading-2" id="loading">
+			<span class="icon-loading"></span>
+			<span class="text">加载中...</span>
+		</div>
+		
+		<script id="template" type="text/x-handlebars-template">
+			{{#noResult shopCard}}
+				<div class="noData" id="noData">
+					啊哦，没有符合你要求的商户哦~
+				</div>
+				{{else}}
+				
+				{{#isLogin this}}
+					{{#isCharge this}}
+						<div class="btmTips">
+							<input type="button" id="pay" class="btn" value="去支付" />
+						</div>
+						{{else}}
+						<div class="btmTips">
+							<div class="col-1">
+								<p class="tixing">充值享折上折，请充值后查看折扣价</p>
+							</div>
+							<div class="col-2">
+								<input type="button" id="chongZhiBtm" class="btn" value="去开卡" />
+							</div>
+						</div>
+					{{/isCharge}}
+					{{else}}
+					<div class="btmTips">
+						<div class="col-1">
+							<p class="tixing">全城畅通无阻,请登陆后查看折扣</p>
+						</div>
+						<div class="col-2">
+							<input type="button" id="loginBtm" class="btn" value="去登录" />
+						</div>
+					</div>
+				{{/isLogin}}
+				
+				{{#shopCard}}
+					<div class="slide" id="slide">
+							<span class="appointed-times">已玩{{appointedTimes}}次</span>
+					    <img src="" data-original="{{image}}" alt="{{name}}">
+					</div>
+					<!--content-->
+					<div class="store-content-2">
+						<table border="0" cellspacing="0" cellpadding="0" class="table-cell">
+							<tr>
+								<th width="70%" class="title">{{name}}</th>
+								<td width="30%" class="right _price">￥<em>{{discountprice}}</em></td>
+							</tr>
+							<tr>
+								<td>原价{{storeprice}}元      {{discount}}折 </td>
+								<td class="right">{{diffDistance}}km</td>
+							</tr>
+						</table>
+						
+						<table border="0" cellspacing="0" cellpadding="0" class="table-cell">
+							<tr>
+								<th width="23%">商户地址：</th>
+								<td width="57%">{{address}}</td>
+								<td width="20%" class="icon-dianhua"><a href="tel:{{appointmentPhone}}"><img src="../img/iconfont-dianhua.png" alt="" /></a></td>
+							</tr>
+						</table>
+						
+						<table border="0" cellspacing="0" cellpadding="0" class="table-cell">
+							<tr>
+								<th width="23%">营业时间：</th>
+								<td width="77%">{{openTime}}</td>
+							</tr>
+							<tr>
+								<th>商户详情：</th>
+								<td>{{about}}</td>
+							</tr>
+							<tr>
+								<th>使用规则：</th>
+								<td> 
+									<ol class="rules">
+										<li>登录“全城遛娃”App或微信服务号“quanchengliuwa”</li>
+										<li>选择所购卡种对应套餐</li>
+										<li>输入所购代金卡密</li>
+										<li>抵用后支付即可开通</li>
+									</ol>
+									<p class="tips">温馨提示：商户列表、预约方式及使用规则等详见“全城遛娃”微信服务号；</p>
+									<p class="tips">微信客服：liuwaapple</p>
+								</td>
+							</tr>
+						</table>
+					</div>
+				{{/shopCard}}
+			{{/noResult}}
+			
+			
+		</script>
+		
+		<script src="//cdn.bootcss.com/jquery/2.2.0/jquery.min.js"></script>
+		<script src="//cdn.bootcss.com/jquery.lazyload/1.9.1/jquery.lazyload.min.js"></script>
+		<script src="//cdn.bootcss.com/handlebars.js/4.0.5/handlebars.min.js"></script>
+		<script src="//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js"></script>
+		<script src="../js/main.js" type="text/javascript" charset="utf-8"></script>
+		<script>
+			var _temp = Handlebars.compile($("#template").html());
+			var _data = {
+				param: {
+					postUrl: "/babypass-server/shopcard/list_detail",
+					postType: "POST",
+					actionShopList: function() { //shop-list  方法
+						console.log(this.currentId);
+					},
+					appId: _method.getQueryString("appId")
+				},
+				ajaxData: {
+					shopId: _method.getQueryString("shopId"),
+					lat: _method.getQueryString("lat"),
+					lng: _method.getQueryString("lng"),
+					openId: _method.getQueryString("openId")
+				},
+				isLogin: false,
+				isCharge: false
+			};
+			
+			var checkDataEmpty = function(res){
+				if(typeof(res)=='object'){
+					for(var key in res){
+						if(res[key] == null){
+							res[key] = 0;
+						}
+					}
+				}
+			};
+			
+			var _loading = {
+				'$loading': "#loading",
+				'showLoading': function() {
+					$(this.$loading).show();
+					$(this.$loading).appendTo($(this.$loading).parent());
+				},
+				'removeLoading': function() {
+					$(this.$loading).remove();
+				}
+			}
+			
+			Handlebars.registerHelper({
+					'showIcon': function(res, options) {
+						if (res == 2) {
+							return options.fn(this);
+						} else {
+							return options.inverse(this);
+						}
+					},
+					'noResult': function(res, options) {
+						if (res == null || res.length == 0) {
+							_loading.removeLoading();
+							return options.fn(this);
+						} else {
+							return options.inverse(this);
+						}
+					},
+					'isLogin': function(res, options) {
+						if (res.isLogin) {
+							return options.fn(this);
+						} else {
+							res.shopCard.discountprice = "?";
+							res.shopCard.discount = "?";
+							return options.inverse(this);
+						}
+					},
+					'isCharge': function(res, options) {
+						if (res.isCharge) {
+							return options.fn(this);
+						} else {
+							res.shopCard.discountprice = "?";
+							res.shopCard.discount = "?";
+							return options.inverse(this);
+						}
+					},
+					'showDiscount': function(res, options) {
+						if (res.isLogin || (res.isLogin && res.isCharge)) {
+							return options.fn(this);
+						} else {
+							return '?';
+						}
+					},
+					'showStoreprice': function(res, options) {
+						if (!res.isLogin || (res.isLogin && res.isCharge)) {
+							return options.fn(this);
+						} else {
+							return '?';
+						}
+					}
+				});
+			
+			var clickBind = function() {
+				//登录按钮跳转
+				$("#loginBtm").on("click", function() {
+					event.preventDefault();
+					//alert('去登录');
+					var shopId = _data.ajaxData.shopId;
+					var lat = _data.ajaxData.lat;
+					var lng =  _data.ajaxData.lng;
+					var openId = _data.ajaxData.openId;
+					var appId = _data.param.appId;
+					 var czk = shopId + "|" + lat + "|" + lng + "|" + openId  + "|" + appId;
+                                         var url = "http://" + window.location.host + "/babypass-server/wxlogin?czk=" + czk;
+					 window.location.href= url;
+				
+				});
+				//充值按钮跳转
+				$("#chongZhiBtm").on("click", function() {
+					event.preventDefault();
+					//alert('去充值');
+					window.location.href="/babypass-server/product/queryCard?shopId=" + _data.ajaxData.shopId + "&cityId="+ _data.param.cityId;
+				});
+				//支付
+				$("#pay").on("click", function() {
+					event.preventDefault();
+					//alert('查余额');
+					window.location.href = "/babypass-server/shopcard/pay_ensure?shopId=" + _data.ajaxData.shopId + "&skuId=" + _data.param.defaultskuid + "&cityId=" + _data.param.cityId;
+					
+					//appId
+					//_data.param.appId
+				});
+			}
+			
+			var reloadTitle = function(title){
+				var $body = $('body');
+				document.title = title;
+				var $iframe = $('<iframe src="/favicon.ico"></iframe>');
+				$iframe.on('load',function() {
+				  setTimeout(function() {
+				      $iframe.off('load').remove();
+				  }, 0);
+				}).appendTo($body);
+			}
+			
+			var getData = function(callback) {
+				$.ajax({
+					type: _data.param.postType,
+					dataType: "json",
+					timeout: 5000,
+					data: _data.ajaxData,
+					url: _data.param.postUrl,
+					success: function(res) {
+						setTimeout(function() {
+							//更新登录&支付状态
+							_data.isLogin = res.isLogin;
+							_data.isCharge = res.isCharge;
+							_data.param.defaultskuid = res.shopCard.defaultskuid;
+							_data.param.cityId = res.shopCard.cityId;
+							_data.param.shopId = res.shopCard.id;
+//							res.isLogin = true;
+//							res.isCharge = true;
+							
+							reloadTitle(res.shopCard.name);
+							_loading.removeLoading(); //移除loading
+							$('body').append(_temp(res));
+							$("#slide img").lazyload({
+								effect: "fadeIn"
+							});
+							callback();
+						}, 200);
+					},
+					error: function(XMLHttpRequest, textStatus, errorThrown) {
+						_loading.removeLoading(); //移除loading
+						$('body').append('<div class=\'noData\'>网络错误，请检查您的网络连接</div>'); //显示错误
+						console.log(XMLHttpRequest.status);
+						console.log(errorThrown);
+					}
+				});
+			}
+			
+			checkDataEmpty(_data.ajaxData);
+			getData(clickBind);
+			
+//			console.log(document.referrer);
+			
+		</script>
+	</body>
+</html>

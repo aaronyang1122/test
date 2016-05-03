@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
+		<title>打卡</title>
+		<link rel="stylesheet" type="text/css" href="../css/less/daka.css"/>
+		<link href="img/logo.png" rel="apple-touch-icon-precomposed">
+		<link href="img/logo.png" sizes="114x114" rel="apple-touch-icon-precomposed">
+	</head>
+	<body>
+		<div class="wrap">
+			<div class="list" id="list"></div>
+		</div>
+		<script src="../js/jquery-2.2.3.min.js"></script>
+		<script src="../js/jquery.lazyload.min.js"></script>
+		<script src="../js/handlebars.runtime-v4.0.5.js"></script>
+		<script src="../js/fastclick.min.js"></script>
+		<script src="../js/main.js"></script>
+		<script src="../js/helper.js"></script>
+		<script src="../js/layer.m.js"></script>
+		<script src="../js/daka.hbs.js"></script>
+		<script type="text/javascript">
+		// 注册页面参数
+		var _initPageParam = {
+			// 每次载入页面获取当前页面的初始化参数
+			getSS: function(){
+				return _method.SS._get("queryParams");
+			}
+		}
+		var _localParam = _initPageParam.getSS()?_initPageParam.getSS():{};
+		_localParam.url = _method.getQueryString("url")?decodeURIComponent(_method.getQueryString("url")):"";
+		var appointmentsList = [];
+		if(_localParam.userId && _localParam.sign){
+			$.get("http://www.imiaoxiu.com/babypass-server/shop_center/calendarScheduleCzk",{ userId: _localParam.userId, flag: 1, sign: _localParam.sign },
+    		function(_res){
+    			appointmentsList = _res.data.appointments;
+  		});
+		}
+		_init = {
+			appointList: {
+				_url: "http://www.imiaoxiu.com/babypass-server/shop_center/appointList",
+				_type: "GET",
+				_data: {
+					"userId": _localParam.userId,
+					"sign": _localParam.sign
+					//"userId": 78,
+					//"sign": "54c54035bf341ac7dc18aa96de2b554f82f05c1c34b9b4515442651fe1a87734082f79abd0d3184dcfdd0dfd71e6bd1ba5013686ba3857c5169eb22d129381a539d911c10b2cd7049beafe4cccad7088a40c20ea5123aebabc544cc5ea52b295da93a1b874e4dcbeea17f86dc1eab9d0370fbe788739187561fcc9b81ab214a8"
+				},
+				_callback:{
+					success: function(res){
+						$("#list").html(Handlebars.templates.daka(res));
+					},
+					failed: function(XMLHttpRequest, textStatus, errorThrown){
+						layer.open({
+							style: "width:100%;max-width:240px;font-size:16px;text-align:center;padding:1rem 0 0;",
+						    content: "<p>你今天没有预约哦！</p>",
+						    btn: ["返回"],
+						    shadeClose: true,
+						    time: 2
+						});
+					}
+				}
+			}
+		}
+		
+		// 注册click事件
+		var _event = {
+			daka: function(){
+				$("#list").on("click",".btn-daka", function(){
+					event.preventDefault();
+					var _userId = $(this).parents(".item").attr("data-userid");
+					var _userSign = $(this).parents(".item").attr("data-usersign");
+					var _category = $(this).parents(".item").attr("data-category");
+					var _id = $(this).parents(".item").attr("data-id");
+					var redirect_url = _localParam.url;
+					
+					for(var i = 0; i< appointmentsList.length; i++){
+    				if(_id == appointmentsList[i].id){
+    					_method.SS._set("tempOrderData", appointmentsList[i]);
+    				}
+    			}
+					
+					switch(_category)
+          {
+          	case "2":
+          	// 储值卡
+          		redirect_url += "&userId=" + _userId  + "&userSign=" + _userSign + "&cityId=" + _localParam.cityId + "&redirect=card";
+          		break;
+          	case "1":
+          	// 包月卡
+          		redirect_url += "&userId=" + _userId  + "&userSign=" + _userSign + "&cityId=" + _localParam.cityId
+          }
+//        console.log(redirect_url)
+					window.location.href = redirect_url;
+				})
+			}
+		}
+		
+		$(function(){
+			// add fastClick
+			FastClick.attach(document.body);
+			
+			
+			
+			// 加载页面内容
+			for(var x in _init){
+				_method.getData(_init[x]._url, _init[x]._callback , _init[x]._type, _init[x]._data);
+			}
+			
+			// 加载click事件
+			for(var x in _event){
+				_event[x]();
+			}
+		});
+		</script>
+	</body>
+</html>

@@ -1,0 +1,92 @@
+{{#if this}}
+	{{#if albums}}
+	<div class="slide">
+		<ul>
+			{{#albums}}
+			  <li><img src="{{image}}"></li>
+			{{/albums}}
+			</ul>
+			{{dot albums}}
+	</div>
+	{{/if}}
+<section>
+	<div class="skuInfo">
+		<div class="row row-1">
+			<div class="col-1">
+				<h1 class="shop-name">{{name}}<a href="tel:{{showPhoneNum shop.appointmentPhone}}" class="phone-call"><img src="../img/icon-phone-2.png" alt="phone" /></a></h1>
+			</div>
+			<div class="col-2">
+				<div class="discount-price"><i>￥</i>{{childDiscountPrice}} <span class="discount">{{showDiscount this}}折</span></div>
+				<div class="store-price">原价：￥{{childStorePrice}}</div>
+			</div>
+		</div>
+		<div class="row row-2">
+			<div class="col-1">
+				<p class="center intro">
+					适合年龄：{{transformToAge ageFrom}}岁-{{transformToAge ageTo}}岁 
+					<ul class="tag-color">
+						{{#tagList}}
+							<li style="border-color:#{{color}};color:#{{color}}">{{title}}</li>
+						{{/tagList}}
+					</ul>
+				</p>
+			</div>
+		</div>
+		<div class="row row-3">
+			<div class="col-1">
+				<a href="" class="address" id="showMap">{{shop.address}}</a>
+			</div>
+			<div class="col-2">
+				<p><span class="icon-location"></span>{{distance}} km</p>
+			</div>
+		</div>
+	</div>
+</section>
+			
+<div class="changci">
+	{{#showChangci isMerchantAlwaysOK}}
+	<div class="col-1">
+		{{#each recentSkuTimes}}
+			{{#if @first}}
+				<a href="" class="item current-item" data-date="{{cutDate date}}" data-id="{{id}}" data-from="{{from}}">
+					<span class="date">{{cutDate date}}</span>
+					<span class="time">{{cutTime from}} - {{cutTime to}}</span>
+				</a>
+			{{else}}
+				<a href="" class="item" data-date="{{cutDate date}}" data-id="{{id}}" data-from="{{from}}">
+					<span class="date">{{cutDate date}}</span>
+					<span class="time">{{cutTime from}} - {{cutTime to}}</span>
+				</a>
+			{{/if}}
+		{{/each}}
+	</div>
+	<div class="col-2">
+		<a href="" class="more" id="moreChangci">更多场次</a>
+	</div>
+	{{else}}
+	<div class="col-1">
+		<p>入场券2个月内有效</p>
+	</div>
+	{{/showChangci}}
+</div>
+			
+<section class="notice">
+	<h1><span>购买须知</span></h1>
+	<div class="content">
+		<dl>
+			<dt>有效期</dt>
+			<dd>工作日周末通用，法定节假日以商户营业时间为准</dd>
+		</dl>
+		{{#if intro}}
+		<dl>
+			<dt>温馨提示</dt>
+			<dd>{{intro}}</dd>
+		</dl>
+		{{/if}}
+	</div>
+</section>
+{{else}}
+<div class="noData" id="noData">
+	啊哦，没有符合你要求的商户哦~
+</div>
+{{/if}}

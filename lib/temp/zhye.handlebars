@@ -1,0 +1,13 @@
+{{#if data}}
+<h2>账户余额</h2>
+<div class="content">
+<p class="price">￥<em>{{data.balance}}</em></p>
+	<a href="chongzhi.html" class="btn" id="btnCZ">充值</a>
+</div>
+{{else}}
+<h2>账户余额</h2>
+<div class="content">
+<p>请登录查看余额</p>
+	<a href="https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx3fa0c56bd36c7469&redirect_uri=http%3a%2f%2fwww.imiaoxiu.com%2fbabypass-server%2fuser%2fbind%3fcityId%3d1&response_type=code&scope=snsapi_base&state=123#wechat_redirect" class="btn" id="btnLogin">登录</a>
+</div>
+{{/if}}

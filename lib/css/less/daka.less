@@ -1,0 +1,110 @@
+@import "reset.less";
+@import "common.less";
+@img: "../../img";
+@newHeight: 50px; //header默认值3.6rem ，这里可以重定义高度
+body{
+    background-color: @base-bg;
+}
+.list{
+    padding: 0.5rem 0;   
+    .item{
+        .border-radius;
+        background: #FFF;
+        margin: 0 0.5rem 0.5rem;
+        padding: 0.5rem;
+        &:last-of-type{
+            margin-bottom: 0;
+        }
+         
+        h1{
+            border-bottom: 1px solid #ddd;
+            font-size: 0.75rem;
+            padding-bottom: 0.5rem;
+            .box(center);
+            .col-1{
+                width: 30%;
+                .box-cell(1);
+                .baoyueka{
+                    color: #9742d8;
+                    &:before{
+                        content: "";
+                        display: inline-block;
+                        width: 1rem;
+                        height: 0;
+                        padding-top: 1rem;
+                        overflow: hidden;
+                        background: url("@{img}/icon-month-card.png") no-repeat 0 0;
+                        background-size: 100%;
+                        vertical-align: middle;
+                        margin-top: -0.1rem;
+                        margin-right: 0.2rem;
+                    }
+                }
+                .chuzhika{
+                    &:extend(.list .item h1 .col-1 .baoyueka);
+                    color: #ff8d13;
+                    &:before{
+                        &:extend(.list .item h1 .col-1 .baoyueka:before);
+                        background: url("@{img}/icon-rechargeable-card.png") no-repeat 0 0;
+                        background-size: 100%;
+                    }
+                }
+                
+            }
+            .col-2{
+                width: 70%;
+                .box-cell(3);
+                text-align: left;
+                .about{
+                    line-height: 1.2rem;
+                    height: 1.2rem;
+                    color: #999;
+                    border-left: 1px solid #e0e0e0;
+                    padding-left: 0.5rem;
+                    .text-overflow-n(1);
+                }
+            }
+        }
+        .content{
+            .box(center);
+            padding-bottom: 0.3rem;
+            .col-1{
+                width: 70%;
+                .box-cell(1);
+                .intro{
+                    font-size: 0.9rem;
+                    padding: 0.6rem 0;
+                    font-weight: bold;
+                }
+                .date{
+                    color: #999;
+                    font-size: 0.75rem;
+                    padding: 0.3rem 0;
+                    &:before{
+                        &:extend(.list .item h1 .col-1 .baoyueka:before);
+                        background: url("@{img}/icon-calendar.png") no-repeat 0 0;
+                        background-size: 100%;
+                        margin-right: 0.5rem;
+                    }
+                }
+            }
+            .col-2{
+                width: 30%;
+                text-align: right;
+                .box-cell(1);
+                .btn-daka, .yanzhengma{
+                    padding: 0.3rem 0;
+                    font-family: helvetica;
+                }
+                .btn-daka{
+                    color: @base-color;
+    
+                }
+                .cancel-ico, .expired-ico, .used-ico{
+                    width: 60%;
+                    margin: 0.5rem 0;
+                }
+            }
+        }
+    }
+}

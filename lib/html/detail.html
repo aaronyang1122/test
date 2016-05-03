@@ -1,0 +1,293 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="../css/less/detail.css"/>
+		<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.4"></script>
+	</head>
+	<body>
+		<div class="wrap">
+			<div class="loading" id="loading">
+				<span class="icon-loading"></span>
+				<span class="text">加载中...</span>
+			</div>
+		
+			<footer>
+				<div class="container">
+					<input type="button" name="" id="submit" value="去支付" class="submit" />
+				</div>
+			</footer>
+		</div>
+		
+		<div id="popCate" class="popCate">
+			<div id="J_pop" class="J_pop">
+				<div id="calendar">
+					<a href="#" id="closeCalendar">close</a>
+					<h2>请选择日期和场次</h2>
+					<input type="hidden" name="" id="selecterDate" value="" />
+					<div class="calendar-container"></div>
+					<div class="selectChangci" id="selectChangci"></div>
+				</div>
+				<div id="baiduMap">
+					<a href="#" id="closeBtn">closeBtn</a>
+					<div id="mapWrap"></div>
+				</div>
+			</div>
+		</div>
+		
+		<script src="../js/jquery-2.2.3.min.js"></script>
+		<script src="../js/jquery.lazyload.min.js"></script>
+		<script src="../js/handlebars.runtime-v4.0.5.js"></script>
+		<script src="../js/fastclick.min.js"></script>
+		<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+		<script src="../js/swipeSlide.min.js"></script>
+		<script src="../js/datepicker.js"></script>
+		<script src="../js/main.js"></script>
+		<script src="../js/helper.js"></script>
+		<script src="../js/detail.hbs.js"></script>
+		<script src="../js/selectChangci.hbs.js"></script>
+		<script>
+			// 注册页面参数
+		var _initPageParam = {
+			// 每次载入页面获取当前页面的初始化参数
+			getSS: function(){
+				return _method.SS._get("queryParams");
+			}
+		}
+//	var _localParam = _method.objSort(["cityId","lat","lng","pageNo","pageSize","sortType","yearsFrom","yearsTo"],_initPageParam.getSS());
+		var _localParam = _initPageParam.getSS()?_initPageParam.getSS():{};
+		
+		// 提交参数
+		var _submitParam = {
+			userId: _localParam.userId?_localParam.userId:null,
+			sign: _localParam.sign?_localParam.sign:null,
+			skuId: _method.getQueryString("skuId")
+		};
+		
+		//map
+    var paramMap = {};
+
+		// 注册页面内容
+		var _init = {
+			detail: {
+				// 查询课程列表
+				"_url": "http://www.imiaoxiu.com/babypass-server/cardShop/skuDetail",
+				"_type": "POST",
+				"_data": {
+					  "skuId": _method.getQueryString("skuId")
+				},
+				"_callback": {
+					"success": function(res){
+						// 写入distance
+						res.data.distance = _method.getQueryString("distance");
+						// 初始化默认场次参数
+						var _getResParam = {
+							shopName: res.data.shop.name,
+							branchName: res.data.shop.branchName,
+							appointDate: res.data.recentSkuTimes[0].date,
+							timeFrom: res.data.recentSkuTimes[0].from,
+							skuTimeId: res.data.recentSkuTimes[0].id,
+							childDiscountPrice: res.data.childDiscountPrice, 
+							discountPrice: res.data.discountPrice,
+							isMerchantAlwaysOK: res.data.isMerchantAlwaysOK
+						}
+						for(x in _getResParam){
+							_submitParam[x] = _getResParam[x];
+						}
+						// baidu 经纬度
+						paramMap.lng = res.data.shop.lng;
+						paramMap.lat = res.data.shop.lat;
+						// 渲染页面
+						$(".wrap").prepend(Handlebars.templates.detail(res.data));
+						// 写入页面title
+						_method.reloadTitle(res.data.name);
+						// 删除loading
+						$("#loading").remove();
+					},
+					"failed": function(XMLHttpRequest, textStatus, errorThrown){
+//						console.log(XMLHttpRequest, textStatus, errorThrown);
+					}
+				}
+			},
+			getSkuDate: {
+				"_url": "http://www.imiaoxiu.com/babypass-server/cardShop/getSkuDate",
+				"_type": "POST",
+				"_data": {
+					  "skuId": _method.getQueryString("skuId")
+				},
+				"_callback": {
+					"_res": {},
+					"success": function(res){
+						var _prohibit = "";
+						this._res = res;
+						this._res.start = _method._formatDate.call(this._res.data.list[0].date);
+						for(var i=0 ; i< this._res.data.list.length; i++){
+							if(!res.data.list[i].hasSku && _prohibit == ""){
+								_prohibit += _method._formatDate.call(res.data.list[i].date);
+							}else if(!res.data.list[i].hasSku && _prohibit != ""){
+								_prohibit += ","+ _method._formatDate.call(res.data.list[i].date);
+							}
+							if(i == this._res.data.list.length-1){
+								this._res.end = _method._formatDate.call(this._res.data.list[i].date);
+							}
+							
+						}
+						
+						//slide init
+						$('.slide').swipeSlide({
+							autoSwipe: true,
+							continuousScroll: true,
+							lazyLoad: true,
+							transitionType: 'cubic-bezier(0.22, 0.69, 0.72, 0.88)',
+							firstCallback: function(i, sum, me) {
+								me.find('.dot').children().first().addClass('cur');
+							},
+							callback: function(i, sum, me) {
+								me.find('.dot').children().eq(i).addClass('cur').siblings().removeClass('cur');
+							}
+						});
+						
+						// 生成日历
+						$("#selecterDate").datepicker({
+							isShow: true,
+							showVal: false,
+							minDate: this._res.start,
+							maxDate: this._res.end,
+							insertPosition: "#calendar>.calendar-container",
+							prohibit: _prohibit
+						});
+						
+						// 场次
+						$("#selectChangci").html(Handlebars.templates.selectChangci(this._res.data.list[0]));
+					},
+					"failed": function(XMLHttpRequest, textStatus, errorThrown){
+//						console.log(XMLHttpRequest, textStatus, errorThrown);
+					}
+				}
+			}
+		}
+		
+		// 注册click事件
+		var _event = {
+			// 显示日历
+			showCalendar: function(){
+				$(".wrap").on("click", "#moreChangci", function(){
+					event.preventDefault();
+					$("#calendar").show();
+					$("#calendar").siblings().hide();
+					_method.pop_show();
+				});
+			},
+			// 显示地图
+			baiduMap: function(){
+				$(".wrap").on("click", "#showMap" ,function(){
+					event.preventDefault();
+					$("#baiduMap").show();
+					$("#baiduMap").siblings().hide();
+					_method.pop_show();
+					// 生成地图
+					var mp = new BMap.Map("mapWrap",{
+					    enableHighResolution: true //是否开启高清
+					});
+					var point = new BMap.Point(paramMap.lng, paramMap.lat);
+					mp.centerAndZoom(point, 20);
+					var marker = new BMap.Marker(point);  // 创建标注
+					mp.addOverlay(marker); 
+					
+				});
+			},
+			// 关闭地图
+			closeMap: function(){
+				$("#closeBtn").on("click",function(){
+					event.preventDefault();
+					_method.pop_hide();
+				})
+			},
+			dateClick: function(){
+				$("#calendar").on("click","a[date]",function(){
+					var _arr = _init.getSkuDate._callback._res.data.list;
+					if(!$(this).hasClass("disabled")){
+						for(var i = 0; i< _arr.length ; i++){
+							if(_method._formatDate.call(_arr[i].date) == $(this).attr("date")){
+								$("#selectChangci").html(Handlebars.templates.selectChangci(_arr[i]));
+							}
+						}
+					}
+				})
+			},
+			selectChangci: function(){
+				$("#selectChangci").on("click","a",function(){
+					event.preventDefault();
+					var _that = $(this);
+					_that.addClass("current-item").siblings().removeClass("current-item");
+					$(".changci>.col-1").html(_that.clone());
+					
+					var _getNewParam = {
+						appointDate: _that.attr("data-date"),
+						timeFrom: _that.attr("data-from"), 
+						skuTimeId: _that.attr("data-id")
+					}
+					for(x in _getNewParam){
+						_submitParam[x] = _getNewParam[x];
+					}
+					
+					_method.pop_hide();
+				})
+			},
+			changci: function(){
+				$(".wrap").on("click",".item",function(){
+					event.preventDefault();
+					$(this).addClass("current-item").siblings().removeClass("current-item");
+					var _getNewParam = {
+						appointDate: $(this).attr("data-date"),
+						timeFrom: $(this).attr("data-from"), 
+						skuTimeId: $(this).attr("data-id")
+					}
+					for(x in _getNewParam){
+						_submitParam[x] = _getNewParam[x];
+					}
+				})
+			},
+			submit: function(){
+				$("#submit").on("click",function(){
+					if(_localParam.sign && _localParam.userId){
+					// 已登录
+						_method.SS._set("skuCatData", _submitParam);
+						if(!_localParam.user.birthday || !_localParam.user.nickName || !_localParam.user.sex){
+							// 补全信息
+							window.location.href = "userInfo.html";	
+						}else{
+							window.location.href = "book_ensure.html";	
+						}
+					}else{
+					// 未登录
+						window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx3fa0c56bd36c7469&redirect_uri=http%3a%2f%2fwww.imiaoxiu.com%2fbabypass-server%2fuser%2fbind%3fcityId%3d1&response_type=code&scope=snsapi_base&state=123#wechat_redirect";
+					}
+				})
+			},
+			closeCalendar: function(){
+				$("#closeCalendar").on("click",function(){
+					event.preventDefault();
+					_method.pop_hide();
+				})
+			}
+		}
+		
+		//dom ready
+		$(function(){
+			// add fastClick
+			FastClick.attach(document.body);
+			// 加载页面内容
+			for(var x in _init){
+					_method.getData(_init[x]._url, _init[x]._callback , _init[x]._type, _init[x]._data);
+			}
+			// 加载click事件
+			for(var x in _event){
+				_event[x]();
+			}
+		});
+		</script>
+	</body>
+</html>

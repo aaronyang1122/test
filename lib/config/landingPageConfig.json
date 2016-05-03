@@ -1,0 +1,20 @@
+{
+	"slide": [
+		{
+			"img": "../img/landingPage_pic_1.png",
+			"alt": "千家商户 全城畅玩"
+		},
+		{
+			"img": "../img/landingPage_pic_2.png",
+			"alt": "随时随地 轻松预约"
+		},
+		{
+			"img": "../img/landingPage_pic_3.png",
+			"alt": "发现附近 开心畅玩"
+		},
+		{
+			"img": "../img/landingPage_pic_4.png",
+			"alt": "立即体验"
+		}
+	]		
+}

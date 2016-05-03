@@ -1,0 +1,198 @@
+/*------------search bar----------------*/
+.searchBar, .searchBarGray{
+	position: relative;
+	width: 100%;
+	background-color: #ff5d6c;
+	top: 0;
+	left: 0;
+	z-index: 100;
+	padding: 0.4rem 0;
+	display:-moz-box;
+	display:-webkit-box;
+	display:box;
+	-moz-box-align:center;
+	-webkit-box-align:center;
+	-o-box-align:center;
+	box-align:center;
+}
+.searchBar{
+	background-image:linear-gradient(61deg, rgba(254,171,164,0.6) 0%, rgba(255,179,163,0.6) 43%, rgba(255,217,199,0.6) 100%);
+}
+#searchWrap{
+	display: none;
+	/*position: absolute;
+	width: 100%;
+	top: 0;
+	left: 0;
+	z-index: 100;*/
+}
+.searchBarGray{
+	background-color: #f0f0f0;
+}
+.shopListSearch{
+	display:-moz-box;
+	display:-webkit-box;
+	display:box;
+	-moz-box-align:center;
+	-webkit-box-align:center;
+	-o-box-align:center;
+	box-align:center;
+	padding: 0.4rem 0;
+}
+.searchBlock{
+	display: none;
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	z-index: 102;
+}
+.searchBlock:after{
+	content: '';
+	display: block;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background-color: #FFF;
+	top: 0;
+	left: 0;
+}
+.searchBar .col-1, .searchBarGray .col-1{
+	position: relative;
+	-moz-box-flex: 3;
+	-webkit-box-flex: 3;
+	box-flex: 3;
+	width: 85%;
+	margin-left: 0.5rem;
+}
+.searchBar input[type=text], .searchBarGray input[type=text], .shopListSearch input[type=text]{
+	display: block;
+	width: 80%;
+	height: 2rem;
+	font-size: 0.9rem;
+	background-color: #FFF;
+	border: none;
+	border-radius: 1rem;
+	padding: 0 10%;
+	outline: none;
+}
+.shopListSearch input[type=text]{
+	width: 80%;
+	padding: 0 5% 0 15%;
+}
+.searchBarGray input[type=text]{
+	background-color: #FFF;
+	color: #333;
+	padding: 0 15% 0 5%;
+}
+.shopListSearch input[type=text]{
+	border: 1px solid #eee;
+	background-color: #FFF;
+	color: #333;
+	-webkit-appearance: none;
+    -moz-appearance: none;
+}
+.shopListSearch .outter{
+	width: 75%;
+	position: relative;
+	margin-left: 0.5rem;
+}
+
+._btns .icon-login:after{
+	content: '';
+	display: inline-block;
+	width: 1.5rem;
+	height: 0;
+	padding-top: 1.5rem;
+	overflow: hidden;
+	background: url(../img/iconfont-login.png) no-repeat center;
+	background-size: 90%;
+	vertical-align: middle;
+	margin-top: -0.2rem;
+	margin-left: 0.2rem;
+}
+._btns .icon-chongzhi:after{
+	content: '';
+	display: inline-block;
+	width: 1.5rem;
+	height: 0;
+	padding-top: 1.5rem;
+	overflow: hidden;
+	background: url(../img/iconfont-chongzhi.png) no-repeat center;
+	background-size: 90%;
+	vertical-align: middle;
+	margin-top: -0.2rem;
+	margin-left: 0.2rem;
+}
+._btns .icon-xufei:after{
+	content: '';
+	display: inline-block;
+	width: 1.5rem;
+	height: 0;
+	padding-top: 1.5rem;
+	overflow: hidden;
+	background: url(../img/iconfont-xufei.png) no-repeat center;
+	background-size: 90%;
+	vertical-align: middle;
+	margin-top: -0.2rem;
+	margin-left: 0.2rem;
+}
+.searchBarGray input[type=submit]{
+	display: block;
+	position: absolute;
+	font-size: 0;
+	right: 0;
+	top: 50%;
+	width: 1.2rem;
+	height: 1.2rem;
+	border: none;
+	margin-top: -0.65rem;
+	margin-right: 0.6rem;
+	background: url(../img/iconfont_search.png) no-repeat 0 100%;
+	background-size: 100%;
+	opacity: 1;
+	outline: none;
+	overflow: hidden;
+}
+.searchBar .col-1:after, .shopListSearch .outter:after{
+	content: '';
+	display: block;
+	position: absolute;
+	left: 0;
+	top: 50%;
+	width: 1.2rem;
+	height: 0;
+	padding-top: 1.2rem;
+	margin-top: -0.6rem;
+	margin-left: 0.8rem;
+	background: url(../img/iconfont_search.png) no-repeat 0 0;
+	background-size: 100%;
+	opacity: 1;
+}
+.shopListSearch .outter:after{
+	background-position: 0 100%;
+}
+.searchBar input[type=text]::-webkit-input-placeholder { /* WebKit browsers */
+    color: #b6b6b6;
+}
+.searchBar .col-2, .searchBarGray .col-2{
+	color: #FFF;
+	-moz-box-flex: 1;
+	-webkit-box-flex: 1;
+	box-flex: 1;
+	width: 15%;
+	height: 2rem;
+	line-height: 2rem;
+	text-align: center;
+}
+.col-2 a{
+	font-size: 0.9rem;
+	color: #FFFFFF;
+}
+.searchBarGray .col-2 a{
+	color: #FF5D6C;
+}
+/*.slide{
+	margin-top: 2.8rem;
+}*/

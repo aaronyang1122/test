@@ -1,0 +1,22 @@
+{{#each data}}
+<div class="item" data-userId="{{userId}}" data-userSign="{{privateKey}}" data-category="{{category}}" data-id="{{id}}">
+	<h1>
+		<div class="col-1">
+			{{czkDaka category}}
+		</div>
+		<div class="col-2">
+			<p class="about">{{shopName}}</p>
+		</div>
+	</h1>
+	<div class="content">
+		<div class="col-1">
+			<p class="intro">{{skuName}} {{from}}-{{to}}</p>
+			<p class="date">{{date}}</p>
+		</div>
+		<div class="col-2">
+			<a href="#" class="btn-daka">打卡</a>
+			<p class="yanzhengma">{{serial}}</p>
+		</div>
+	</div>
+</div>
+{{/each}}

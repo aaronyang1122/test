@@ -1,0 +1,40 @@
+{{#if appointments}}
+{{#each appointments}}
+<!-- 成功 -->
+<div class="item" data-date="{{cutDate date}}" data-isok="{{skuCat.isMerchantAlwaysOK}}" data-category="{{category}}">
+	<h1>
+		<div class="col-1">
+               {{czkStatus status}}
+			   <!--<span class="success">预约成功</span>
+			   <span class="standby">预约成功</span>-->
+			<span class="chengren">成人{{adultNum}}人</span>
+			<span class="ertong">儿童{{childNum}}人</span> 
+		</div>
+		<div class="col-2">
+			{{#czkDk status}}
+			<a href="" class="daka">打卡</a>
+			{{/czkDk}}
+		</div>
+	</h1>
+	<div class="content">
+		<div class="col-1">
+			<p class="intro">{{skuCat.shop.name}}{{skuCat.shop.branchName}}</p>
+			<p class="date">{{#showChangci skuCat.isMerchantAlwaysOK}}{{formatDate date}}{{else}}有效期2个月{{/showChangci}}</p>
+		</div>
+		<div class="col-2">
+			{{#czk status}}
+			<p class="price"><i>￥</i>{{totalCost}}</p>
+			<p class="yanzhengma">{{serial}}</p>
+			{{/czk}} 
+			<!--<img src="../img/icon-canceled-mark.png" class="cancel-ico">
+		    <img src="../img/icon-guoqi-mark.png" class="expired-ico">
+		    <img src="../img/icon-used-mark.png" class="used-ico">-->
+		</div>  
+	</div>
+</div>
+{{/each}}
+{{else}}
+<div class="noData" id="noData">
+		没有预约哦~
+	</div>	
+{{/if}}

@@ -1,0 +1,112 @@
+@import "reset.less";
+@import "common.less";
+@import "header";
+@import "shopList.less";
+@import "menu.less";
+@import "calendar.less";
+@img: "../../img";
+@czk-header-height: 3.125rem;
+
+body{
+    background-color: @base-bg;
+}
+header{
+    z-index: 2;
+    .container{
+        background-color: @base-color;
+        width: @full-width;
+        height: @czk-header-height;
+        .sort{
+            height: @czk-header-height;
+            font-size: 0.8125rem;
+            margin-left: 1rem;
+            .box(center);
+            .col-1{
+                span{
+                    display: inline-block;
+                    color: #fff;
+                    padding: 0.5rem 0.5rem 0.5rem 0;
+                    &:after{
+                        content: "";
+                        display: inline-block;
+                        width: 0;
+                        height: 0;
+                        border-top: 0.25rem solid transparent;
+                        border-left: 0.5rem solid #fff;
+                        border-bottom: 0.25rem solid transparent;
+                        margin-left: 0.5rem;
+                    }
+                }
+                .box-cell(3);
+            }
+            .col-2{
+                .box-cell(0.5);
+                text-align: center;
+                margin-right: 0.5rem;
+                .goto-btn{
+                    height: 1.875rem;
+                    line-height: 1.875rem;
+                    min-width: 3rem;
+                    text-align: center;
+                    color: #fff;
+                    .border-radius;
+                    background-color: #db244f;
+                }
+            }
+        }
+    }
+    &:after{
+        height: @czk-header-height;
+    }
+}
+/*------------slide----------------*/
+.slide{
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+    ul{
+        .absolute;
+        width: @full-width;
+        height: @full-height;
+        li{
+            list-style: none;
+            .absolute;
+            width: @full-width;
+            height: @full-height;
+            &:first-child{
+                z-index: 1;
+            }
+            img{
+                .absolute;
+                width: @full-width;
+                border: none;
+            }
+        }
+    }
+    .dot{
+        position: absolute;
+        width: @full-width;
+        bottom: 7px;
+        z-index: 5;
+        font-size: 0;
+        text-align: center;
+        span{
+            display: @inline-pic;
+            width: 6px;
+            height: 6px;
+            margin-left: 3px;
+            border-radius: 3px;
+            background-color: #fff;
+        }
+        .cur{
+            width: 12px;
+            background-color: @base-color;
+        }
+    }
+    &:after{
+        content: '';
+        display: block;
+        width: @full-width;
+        padding-top: 26.67%;
+    }
+}

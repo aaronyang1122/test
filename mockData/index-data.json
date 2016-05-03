@@ -1,0 +1,92 @@
+{
+     code: 200,
+     msg: "失败原因",
+     data: {
+          totalCount: 23, // 初始的时候写入hiden
+          isGotLocation : true,
+          shops: [
+               {
+                              id: 100,
+                              name: "马丁乐园1",
+                              branchName: "张江店",
+                              address: "汇智国际广场",
+                              image: "http://7xkccn.com1.z0.glb.clouddn.com/ecc66542-4b1b-4785-8416-ca2cdbc10d1c",
+                              distance: 3,
+                              isVip: 1
+
+               }, {
+                              id: 101,
+                              name: "马丁乐园2",
+                              branchName: "张江店",
+                              address: "汇智国际广场",
+                              image: "http://7xkccn.com1.z0.glb.clouddn.com/ecc66542-4b1b-4785-8416-ca2cdbc10d1c",
+                              distance: 12
+
+               }, {
+                              id: 102,
+                              name: "马丁乐园3",
+                              branchName: "张江店",
+                              address: "汇智国际广场",
+                              image: "http://7xkccn.com1.z0.glb.clouddn.com/ecc66542-4b1b-4785-8416-ca2cdbc10d1c",
+                              distance: 12
+
+               }, {
+                              id: 103,
+                              name: "马丁乐园4",
+                              branchName: "张江店",
+                              address: "汇智国际广场",
+                              image: "http://7xkccn.com1.z0.glb.clouddn.com/ecc66542-4b1b-4785-8416-ca2cdbc10d1c",
+                              distance: 12
+
+               }, {
+                              id: 104,
+                              name: "马丁乐园5",
+                              branchName: "张江店",
+                              address: "汇智国际广场",
+                              image: "http://7xkccn.com1.z0.glb.clouddn.com/ecc66542-4b1b-4785-8416-ca2cdbc10d1c",
+                              distance: 12
+
+               }, {
+                              id: 105,
+                              name: "马丁乐园6",
+                              branchName: "张江店",
+                              address: "汇智国际广场",
+                              image: "http://7xkccn.com1.z0.glb.clouddn.com/ecc66542-4b1b-4785-8416-ca2cdbc10d1c",
+                              distance: 12
+
+               }, {
+                              id: 106,
+                              name: "马丁乐园7",
+                              branchName: "张江店",
+                              address: "汇智国际广场",
+                              image: "http://7xkccn.com1.z0.glb.clouddn.com/ecc66542-4b1b-4785-8416-ca2cdbc10d1c",
+                              distance: 12
+
+               }, {
+                              id: 107,
+                              name: "马丁乐园8",
+                              branchName: "张江店",
+                              address: "汇智国际广场",
+                              image: "http://7xkccn.com1.z0.glb.clouddn.com/ecc66542-4b1b-4785-8416-ca2cdbc10d1c",
+                              distance: 12
+
+               }, {
+                              id: 108,
+                              name: "马丁乐园9",
+                              branchName: "张江店",
+                              address: "汇智国际广场",
+                              image: "http://7xkccn.com1.z0.glb.clouddn.com/ecc66542-4b1b-4785-8416-ca2cdbc10d1c",
+                              distance: 12
+
+               }, {
+                              id: 109,
+                              name: "马丁乐园10",
+                              branchName: "张江店",
+                              address: "汇智国际广场",
+                              image: "http://7xkccn.com1.z0.glb.clouddn.com/ecc66542-4b1b-4785-8416-ca2cdbc10d1c",
+                              distance: 12
+
+               }
+          ]
+     }
+}

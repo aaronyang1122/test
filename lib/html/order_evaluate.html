@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
+		<title>评价订单</title>
+		<link rel="stylesheet" type="text/css" href="../css/less/temp_1.css" />
+		<link rel="stylesheet" type="text/css" href="../css/chongzhi.css" />
+		<link rel="stylesheet" type="text/css" href="../css/less/book.css" />
+		<link rel="stylesheet" type="text/css" href="../css/jquery.spinner.css" />
+		<link rel="stylesheet" type="text/css" href="../css/less/dingdan.css" />
+		<script src="../js/jquery-1.11.3.min.js"></script>
+	</head>
+
+	<body>
+		<!-- 页面外框 -->
+		<div>
+			<div class="order-evaluate">
+				<div>
+					<div>
+						<p class="evaluate-calendar" id="order-date"></p>
+					</div>
+
+					<div class="dingdan-item">
+						<section class="sec-1">
+							<div class="col-1">
+								<p class="icon-p" >订单编号：<span id="order-id"></span></p>
+								<p class="icon-p">
+									<span class="icon-order-used">已使用</span>
+									<span class="icon-chengren">成人<span id="adult-num"></span>人</span>
+									<span class="icon-ertong">儿童<span id="child-num"></span>人</span>
+								</p>
+							</div>
+						</section>
+
+						<dl>
+							<br />
+							<dt class="shop-title">预约商户：</dt>
+						</dl>
+
+						<div class="order-shop-name">
+							<span id="shop-name"></span>
+							<a href="#" class="icon-order-phone" id="phone"></a>
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+
+			<div class="evaluate-item">
+
+				<p class="order-evaluate-ask">您对该商户满意吗？</p>
+
+				<form>
+					<div class="star-mapping">
+						<a href="javascript:click(1)"><img width="40" height="40" src="../img/icon-star grey.png" id="star1" onMouseOver="over(1)" onMouseOut="out(1)" /></a>
+						<a href="javascript:click(2)"><img width="40" height="40" src="../img/icon-star grey.png" class="star-size" id="star2" onMouseOver="over(2)" onMouseOut="out(2)" /></a>
+						<a href="javascript:click(3)"><img width="40" height="40" src="../img/icon-star grey.png" class="star-size" id="star3" onMouseOver="over(3)" onMouseOut="out(3)" /></a>
+						<a href="javascript:click(4)"><img width="40" height="40" src="../img/icon-star grey.png" class="star-size" id="star4" onMouseOver="over(4)" onMouseOut="out(4)" /></a>
+						<a href="javascript:click(5)"><img width="40" height="40" src="../img/icon-star grey.png" class="star-size" id="star5" onMouseOver="over(5)" onMouseOut="out(5)" /></a>
+					</div>
+				</form>
+				<div class="good-ev">
+					<span class="message" id="_msg_id">很满意</span>
+				</div>
+				
+				<input class="box2" id="_content" type="text" placeholder="说一下您的理由…" />
+				
+
+			</div>
+			<div class="btm-div">
+				<p>
+					<input type="button" value="确认留言" class="btn-center" id="btnEval" />
+				</p>
+			</div>
+		</div>
+	</body>
+
+</html>
+<script src="//cdn.bootcss.com/jquery/2.2.0/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js"></script>
+<script src="../js/layer.m.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/main.js"></script>
+<script type="text/javascript">
+	var check = 0; //记录当前选择的评分  
+	var time = 0; //统计用户评价的次数
+	function over(param) {
+		if (param == 1) {
+			$("#star1").attr("background", "../img/icon-star yellow.png"); //第一颗星星亮起来，以此类推  
+			$("#_msg_id").text("很不满意"); //设置提示语，以此类推  
+		} else if (param == 2) {
+			$("#star1").attr("src", "../img/icon-star yellow.png");
+			$("#star2").attr("src", "../img/icon-star yellow.png");
+			$("#_msg_id").text("不满意");
+		} else if (param == 3) {
+			$("#star1").attr("src", "../img/icon-star yellow.png");
+			$("#star2").attr("src", "../img/icon-star yellow.png");
+			$("#star3").attr("src", "../img/icon-star yellow.png");
+			$("#_msg_id").text("一般");
+		} else if (param == 4) {
+			$("#star1").attr("src", "../img/icon-star yellow.png");
+			$("#star2").attr("src", "../img/icon-star yellow.png");
+			$("#star3").attr("src", "../img/icon-star yellow.png");
+			$("#star4").attr("src", "../img/icon-star yellow.png");
+			$("#_msg_id").html("满意");
+		} else if (param == 5) {
+			$("#star1").attr("src", "../img/icon-star yellow.png");
+			$("#star2").attr("src", "../img/icon-star yellow.png");
+			$("#star3").attr("src", "../img/icon-star yellow.png");
+			$("#star4").attr("src", "../img/icon-star yellow.png");
+			$("#star5").attr("src", "../img/icon-star yellow.png");
+			$("#_msg_id").html("非常满意");
+		}
+	}
+	/*out 方法是鼠标移除事件的处理方法，当鼠标移出时，恢复到打分情况*/
+	function out() {
+		if (check == 1) { //打分是1，设置第一颗星星亮，其他星星暗，其他情况以此类推  
+			$("#star1").attr("src", "../img/icon-star yellow.png");
+			$("#star2").attr("src", "../img/icon-star grey.png");
+			$("#star3").attr("src", "../img/icon-star grey.png");
+			$("#star4").attr("src", "../img/icon-star grey.png");
+			$("#star5").attr("src", "../img/icon-star grey.png");
+			$("#_msg_id").html("很不满意");
+		} else if (check == 2) {
+			$("#star1").attr("src", "../img/icon-star yellow.png");
+			$("#star2").attr("src", "../img/icon-star yellow.png");
+			$("#star3").attr("src", "../img/icon-star grey.png");
+			$("#star4").attr("src", "../img/icon-star grey.png");
+			$("#star5").attr("src", "../img/icon-star grey.png");
+			$("#_msg_id").html("不满意");
+		} else if (check == 3) {
+			$("#star1").attr("src", "../img/icon-star yellow.png");
+			$("#star2").attr("src", "../img/icon-star yellow.png");
+			$("#star3").attr("src", "../img/icon-star yellow.png");
+			$("#star4").attr("src", "../img/icon-star grey.png");
+			$("#star5").attr("src", "../img/icon-star grey.png");
+			$("#_msg_id").html("一般");
+		} else if (check == 4) {
+			$("#star1").attr("src", "../img/icon-star yellow.png");
+			$("#star2").attr("src", "../img/icon-star yellow.png");
+			$("#star3").attr("src", "../img/icon-star yellow.png");
+			$("#star4").attr("src", "../img/icon-star yellow.png");
+			$("#star5").attr("src", "../img/icon-star grey.png");
+			$("#_msg_id").html("满意");
+		} else if (check == 5) {
+			$("#star1").attr("src", "../img/icon-star yellow.png");
+			$("#star2").attr("src", "../img/icon-star yellow.png");
+			$("#star3").attr("src", "../img/icon-star yellow.png");
+			$("#star4").attr("src", "../img/icon-star yellow.png");
+			$("#star5").attr("src", "../img/icon-star yellow.png");
+			$("#_msg_id").html("非常满意");
+		} else if (check == 0) {
+			$("#star1").attr("src", "../img/icon-star grey.png");
+			$("#star2").attr("src", "../img/icon-star grey.png");
+			$("#star3").attr("src", "../img/icon-star grey.png");
+			$("#star4").attr("src", "../img/icon-star grey.png");
+			$("#star5").attr("src", "../img/icon-star grey.png");
+			$("#_msg_id").html("非常不满意");
+		}
+	}
+	/*click()点击事件处理，记录打分*/
+	function click(param) {
+		time++; //记录打分次数  
+		check = param; //记录当前打分  
+		out(); //设置星星数  
+	}
+	var _localParam = _method.SS._get("queryParams");
+	var _initData = _method.SS._get("tempOrderData");
+	var cityId = 1;
+	if(_localParam != null && _localParam.cityId != null) {
+		cityId = _localParam.cityId;
+	}
+	
+	
+	
+	
+    $("#btnEval").on("click", function () {
+	    var _wxEvPara = {
+		  "appoimentId": _initData.id,
+		  "channel": "weixin",
+		  "cityId": cityId,
+		  "content": $("#_content").val(),
+		  "stars": "" + check,
+		  "title": "标题"
+		}
+    		alert(JSON.stringify(_wxEvPara));
+        $.ajax({   
+       type: "post",   
+       url: "http://www.imiaoxiu.com/babypass-server/shop_center/evaluation",
+       data: JSON.stringify(_wxEvPara),  
+	   contentType : "application/json",
+       dataType: "json",   
+       success: function (data) {   
+              layer.open({
+                shade: true,
+                style: 'width:100%;max-width:240px;font-size:16px;text-align:center;padding:1rem 0 0;',
+                content: '<p>您已评价成功!</p>',
+                btn: ['好哒'],
+                shadeClose: false,
+                yes: function (index) {
+                    window.location.href="index.html";
+                }
+            });
+       }
+	});
+    });
+	$("#order-id").text(_initData.order.serial);
+	$("#child-num").text(_initData.childNum);
+	$("#adult-num").text(_initData.adultNum);
+	$("#shop-name").text(_initData.skuCat.shop.name);
+	$("#phone").prop("href","tel:"+_initData.skuCat.shop.appointmentPhone);
+	
+	switch(_initData.skuCat.isMerchantAlwaysOK)
+	{
+		case 0:
+			$("#order-date").text(_method._formatDate.call(_initData.date));
+			break;
+		case 1:
+			$("#order-date").text("有效期2个月");
+	}
+	
+</script>

@@ -1,0 +1,286 @@
+@import "reset.less";
+@import "common.less";
+@import "shopList.less";
+@import "menu.less";
+@img: "../../img";
+body{
+    background-color: @base-bg;
+}
+
+/*------------search bar----------------*/
+.searchBar, .searchBarGray{
+    position: relative;
+    width: @full-width;
+    background-color: @base-color;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    padding: 0.5rem 0;
+    .box(center);
+}
+//.searchBar{
+//  .linear-gradient-1(61deg, rgba(254,171,164,0.6), rgba(255,179,163,0.6), rgba(255,217,199,0.6), 43%);
+//}
+.searchBarGray{
+    background-color: @base-bg;
+}
+.searchBar{
+    .col-1{
+        .box-cell(3);
+        margin-left: 1rem;
+        position: relative;
+    }
+    .col-1:after{
+        content: '';
+        display: @inline-pic;
+        position: absolute;
+        left: 0;
+        top: 50%;
+        width: 1rem;
+        height: 0;
+        padding-top: 1rem;
+        margin-top: -0.5rem;
+        margin-left: 0.5rem;
+        background: url("@{img}/iconfont_search.png") no-repeat 0 100%;
+        background-size: 100%;
+        opacity: 0.8;
+    }
+    .col-2{
+        text-align: center;
+        .box-cell(0.3);
+        .scan{
+            width: 2rem;
+            height: 0;
+            padding-top: 2rem;
+            overflow: hidden;
+            display: inline-block;
+            background: url("@{img}/icon-scan.png") no-repeat center;
+            background-size: 80%;
+        }
+        .search{
+            &:extend(.searchBar .col-2 .scan);
+            background: url("@{img}/iconfont_search.png") no-repeat 0 0;
+            background-size: 100%;
+        }
+        .back{
+            &:extend(.searchBar .col-2 .scan);
+            background: url("@{img}/icon-back.png") no-repeat 0 0;
+            background-size: 100%;
+            margin-top: 0.2rem;
+        }
+    }
+    input[type=text]{
+        display: block;
+        width: 80%;
+        height: 2.2rem;
+        line-height: 2.2rem;
+        font-size: 0.9rem;
+        background-color: #FFF;
+        border: none;
+        border-radius: 1.1rem;
+        padding: 0 10%;
+        outline: none;
+        &::-webkit-input-placeholder { /* WebKit browsers */
+            color: #999;
+        }
+    }
+}
+
+/*------------slide----------------*/
+.slide{
+    position: relative;
+    overflow: hidden;
+    ul{
+        .absolute;
+        width: @full-width;
+        height: @full-height;
+        li{
+            list-style: none;
+            .absolute;
+            width: @full-width;
+            height: @full-height;
+            &:first-child{
+                z-index: 1;
+            }
+            img{
+                .absolute;
+                width: @full-width;
+                border: none;
+            }
+        }
+    }
+    .dot{
+        position: absolute;
+        width: @full-width;
+        bottom: 7px;
+        z-index: 5;
+        font-size: 0;
+        text-align: center;
+        span{
+            display: @inline-pic;
+            width: 6px;
+            height: 6px;
+            margin-left: 3px;
+            border-radius: 3px;
+            background-color: #fff;
+        }
+        .cur{
+            width: 12px;
+            background-color: @base-color;
+        }
+    }
+    &:after{
+        content: '';
+        display: block;
+        width: @full-width;
+        padding-top: 37.33%;
+    }
+}
+/*------------自定义模块----------------*/
+.custom{
+    &:extend(section);
+    padding: 0;
+    margin-top: 0.5rem;
+    display: table;
+    width: @full-width;
+    .col-1{
+        display: table-cell;
+        width: 42.7%;
+        border-right: 1px solid #e2e2e2;
+        #pic1{
+            width: @full-width;
+            height: 0;
+            padding-top: 109%;
+            position: relative;
+            .overflow-hide;
+            background: url("@{img}/logo-watermark-gray.png") no-repeat center;
+            background-size: 50px;
+            img{
+                position: absolute;
+                width: @full-width;
+                top: 0;
+                left: 0;
+            }
+        } 
+    }
+    .col-2{
+        vertical-align: top;
+        display: table-cell;
+        width: 57.3%;
+        .row{
+            #pic2{
+                width: @full-width;
+                height: 0;
+                padding-top: 40.8%;
+                position: relative;
+                .overflow-hide;
+                background: url("@{img}/logo-watermark-gray.png") no-repeat center;
+                background-size: 50px;
+                img{
+                    position: absolute;
+                    width: @full-width;
+                    top: 0;
+                    left: 0;
+                }
+            } 
+            &:last-of-type{
+                display: table;
+                width: 100%;
+                border-top: 1px solid #e2e2e2;
+                .col{
+                    display: table-cell;
+                    width: 50%;
+                    vertical-align: middle;
+                    text-align: center;
+                    #pic3{
+                        width: @full-width;
+                        height: 0;
+                        padding-top: 80.6%;
+                        position: relative;
+                        .overflow-hide;
+                        background: url("@{img}/logo-watermark-gray.png") no-repeat center;
+                        background-size: 50px;
+                        img{
+                            position: absolute;
+                            width: @full-width;
+                            top: 0;
+                            left: 0;
+                        }
+                    } 
+                    &:last-of-type{
+                        border-left: 1px solid #e2e2e2;
+                    }
+                    .zhye{
+                        width: 85%;
+                        display: inline-block;
+                        background-color: @base-bg;
+                        .overflow-hide;
+                        .border-radius;
+                        h2{
+                            font-size: 0.625rem;
+                            line-height: 1.2rem;
+                            background-color: @base-color;
+                            color: @bg-white;
+                        }
+                        .content{
+                            padding: 0 0 0.5rem 0;
+                            p{
+                                font-size: 0.625rem;
+                                padding: 0.3rem 0;
+                                color: @base-gray;
+                            }
+                            .price{
+                                font-family: helvetica;
+                                color: @base-color;
+                                em{
+                                    font-size: 0.9rem;
+                                    font-weight: bold;
+                                }
+                            }
+                            .btn{
+                                font-size: 0.625rem;
+                                line-height: 1.2rem;
+                                background: #ffb7c8;
+                                width: 90%;
+                                color: #fff;
+                                .border-radius(0.6rem);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+/*------------每周推荐----------------*/
+.tab-3-cells{
+    .box(center);
+    padding: 0.5rem 0 0 0;
+    li{
+        .box-cell(1);
+        width: 33.3%;
+        text-align: center;
+        margin: 0.5rem 0 0 0;
+        .pic-wrap{
+            .lazy-pic-wrap(100%;70.3%;40%;100%);
+        }
+        img{
+            width: 100%;
+        }
+        i{
+            display: block;
+            font-size: 0.75rem;
+            line-height: 1.67rem;
+        }
+        a{
+            display: block;
+            color: #333333;
+        }
+        &:first-of-type{
+            margin-right: 0.5rem;
+        }
+        &:last-of-type{
+            margin-left: 0.5rem;
+        }
+    }
+}

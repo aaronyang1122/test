@@ -1,0 +1,203 @@
+html,
+body {
+	width: 100%;
+	height: 100%;
+}
+body {
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-webkit-text-size-adjust: none;
+	/*font: 16px "Helvetica Neue", Helvetica, STHeiTi, "\5FAE\8F6F\96C5\9ED1", sans-serif;*/
+	/*font-size: 16px;*/
+	min-width: 320px;
+}
+a{
+	text-decoration: none;
+	display: inline-block;
+	color: #FF6270;
+	tap-highlight-color: rgba(0,0,0,0);  
+	focus-ring-color: rgba(0, 0, 0, 0);  
+	-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+	-webkit-focus-ring-color: rgba(0, 0, 0, 0);
+	-moz-tap-highlight-color: rgba(0, 0, 0, 0);
+	-moz-focus-ring-color: rgba(0, 0, 0, 0);
+}
+a:visited{
+	color: #FF6270;
+}
+input{
+	/*font: 16px "Helvetica Neue", Helvetica, STHeiTi, "\5FAE\8F6F\96C5\9ED1", sans-serif;*/
+	font-size: 16px;
+	/*tap-highlight-color: rgba(0,0,0,0);  
+	focus-ring-color: rgba(0, 0, 0, 0);  
+	-webkit-tap-highlight-color: rgba(0,0,0,0);  
+	-webkit-focus-ring-color: rgba(0, 0, 0, 0);  
+	-moz-tap-highlight-color: rgba(0,0,0,0);  
+	-moz-focus-ring-color: rgba(0, 0, 0, 0);*/
+}
+.list-wrapper img{
+	width: 100%;
+}
+/**
+ *
+ * iscroll styles
+ *
+ */
+#wrapper {
+	position:absolute; 
+	z-index:1;
+	top:0; 
+	bottom:0;
+	left:-9999px;
+	width:100%;
+	overflow:auto;
+}
+#scroller {
+	position:absolute; z-index:1;
+/*	-webkit-touch-callout:none;*/
+	-webkit-tap-highlight-color:rgba(0,0,0,0);
+	width:100%;
+	padding:0;
+}
+#scroller ul {
+	list-style:none;
+	padding:0;
+	margin:0;
+	width:100%;
+	text-align:left;
+}
+#scroller li {
+	padding:0 10px;
+	height:40px;
+	line-height:40px;
+	border-bottom:1px solid #ccc;
+	border-top:1px solid #fff;
+	background-color:#fafafa;
+	font-size:14px;
+}
+/**
+ *
+ * Pull down styles
+ *
+ */
+#pullDown, #pullUp {
+	height:40px;
+	line-height:40px;
+	padding:5px 10px;
+	font-size:14px;
+	color:#999;
+	text-align: center;
+}
+#pullDown .pullDownIcon, #pullUp .pullUpIcon  {
+	display:inline-block;
+	width: 8%; 
+	height: 0;
+	padding-top: 8%;
+	vertical-align: middle;
+	margin-right: 0.5rem;
+	background:url(../img/pull-icon@2x.png) 0 0 no-repeat;
+	-webkit-background-size: cover; 
+	background-size: cover;
+	-webkit-transition-property:-webkit-transform;
+	-webkit-transition-duration:500ms;
+}
+#pullDown .pullDownIcon {
+	-webkit-transform:rotate(0deg) translateZ(0);
+}
+#pullUp .pullUpIcon  {
+	-webkit-transform:rotate(-180deg) translateZ(0);
+}
+
+#pullDown.flip .pullDownIcon {
+	-webkit-transform:rotate(-180deg) translateZ(0);
+}
+
+#pullUp.flip .pullUpIcon {
+	-webkit-transform:rotate(0deg) translateZ(0);
+}
+
+#pullDown.loading .pullDownIcon, #pullUp.loading .pullUpIcon {
+	background-position:0 100%;
+	-webkit-transform:rotate(0deg) translateZ(0);
+	-webkit-transition-duration:0ms;
+	-webkit-animation-name:loading;
+	-webkit-animation-duration:1000ms;
+	-webkit-animation-iteration-count:infinite;
+	-webkit-animation-timing-function:linear;
+}
+@-webkit-keyframes loading {
+	from { -webkit-transform:rotate(0deg) translateZ(0); }
+	to { -webkit-transform:rotate(360deg) translateZ(0); }
+}
+
+#nomoreResult{
+	display: none;
+	text-align: center;
+}
+.mylayer-title{
+	font-size: 1.4rem;
+	margin-bottom: 1rem;
+}
+
+
+/*------------------top notice---------------*/
+.top-notice{
+	background: #EB4F38;
+	color: #FFFFFF;
+	font-size: 0.9rem;
+	padding: 1rem 2rem 1rem 1.4rem;
+	line-height: 1.2rem;
+	background:#EB4F38 url(../img/iconfont-tongzhi.png) no-repeat 0.5rem center;
+	background-size: auto 50%;
+	padding-left: 4rem;
+	position: relative;
+	overflow: hidden;
+}
+.top-notice .close-btn{
+	content: '';
+	position: absolute;
+	display: block;
+	right: 0.4rem;
+	top: 50%;
+	margin-top: -0.6rem;
+	height: 1.2rem;
+	width: 1.2rem;
+	background: url(../img/icon-top-notice-close.png) no-repeat 0 0;
+	background-size: contain;
+}
+
+@media screen and (min-width:320px) {
+	html {
+		font-size: 14px
+	}
+}
+
+@media screen and (min-width:360px) {
+	html {
+		font-size: 16px
+	}
+}
+
+@media screen and (min-width:400px) {
+	html {
+		font-size: 18px
+	}
+}
+
+@media screen and (min-width:440px) {
+	html {
+		font-size: 20px
+	}
+}
+
+@media screen and (min-width:480px) {
+	html {
+		font-size: 22px
+	}
+}
+
+@media screen and (min-width:640px) {
+	html {
+		font-size: 28px
+	}
+}

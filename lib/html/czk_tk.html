@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
+		<title>储值卡退款</title>
+		<link rel="stylesheet" type="text/css" href="../css/less/czk_tk.css" />
+	</head>
+
+	<body>
+		<!-- 页面外框 -->
+		<div class="wrap">
+			<!-- 页面  content-->
+			<div class="content">
+				<div class="m-zj">
+					<div class="m-img"><img class="img-balance" src="../img/icon-balance.png" /></div>
+					<div class="m-font"><span class="price"><em>当前余额</em><em id="ye">0.00</em><em>元</em></span></div>
+				</div>
+				<div class="m-je">
+					<div class="m-je-hz">
+						<h3>可退金额</h3>
+					</div>
+					<div class="m-je-pr">
+						<span><em id="refundAmount">0.00</em>元<span>
+						</div>
+				</div>
+				<div class="m-je">
+						<div class="m-je-hz">
+							<h3>不可退金额</h3>
+						</div>
+						<div class="m-je-pr-1">
+							<span><em id="noRefundAmount">0.00</em>元<span>
+						</div>
+				</div>
+				<p class="m-mar-top">
+					<span class="tkwz">* 退款将原路返回到你的支付账户</span>
+						</p>
+						<p class="m-mar-edge"><a href="javascript:void(0)" class="btn-base" id="_amount">退款金额<em id="refundAmount_btn">199.88</em>元</a></p>
+					</div>
+					<p class="bot-p"><a href="refund_rule.html">退款规则说明</a></p>
+				</div>
+
+				<script src="../js/jquery-2.2.3.min.js"></script>
+				<script src="../js/jquery.lazyload.min.js"></script>
+				<script src="../js/handlebars.runtime-v4.0.5.js"></script>
+				<script src="../js/fastclick.min.js"></script>
+				<script src="../js/main.js"></script>
+				<script src="../js/helper.js"></script>
+				<script src="../js/layer.m.js"></script>
+				<script type="text/javascript">
+					// 注册页面参数
+					var _initPageParam = {
+						// 每次载入页面获取当前页面的初始化参数
+						getSS: function() {
+							return _method.SS._get("queryParams");
+						}
+					}
+					var _localParam = _initPageParam.getSS() ? _initPageParam.getSS() : {};
+					var _balanceData = {
+						"sign": _localParam.sign,
+						"userId": _localParam.userId
+					}
+					var refundAmount,noRefundAmount;
+					$.ajax({
+						type: "post",
+						url: "http://www.imiaoxiu.com/babypass-server/cardUser/balance",
+						data: JSON.stringify(_balanceData),
+						contentType: "application/json",
+						dataType: "json",
+						success: function(data) {
+							var ye = data.data.balance;
+							$("#ye").text(ye.toFixed(2));
+							//yuer();
+							selectYuer(data.data.balance);
+						},
+						error: function(XMLHttpRequest, textStatus, errorThrown) {
+							alert("未知用户！");
+						}
+					});
+
+					function selectYuer(amount) {
+						$.ajax({
+							type: "get",
+							url: "http://www.imiaoxiu.com/babypass-server/shop_center/amount?userId=" + 　_localParam.userId　 + "&amount=" + amount,
+							contentType: "application/json",
+							dataType: "json",
+							success: function(data) {
+								refundAmount = data.data.refundAmount.toFixed(2);
+								noRefundAmount = data.data.noRefundAmount.toFixed(2);
+								$("#refundAmount").text(refundAmount);
+								$("#refundAmount_btn").text(refundAmount);
+								$("#noRefundAmount").text(noRefundAmount);
+							},
+							error: function(XMLHttpRequest, textStatus, errorThrown) {
+								alert("未知用户！");
+							}
+						});
+					}
+
+					function tuikuan() {
+						var _balanceData = {
+							"sign": _localParam.sign,
+							"userId": _localParam.userId,
+							"amount": refundAmount,
+							"virAmount": noRefundAmount,
+							"channel":"weixin",
+							"cityId": _localParam.cityId
+						}
+						$.ajax({
+							url: "http://www.imiaoxiu.com/babypass-server/order/amount",
+							type: "post",
+							dataType: "json",
+							data: JSON.stringify(_balanceData),
+							contentType: "application/json",
+							success: function(res) {
+								//alert(1);
+								window.location = "tk_success.html";
+							},
+							error: function(XMLHttpRequest, textStatus, errorThrown) {
+								//alert("未知用户！");
+							}
+						});
+					}
+
+
+//					function sure() {
+//						//退款
+//						if(refundAmount <= 0){
+//							layer.open({
+//								shade: true,
+//								style: 'width:100%;max-width:300px;font-size:16px;text-align:center;padding:1rem 0 0;',
+//								content: '<p>退款金额不足，不可退款</p>',
+//								btn: ['确认'],
+//								shadeClose: false
+//							});　　　　
+//						}else{
+//							layer.open({
+//								shade: true,
+//								style: 'width:100%;max-width:300px;font-size:16px;text-align:center;padding:1rem 0 0;',
+//								content: '<p>退款金额' + refundAmount + '元，退款提交将不可恢复，你确定吗？</p>',
+//								btn: ['确认', '取消'],
+//								shadeClose: false,
+//								yes: function() {
+//									//提交表单
+//									tuikuan();
+//								}
+//							});　　　　
+//						}
+//						
+//					}
+					$(function() {
+						// add fastClick
+//						FastClick.attach(document.body);
+						
+						$("#_amount").on("click",function(){
+							if(refundAmount <= 0){
+								layer.open({
+									shade: true,
+									style: 'width:100%;max-width:300px;font-size:16px;text-align:center;padding:1rem 0 0;',
+									content: '<p>退款金额不足，不可退款</p>',
+									btn: ['确认'],
+									shadeClose: false
+								});　　　　
+							}else{
+								layer.open({
+									shade: true,
+									style: 'width:100%;max-width:300px;font-size:16px;text-align:center;padding:1rem 0 0;',
+									content: '<p>退款金额' + refundAmount + '元，退款提交将不可恢复，你确定吗？</p>',
+									btn: ['确认', '取消'],
+									shadeClose: false,
+									yes: function() {
+										//提交表单
+										tuikuan();
+									}
+								});　　　　
+							}
+						})
+					});
+				</script>
+	</body>
+
+</html>

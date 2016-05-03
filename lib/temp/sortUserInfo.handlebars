@@ -1,0 +1,14 @@
+{{#if user}}
+<h2>请选择宝贝年龄：</h2>
+<div class="content userInfo">
+	<h3>{{user.nickName}} {{babyAge user.birthday}}岁</h3>
+	<a href="" class="btn-base btn-inline-1" id="showBabySort">只显示适合她的活动</a>
+	<a href="userInfo.html" class="edit-age" id="changeBabyAge">更改宝贝年龄</a>
+</div>
+{{else}}
+<h2>请选择宝贝年龄：</h2>
+<div class="content userInfo">
+	<h3>您尚未登录</h3>
+	<a href="https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx3fa0c56bd36c7469&redirect_uri=http%3a%2f%2fwww.imiaoxiu.com%2fbabypass-server%2fuser%2fbind%3fcityId%3d1&response_type=code&scope=snsapi_base&state=123#wechat_redirect" class="btn-base btn-inline-1" id="setBabyAge">设置宝贝年龄</a>
+</div>
+{{/if}}

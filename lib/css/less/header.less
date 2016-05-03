@@ -1,0 +1,20 @@
+@import "common.less";
+@img: "../../img";
+@headerHeight: 3.6rem;
+/*-------------header--------------*/
+header{
+    position: relative;
+    z-index: 1;
+    .container{
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1;
+        width: @full-width;
+    }
+    &:after{
+        content: "";
+        display: block;
+        height: @headerHeight;
+    }
+}

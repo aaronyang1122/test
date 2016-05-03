@@ -1,0 +1,8 @@
+{{#hasSku hasSku}}
+	{{#shopSkuTimes}}
+	<a href="" class="item" data-date="{{cutDate ../date}}" data-id="{{id}}" data-from="{{from}}">
+		<span class="date">{{cutDate ../date}}</span>
+		<span class="time">{{cutTime from}} - {{cutTime to}}</span>
+	</a>
+	{{/shopSkuTimes}}
+{{/hasSku}}

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
+		<title>订单详情</title>
+		<link rel="stylesheet" type="text/css" href="../css/less/temp_1.css" />
+		<link rel="stylesheet" type="text/css" href="../css/less/book.css" />
+		<link rel="stylesheet" type="text/css" href="../css/jquery.spinner.css" />
+		<link rel="stylesheet" type="text/css" href="../css/less/dingdan.css" />
+		<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.4"></script>
+	</head>
+
+	<body>
+		<!-- 页面外框 -->
+		<div class="wrap"></div>
+		
+		<div id="popCate" class="popCate">
+			<div id="J_pop" class="J_pop">
+				<div id="baiduMap">
+					<a href="#" id="closeBtn">closeBtn</a>
+					<div id="mapWrap"></div>
+				</div>
+			</div>
+		</div>
+		
+		<script src="../js/jquery-2.2.3.min.js"></script>
+		<script src="../js/jquery.lazyload.min.js"></script>
+		<script src="../js/handlebars.runtime-v4.0.5.js"></script>
+		<script src="../js/fastclick.min.js"></script>
+		<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+		<script src="../js/layer.m.js"></script>
+		<script src="../js/main.js"></script>
+		<script src="../js/helper.js"></script>
+		<script src="../js/orderDetail.hbs.js"></script>
+		<script>
+			// 注册页面参数
+		var _initPageParam = {
+			// 每次载入页面获取当前页面的初始化参数
+			getSS: function(){
+				return _method.SS._get("queryParams");
+			}
+		}
+		var _localParam = _initPageParam.getSS()?_initPageParam.getSS():{};
+		var _initData = _method.SS._get("tempOrderData");
+		
+		var url_top = window.location;
+		//var urls = encodeURI(url_top);
+    var u = "http://www.imiaoxiu.com/babypass-server/shop_center/jsapi?&cityId=1&urls=" + url_top;
+    if(_method.os.isWeiXin){
+	    $.get(u,function(result){
+	      wx.config({
+	        debug: false,
+	        appId: result.data.appId,
+	        timestamp: result.data.timestamp,
+	        nonceStr: result.data.nonceStr,
+	        signature: result.data.signature,
+	        jsApiList: [
+	          'getLocation',
+	          'scanQRCode'
+	        ]
+	      })
+	    });
+    }
+    
+		$(".wrap").prepend(Handlebars.templates.orderDetail(_initData));
+		
+		// 取消预约
+		var _cancelAppointment = {
+			_url: "http://www.imiaoxiu.com/babypass-server/cardAppoint/cancelAppointment",
+			_type: "POST",
+			_data: {
+				"userId": _localParam.userId,
+				"sign": _localParam.sign,
+				"appointId": _initData.id,
+				"cityId": _initData.skuCat.cityId
+			},
+			_callback: {
+				success: function(res){
+					window.location.href = "baobeiricheng.html";
+				},
+				failed: function(XMLHttpRequest, textStatus, errorThrown){
+					layer.open({
+						shade: true,
+						className: 'toast',
+						style:'width:100%;max-width:240px;font-size:14px;text-align:center;padding:0;border:none',
+					    content: '<p>取消失败，请重试</p>',
+					    shadeClose: true,
+					    time: 2
+					});
+//			console.log(XMLHttpRequest, textStatus, errorThrown);
+				}
+			},
+			_query: function(){
+				_cancelAppointment._data.userId = _localParam.userId;
+				_cancelAppointment._data.sign = _localParam.sign;
+				_method.getData(this._url,this._callback,this._type,this._data);
+			}
+		}
+		
+		var _event = {
+			// 显示地图
+			baiduMap: function(){
+				$(".wrap").on("click", "#showMap" ,function(){
+					event.preventDefault();
+					$("#baiduMap").show();
+					$("#baiduMap").siblings().hide();
+					_method.pop_show();
+					// 生成地图
+					var paramMap = {};
+					paramMap.lng = $(this).attr("data-lng");
+					paramMap.lat = $(this).attr("data-lat");
+					var mp = new BMap.Map("mapWrap",{
+					    enableHighResolution: true //是否开启高清
+					});
+					var point = new BMap.Point(paramMap.lng, paramMap.lat);
+					mp.centerAndZoom(point, 20);
+					var marker = new BMap.Marker(point);  // 创建标注
+					mp.addOverlay(marker); 
+				});
+			},
+			// 关闭地图
+			closeMap: function(){
+				$("#closeBtn").on("click",function(){
+					event.preventDefault();
+					_method.pop_hide();
+				})
+			},
+			wxscan: function(){
+					// 点击扫码按钮
+					$("#btnPay").on("click",function(){
+						if(_localParam.sign && _localParam.userId){
+							// 扫描打卡
+							if(_initData.skuCat.isMerchantAlwaysOK == 0 && _method._formatDate.call(_initData.date) != _method._newDate(0)){
+								layer.open({
+									shade: true,
+									className: 'toast',
+									style:'width:100%;max-width:240px;font-size:14px;text-align:center;padding:0;border:none',
+								    content: '<p>没到当天，不能打卡</p>',
+								    shadeClose: true,
+								    time: 2
+								});
+							}else{
+								_method._wxScan(_localParam.userId,_localParam.sign,_localParam.cityId,_initData.category);
+							}
+						}else{
+							layer.open({
+								style: "width:100%;max-width:240px;font-size:16px;text-align:center;padding:1rem 0 0;",
+							    content: "<p>您还没登录</p>",
+							    btn: ["返回"],
+							    shadeClose: true
+							});
+						}
+					})
+			},
+			goBack: function(){
+				// 返回
+				$(".wrap").on("click","#goBack",function(){
+					window.location.href = "baobeiricheng.html";
+				})
+			},
+			cancelAppointment: function(){
+				// 取消订单
+				$(".wrap").on("click","#cancelAppointment",function(){
+					layer.open({
+						style: "width:100%;max-width:240px;font-size:16px;text-align:center;padding:1rem 0 0;",
+				    content: "<p>是否确认取消，取消成功后该订单金额将返还至您的储值卡账户余额</p>",
+				    btn: ['确认', '取消'],
+				    shadeClose: false,
+				    yes: function(){
+				      _cancelAppointment._query();
+				    }, 
+				    no: function(){}
+					});
+					
+					
+				})
+			}
+		}
+		
+		//dom ready
+		$(function(){
+			// add fastClick
+			FastClick.attach(document.body);
+			// 加载click事件
+			for(var x in _event){
+				_event[x]();
+			}
+		});
+		
+		</script>
+	</body>
+</html>

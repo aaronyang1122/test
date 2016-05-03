@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
+		<title>储值卡</title>
+		<link rel="stylesheet" type="text/css" href="../css/less/czk.css"/>
+		<link href="img/logo.png" rel="apple-touch-icon-precomposed">
+		<link href="img/logo.png" sizes="114x114" rel="apple-touch-icon-precomposed">
+	</head>
+	<body>
+		<div class="wrap">
+			<header>
+				<div class="container">
+					<div class="sort">
+						<div class="col-1">
+							<span id="showCalendar">本周末</span>
+							<span id="showSort">不限</span>
+							<span id="showHot">热门</span>
+							<span id="showNew">新品</span>
+						</div>
+						<div class="col-2">
+							<a href="#" id="dynamicBtn" class="goto-btn"></a>
+						</div>
+					</div>
+				</div>
+			</header>
+			
+			<!-- 轮播  -->
+			<div id="slide"></div>
+			
+			<!-- list  -->
+			<section id="shopList"></section>
+			<div class="loading" id="loading">
+				<span class="icon-loading"></span>
+				<span class="text">加载中...</span>
+			</div>
+		</div>
+		<div id="popCate" class="popCate">
+			<div id="J_pop" class="J_pop">
+				<div id="calendar">
+					<a href="#" id="closeCalendar">close</a>
+					<h2>请选择日期</h2>
+					<div class="calendar-container"></div>
+					<div class="btm">
+						<a href="#" id="dateNull">不限时间</a>
+						<a href="#" id="dateEmpty">本周末</a>
+					</div>
+				</div>	
+				<div id="sort">
+					<section id="userInfo"></section>
+					<section>
+						<h2>请选择宝贝年龄：</h2>
+						<div class="content" id="ageRange">
+							<a href="" class="btn-base btn-inline-2" data-age-from="0" data-age-to="12">0-1岁</a>
+							<a href="" class="btn-base btn-inline-2" data-age-from="12" data-age-to="36">1-3岁</a>
+							<a href="" class="btn-base btn-inline-2" data-age-from="36" data-age-to="72">3-6岁</a>
+							<a href="" class="btn-base btn-inline-2" data-age-from="72" data-age-to="120">6-以上</a>
+							<a href="" class="btn-base btn-inline-2" data-age-from="" data-age-to="">不限</a>
+						</div>
+					</section>
+				</div>
+			</div>
+		</div>
+		<!--<script src="//cdn.bootcss.com/jquery/2.2.0/jquery.min.js"></script>
+		<script src="//cdn.bootcss.com/jquery.lazyload/1.9.1/jquery.lazyload.min.js"></script>
+		<script src="//cdn.bootcss.com/handlebars.js/4.0.5/handlebars.runtime.min.js"></script>
+		<script src="//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js"></script>-->
+		<script src="../js/jquery-2.2.3.min.js"></script>
+		<script src="../js/jquery.lazyload.min.js"></script>
+		<script src="../js/handlebars.runtime-v4.0.5.js"></script>
+		<script src="../js/fastclick.min.js"></script>
+		<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+		<script src="../js/main.js"></script>
+		<script src="../js/swipeSlide.min.js"></script>
+		<script src="../js/datepicker.js"></script>
+		<script src="../js/helper.js"></script>
+		<script src="../js/list.hbs.js"></script>
+		<script src="../js/menu.hbs.js"></script>
+		<script src="../js/slide.hbs.js"></script>
+		<script src="../js/sortUserInfo.hbs.js"></script>
+		<script type="text/javascript">
+		var _localParam = {}; // 本地变量_localParam，所有请求参数均从此调用
+    // 注册页面内容
+		var _init = {
+			userInfo: {
+				callback: function(){
+					var emp = {}; //空对象
+					var _age,_m;
+
+					if(_localParam.sign && _localParam.userId){
+					var _age = _localParam.user.birthday?_method._getAge(_localParam.user.birthday,"y"):console.log("not get \"param\":user.birthday");
+					var _m = _localParam.user.birthday?_method._getAge(_localParam.user.birthday,"m"):console.log("not get \"param\":user.birthday");
+						// 已登录
+						$("#userInfo").append(Handlebars.templates.sortUserInfo(_localParam));
+						if(_age >= 0){
+							// 获取到年龄
+							_init.list._data.yearsFrom = _m;
+							_init.list._data.yearsTo = _m;
+							$("#showSort").text(_age + "岁适用");
+						}else{
+							// 如果获取不到年龄
+							_init.list._data.yearsFrom = ""; // 年龄不限
+							_init.list._data.yearsTo = ""; // 年龄不限
+						}
+					}else{
+						// 未登录
+						_init.list._data.yearsFrom = ""; // 年龄不限
+						_init.list._data.yearsTo = ""; // 年龄不限
+						$("#userInfo").append(Handlebars.templates.sortUserInfo(emp));
+					}
+				}
+			},
+			slide: {
+				//首页模块接口服务 
+				"_url": "http://www.imiaoxiu.com/babypass-server/oprt/shopRecommend",
+				"_type": "POST",
+				"_data": {},
+				"_callback": {
+					"_tag": [
+						{
+							tagId: "#slide",
+							tempName: "slide",
+							type: 4,
+							callback: function(){
+								//slide init
+								$('.slide').swipeSlide({
+									autoSwipe: true,
+									continuousScroll: true,
+									lazyLoad: true,
+									transitionType: 'cubic-bezier(0.22, 0.69, 0.72, 0.88)',
+									firstCallback: function(i, sum, me) {
+										me.find('.dot').children().first().addClass('cur');
+									},
+									callback: function(i, sum, me) {
+										me.find('.dot').children().eq(i).addClass('cur').siblings().removeClass('cur');
+									}
+								});
+							}
+						}
+					],
+					"success": function(res){
+						var _res = res.data.listDTO;
+						for(var i=0; i<this._tag.length; i++){
+							$(this._tag[i].tagId).append(Handlebars.templates[this._tag[i].tempName](_res[this._tag[i].type-1]));
+							// run slide callback
+							if(this._tag[i].callback && _res[this._tag[i].type-1].list){
+								this._tag[i].callback();
+							}	
+						}
+					},
+					"failed": function(XMLHttpRequest, textStatus, errorThrown){
+//						console.log(XMLHttpRequest, textStatus, errorThrown);
+					}
+				}
+			},
+			list: {
+				//查询课程列表
+				"_url": "http://www.imiaoxiu.com/babypass-server/cardShop/querySku",
+				"_type": "POST",
+				"_data": {},
+				"_callback": {
+					"_tag": "#shopList",
+					"tempName": "list",
+					"success": function(res){
+						$(this._tag).append(Handlebars.templates[this.tempName](res));
+						_method.isShowMore.check(_init.list._data.pageSize, res.data.length);
+							if (_method.isShowMore.result) {
+								_init.list._data.pageNo += 1; //pageNo +1
+							} else {
+								if(_init.list._data.pageNo == 1){
+									_method._loading.removeLoading(); //移除loading
+								}else{
+									_method._loading.removeLoading(); //移除loading
+									$("#shopList").after('<div class=\'no-more-tips no-more-tips-2\'>没有更多了</div>');
+								}	
+							}
+						//img lazyload
+						$("section img").lazyload({
+							effect : "fadeIn"
+						});
+					},
+					"failed": function(XMLHttpRequest, textStatus, errorThrown){
+//						console.log(XMLHttpRequest, textStatus, errorThrown);
+					}
+				}
+			},
+			calendar: {
+				callback: function(){
+					$("#selecterDate").datepicker({isShow:true,showVal:false,minDate:_method._newDate(),maxDate:_method._newDate(3),insertPosition:"#calendar>.calendar-container"});
+				}
+			}
+		}
+		
+		// 注册click事件
+		var _event = {
+			// 显示日历
+			showCalendar: function(){
+				$("#showCalendar").on("click", function(){
+					$("#calendar").show();
+					$("#calendar").siblings().hide();
+					_method.pop_show();
+				});
+			},
+			// 年龄筛选
+			showSort: function(){
+				$("#showSort").on("click", function(){
+					$("#sort").show();
+					$("#sort").siblings().hide();
+					_method.pop_show();
+				});
+			},
+			// 跳转热门
+			showHot: function(){
+				$("#showHot").on("click", function(){
+					event.preventDefault();
+					window.location.href = "list_keyword.html?sortType=2";
+				});
+			},
+			// 跳转新品
+			showNew: function(){
+				$("#showNew").on("click", function(){
+					event.preventDefault();
+					window.location.href = "list_keyword.html?sortType=3";
+				});
+			},
+			// 不限时间
+			dateNull: function(){
+				$("#dateNull").on("click",function(){
+					event.preventDefault();
+					_method.pop_hide();
+					_init.list._data.date = null;
+					_init.list._data.pageNo = 1;
+					$("#shopList").html("");
+					$("#showCalendar").text($(this).text());
+					_method.getData(_init.list._url, _init.list._callback , _init.list._type, _init.list._data);
+				});
+			},
+			// 本周末
+			dateEmpty: function(){
+				$("#dateEmpty").on("click",function(){
+					event.preventDefault();
+					_method.pop_hide();
+					if(_init.list._data.date != ""){
+						_init.list._data.date = "";
+						_init.list._data.pageNo = 1;
+						$("#shopList").html("");
+						$("#showCalendar").text($(this).text());
+						_method.getData(_init.list._url, _init.list._callback , _init.list._type, _init.list._data);
+					}
+				});
+			},
+			dateClick: function(){
+				$("#calendar").on("click","a[date]",function(){
+					if(!$(this).hasClass("disabled")){
+						_method.pop_hide();
+						_init.list._data.date = $(this).attr("date");
+						_init.list._data.pageNo = 1;
+						$("#shopList").html("");
+						if(_method._newDate() == _init.list._data.date){
+							$("#showCalendar").text("今天");
+						}else{
+							$("#showCalendar").text(_init.list._data.date);
+						}
+						_method.getData(_init.list._url, _init.list._callback , _init.list._type, _init.list._data);
+					}
+				})
+			},
+			ageRange: function(){
+				$("#ageRange").on("click","a",function(){
+					event.preventDefault();
+					_method.pop_hide();
+					if(_init.list._data.yearsFrom == $(this).attr("data-age-from") && _init.list._data.yearsTo == $(this).attr("data-age-to")){
+						return;
+					}else{
+						_init.list._data.pageNo = 1;
+						_init.list._data.yearsFrom = $(this).attr("data-age-from");
+						_init.list._data.yearsTo = $(this).attr("data-age-to");
+						$(this).addClass("btn-inline-3").siblings().removeClass("btn-inline-3");
+						$("#showSort").text($(this).text());
+						_method.getData(_init.list._url, _init.list._callback , _init.list._type, _init.list._data);
+					}
+				})
+			},
+			showBabySort: function(){
+				var _age = _localParam.user?_method._getAge(_localParam.user.birthday,"y"):console.log("not get \"param\":user.birthday");
+				var _m = _localParam.user?_method._getAge(_localParam.user.birthday,"m"):console.log("not get \"param\":user.birthday");
+				$("#userInfo").on("click","#showBabySort",function(){
+					if(_age >= 0){
+						// 获取到年龄
+							_init.list._data.yearsFrom = _m;
+							_init.list._data.yearsTo = _m;
+						}else{
+							// 如果获取不到年龄
+							_init.list._data.yearsFrom = ""; // 年龄不限
+							_init.list._data.yearsTo = ""; // 年龄不限
+						}
+						event.preventDefault();
+						_method.pop_hide();
+						_init.list._data.pageNo = 1;
+						$("#shopList").html("");
+						$("#showSort").text(_age + "岁适用");
+						$("#ageRange>a").removeClass("btn-inline-3");
+						_method.getData(_init.list._url, _init.list._callback , _init.list._type, _init.list._data);
+				})
+			},
+			dynamicBtn: function(){
+				var _goto = {
+					"login": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx3fa0c56bd36c7469&redirect_uri=http%3a%2f%2fwww.imiaoxiu.com%2fbabypass-server%2fuser%2fbind%3fcityId%3d1&response_type=code&scope=snsapi_base&state=123#wechat_redirect",
+					"chongzhi": "chongzhi.html",
+					"yue": "balance.html"
+				}
+				if(_localParam.sign){
+					if(_localParam.isCharge == true){
+						$("#dynamicBtn").text("余额");
+					}else{
+						$("#dynamicBtn").text("充值");
+					}
+				}else{
+					$("#dynamicBtn").text("登录")
+				}
+				$("#dynamicBtn").on("click",function(){
+					event.preventDefault();
+					if(_localParam.sign){
+						if(_localParam.isCharge == true){
+							window.location.href = _goto.yue;
+						}else{
+							window.location.href = _goto.chongzhi;
+						}
+					}else{
+						window.location.href = _goto.login;
+					}
+				})
+				
+			},
+			popClose: function(){
+				$("#popClose").on("click", function(){
+					_method.pop_hide();
+				});
+			},
+			menuItemCzk: function(){
+				$(".wrap").on("click",".menu-item-czk",function(){
+					// 屏蔽当前页面重复点击
+					event.preventDefault();
+				});
+			},
+			closeCalendar: function(){
+				$("#closeCalendar").on("click",function(){
+					event.preventDefault();
+					_method.pop_hide();
+				});
+			}
+		}
+		// 注册底部菜单
+		var _menu = {
+			config: {
+				"hasBYK": false,
+				"current": 0
+			},
+			creatMenu: function(){
+				$.get("../config/menuConfig.json", $.proxy(function(result) {
+					_menu.config.hasBYK = (_localParam.sign && _localParam.userId)?_localParam.hasMemShip:false;
+					var _res = _method.isBYK(result.menu,this.config.hasBYK);
+					_res.menu[this.config.current].current = true;
+					$(".wrap").append(Handlebars.templates.menu(_res));
+				},this));
+			}
+		}
+		
+		// 请把页面渲染所需要的事件、方法已经click事件、方法放入_start 这个匿名函数里
+		var _start = function(){
+			// 渲染底部菜单
+			_menu.creatMenu();
+			// 加载页面内容
+			for(var x in _init){
+				switch(x)
+				{
+					case "calendar":
+						_init[x].callback();
+						break;
+					case "userInfo":
+						_init[x].callback();
+						break;
+					case "list":
+						_init[x]._data = _method.objSort(["cityId","lat","lng","pageNo","pageSize","sortType","yearsFrom","yearsTo","categoryIds"],_localParam);
+						_method.getData(_init[x]._url, _init[x]._callback , _init[x]._type, _init[x]._data);
+						break;
+					case "slide":
+						_init[x]._data = _method.objSort(["cityId"],_localParam);
+						_method.getData(_init[x]._url, _init[x]._callback , _init[x]._type, _init[x]._data);
+						break;
+				}
+			}
+			// 加载click事件
+			for(var x in _event){
+				_event[x]();
+			}
+			// 滚动条加载更多事件
+			_method.scrollLoad(_init.list);
+		};
+		
+		$(function(){
+			//add fastClick
+			FastClick.attach(document.body);
+			if(_method.SS._get("queryParams")){
+				// 如果sessionStorage 里有 “queryParams” ,把queryParams所有参数赋值到_localParam
+				_localParam = _method.deepCopy(_method.SS._get("queryParams"));
+				// 执行页面渲染
+				_start();
+			}else{
+				// 如果sessionStorage 里没有 “queryParams”
+				// 判断url 有没有带入 cityId、sign、userId 三个参数
+				_method._hasMemShip._data = _method.deepCopy({
+					cityId: _method.getQueryString("cityId")?_method.getQueryString("cityId"):1,
+					sign: _method.getQueryString("sign")?_method.getQueryString("sign"):0,
+					userId: _method.getQueryString("userId")?_method.getQueryString("userId"):0,
+					openId: _method.getQueryString("openId")?_method.getQueryString("openId"):0
+				});
+				// 请求用户信息
+				_method._hasMemShip._query(_start);
+			}
+		});
+		</script>
+	</body>
+</html>

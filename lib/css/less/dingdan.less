@@ -1,0 +1,441 @@
+@import "reset.less";
+@import "common.less";
+@import "header.less";
+@import "menu.less";
+@import "temp_1.less";
+@import "book.less";
+@import "../jquery.spinner.css";
+@img: "../../img";
+@newHeight: 100px; //header默认值3.6rem ，这里可以重定义高度
+
+
+
+.icon-chengren:before {
+  content: "";
+  display: inline-block;
+  width: 0.8rem;
+  height: 0;
+  padding-top: 1rem;
+  overflow: hidden;
+  background: url("../../img/icon-adult-grey.png") no-repeat 0 0;
+  background-size: 100%;
+  vertical-align: middle;
+  margin-top: -0.1rem;
+}
+.icon-order-used:before {
+  content: "";
+  display: inline-block;
+  width: 1rem;
+  height: 0;
+  padding-top: 1rem;
+  overflow: hidden;
+  background: url("../../img/icon-used.png") no-repeat 0 0;
+  background-size: 100%;
+  vertical-align: middle;
+  margin-top: -0.1rem;
+  margin-right: 0.2rem;
+}
+.icon-ertong:before {
+  content: "";
+  display: inline-block;
+  width: 1rem;
+  height: 0;
+  padding-top: 1rem;
+  overflow: hidden;
+  background: url("../../img/icon-kid-grey.png") no-repeat 0 0;
+  background-size: 100%;
+  vertical-align: middle;
+  margin-top: -0.1rem;
+  margin-right: 0.2rem;
+}
+.icon-order-phone {
+    &:before{
+          content: "";
+          display: inline-block;
+          width: 1.5rem;
+          height: 0;
+          line-height: 0;
+          padding-top: 1.5rem;
+          overflow: hidden;
+          background: url("../../img/icon-phone.png") no-repeat 0 0;
+          background-size: 100%;
+          vertical-align: middle;
+          margin-top: -0.1rem;
+          margin-left: 1rem;
+     }
+    font-size:14sp
+}
+.icon-dingdan-location {
+  height: 2rem;
+  width: 100%;
+  padding: 0.5rem 0 1rem 0;
+  font-size: 18px;
+  color: blue;
+  vertical-align: middle;
+  margin-top: 0.5rem;
+  text-align: left;
+}
+.icon-dingdan-location:before {
+  content: "";
+  display: inline-block;
+  width: 1rem;
+  height: 0;
+  padding-top: 1rem;
+  overflow: hidden;
+  background: url("../../img/icon-location.png") no-repeat 0 0;
+  background-size: 100%;
+  vertical-align: middle;
+  margin-top: -0.1rem;
+  margin-right: 0.2rem;
+}
+
+.icon-p {
+  text-align: left;
+  padding: 0;
+  margin: 0.5rem 0.2rem 0.5rem 0;
+}
+
+.btn-center {
+  display: block;
+  width: 96%;
+  height: 2%;
+  margin: 6% 2% 2% 2%;
+  -webkit-border-radius: 0.3rem;
+  -moz-border-radius: 0.3rem;
+  border-radius: 0.3rem;
+  padding: 1rem;
+  vertical-align: middle;
+  background-color: white;
+  text-align: center;
+  font-size: 1rem;
+  border: 1px solid #ff5981;
+}
+
+
+.address-title {
+    color: gray;
+    margin-bottom: 0.8rem;
+}
+.shop-title {
+    color: gray;
+}
+.icon-p-right {
+  text-align: center;
+  width: 3rem;
+  height: 1rem;
+  background-image: url("../../img/serial_bg.png");
+  background-repeat:no-repeat;
+  background-position:center;
+  background-size: contain;
+}
+
+.order-shop-name {
+  color: black;
+  font-size: 1.5rem;
+  padding: 1rem;
+}
+
+.order-dingdan-title {
+  width: 100%;
+  height: 2rem;
+  font-size: 16px;
+  color: #FFFFFF;
+  background-repeat: no-repeat;
+  background-image: url(../../img/icon-calendar.png);
+  margin-top: 1rem;
+}
+
+.order-header {
+    width: 96%;
+    height: 100%;
+  padding: 2%;
+  background-image: url("../../img/stamp-dingdan.png");
+  background-repeat:no-repeat;
+  background-position:top;
+  background-size: 100% 100%;
+  margin-top: 1rem;
+  font-size: 1rem;
+  text-align: left;
+  overflow: hidden;
+}
+
+.order-evaluate {
+  width: 96%;
+  height: 100%;
+  padding: 2%;
+  background-image: url("../../img/stamp-evaluate.png");
+  background-repeat: no-repeat;
+  background-position: top;
+  background-size: 100% 100%;
+  margin-top: 1rem;
+  font-size: 1rem;
+  text-align: left;
+  overflow: hidden;
+}
+.dingdan-calendar {
+    font-size: 18px;
+    vertical-align: middle;
+    margin-left: 60px;
+}
+.evaluate-calendar {
+    &:before {
+        content: "";
+        display: inline-block;
+        width: 1.2rem;
+        height: 1.2rem;
+        overflow: hidden;
+        background: url("@{img}/icon-calendar-grey.png") no-repeat 0 0;
+        background-size: 100%;
+        vertical-align: middle;
+        margin-right: 0.1rem;
+    }
+    margin-top: 1rem;
+    margin-left: 1rem;
+    font-size: 14sp;
+    padding-left: 1rem;
+    vertical-align: middle;
+}
+
+.address-item{
+    position: relative;
+    margin-top: 0.7rem;
+    margin-bottom: 1rem;
+}
+
+.btm-div {
+    width: 96%;
+    padding: 2%;
+    margin-top: 2rem;
+}
+
+.dingdan-item{
+    position: relative;
+    margin-top: 3rem;
+}
+.dingdan-item dl{
+    padding: 0.5rem 0.5rem 0.5rem 0;
+}
+.dingdan-item dl:last-of-type{
+    bdingdan-bottom: none;
+}
+.dingdan-item dt{
+    -moz-box-flex:1;
+    -webkit-box-flex:1;
+    box-flex:1;
+    width: 65%;
+}
+.dingdan-item dd{
+    -moz-box-flex:1;
+    -webkit-box-flex:1;
+    box-flex:1;
+    width: 35%;
+    text-align: left;
+}
+.dingdan-item .price{
+    color: #FF5D6C;
+}
+
+.sec-1 {
+  display: -moz-box;
+  display: -webkit-box;
+  display: box;
+  -moz-box-align: center;
+  -webkit-box-align: center;
+  -o-box-align: center;
+  box-align: center;
+}
+.sec-1 .col-1 {
+  -moz-box-flex: 2;
+  -webkit-box-flex: 2;
+}
+.sec-1 .col-2 {
+  -moz-box-flex: 1;
+  -webkit-box-flex: 1;
+}
+
+.order-evaluate-title {
+  width: 100%;
+  height: 1rem;
+  font-size: 16px;
+  color: #FFFFFF;
+  background-repeat: no-repeat;
+  background-image: url(../../img/icon-calendar-grey.png);
+}
+.icon-order-used:before {
+  content: "";
+  display: inline-block;
+  width: 1rem;
+  height: 0;
+  padding-top: 1rem;
+  overflow: hidden;
+  background: url("../../img/icon-used.png") no-repeat 0 0;
+  background-size: 100%;
+  vertical-align: middle;
+  margin-top: -0.1rem;
+  margin-right: 0.2rem;
+}
+
+.evaluate-item {
+    display:-moz-box;
+    display:-webkit-box;
+    display:list-item;
+    /*display: -webkit-box;
+    display: box;
+    -webkit-align-items: center;
+    align-items: center;*/
+    background-color: #FFFFFF;
+    border-bottom: 1px solid #ECECEC;
+    padding: 1rem;
+    margin-top: 1rem;
+    height: 15rem;
+}
+.order-evaluate-ask {
+  text-align: center;
+  width: 100%;
+  height: 1rem;
+  color: grey;
+  font-size: @fnt-12;
+}
+.star-mapping {
+  height: 1rem;
+  width: 96%;
+  margin: 2%;
+  text-align: center;
+}
+.good-ev {
+  height: 1rem;
+  width: 96%;
+  margin: 4rem 2% 1rem 2%;
+  text-align: center;
+}
+
+.box2 {
+    width: 96%;
+    height: 5rem;
+    line-height: 22px;
+    border: 1px solid lightgray;
+    border-radius:5px;
+    background: white;
+    padding:0 2%;
+    font-size:12px; 
+}
+
+.message {
+  text-align: center;
+  width: 96%;
+  margin: 5rem 2%;
+  height: 2rem;
+  padding: 0.5rem 1rem;
+  color: grey;
+  font-size: @fnt-12;
+  background-image: url("../../img/good_bg.png");
+  background-repeat: no-repeat;
+  background-position: top;
+  background-size: 100% 100%;
+}
+.star_bg {
+    width: 120px; height: 20px;
+    background: url(star.png) repeat-x;
+    position: relative;
+    overflow: hidden;
+}
+.star {
+    height: 100%; width: 24px;
+    line-height: 6em;
+    position: absolute;
+    z-index: 3;
+}
+.star:hover {    
+    background: url(star.png) repeat-x 0 -20px!important;
+    left: 0; z-index: 2;
+}
+.star_1 { left: 0; }
+.star_2 { left: 24px; }
+.star_3 { left: 48px; }
+.star_4 { left: 72px; }
+.star_5 { left: 96px; }
+.star_1:hover { width: 24px; }
+.star_2:hover { width: 48px; }
+.star_3:hover { width: 72px; }
+.star_4:hover { width: 96px; }
+.star_5:hover { width: 120px; }
+
+label { 
+    display: block; _display:inline;
+    height: 100%; width: 100%;
+    cursor: pointer;
+}
+
+.score { position: absolute; clip: rect(0 0 0 0); }
+.score:checked + .star {    
+    background: url(star.png) repeat-x 0 -20px;
+    left: 0; z-index: 1;
+}
+.score_1:checked ~ .star_1 { width: 24px; }
+.score_2:checked ~ .star_2 { width: 48px; }
+.score_3:checked ~ .star_3 { width: 72px; }
+.score_4:checked ~ .star_4 { width: 96px; }
+.score_5:checked ~ .star_5 { width: 120px; }
+
+.star_bg:hover .star {  background-image: none; }
+
+/* for IE6-IE8 JS 交互 */
+.star_checked {    
+    background: url(star.png) repeat-x 0 -20px;
+    left: 0; z-index: 1;
+
+}
+
+/*----------------- 地图 ---------------------*/
+#baiduMap{
+    width: 100%;
+    height: 100%;
+    position: relative;
+    #mapWrap{
+        width: 100%;
+        height: 100%;
+    }
+    #closeBtn{
+        position: absolute;
+        width: 3rem;
+        height: 0;
+        padding-top: 3rem;
+        overflow: hidden;
+        background: rgba(0,0,0,0.6) url("@{img}/icon-back.png") no-repeat center;
+        background-size: 2rem;
+        border-radius: 1.5rem;
+        top: 0.5rem;
+        left: 0.5rem;
+        z-index: 2;
+    }
+}
+
+/*------------- loading -------------*/
+.loading{
+    font-size: 0;
+    padding: 0.6rem 0;
+    text-align: center;
+    .text{
+        font-size: 0.8rem;
+        vertical-align: middle;
+        color: #aaaaaa;
+    }
+    .keyframes(loading;{
+        from { .transform(0deg); }
+        to { .transform(360deg); }
+    });
+    .icon-loading{
+        display: @inline-pic;
+        width: 8%; 
+        height: 0;
+        padding-top: 8%;
+        vertical-align: middle;
+        background:url("@{img}/pull-icon@2x.png") 0 0 no-repeat;
+        -webkit-background-size: cover; 
+        background-size: cover;
+        background-position: 0 100%;
+        .transform;
+        .animation(loading);
+    }
+
+}

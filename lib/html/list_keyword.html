@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="../css/less/list_keyword.css"/>
+		<link href="img/logo.png" rel="apple-touch-icon-precomposed">
+		<link href="img/logo.png" sizes="114x114" rel="apple-touch-icon-precomposed">
+	</head>
+	<body>
+		<div class="wrap">
+			<!-- list  -->
+			<section id="shopList"></section>
+			<div class="loading" id="loading">
+				<span class="icon-loading"></span>
+				<span class="text">加载中...</span>
+			</div>
+		</div>
+
+		<!--<script src="//cdn.bootcss.com/jquery/2.2.0/jquery.min.js"></script>
+		<script src="//cdn.bootcss.com/jquery.lazyload/1.9.1/jquery.lazyload.min.js"></script>
+		<script src="//cdn.bootcss.com/handlebars.js/4.0.5/handlebars.runtime.min.js"></script>
+		<script src="//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js"></script>-->
+		<script src="../js/jquery-2.2.3.min.js"></script>
+		<script src="../js/jquery.lazyload.min.js"></script>
+		<script src="../js/handlebars.runtime-v4.0.5.js"></script>
+		<script src="../js/fastclick.min.js"></script>
+		<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+		<script src="../js/main.js"></script>
+		<script src="../js/helper.js"></script>
+		<script src="../js/list.hbs.js"></script>
+		<script type="text/javascript">
+		var _localParam = {}; // 本地变量_localParam，所有请求参数均从此调用
+    // 注册页面内容
+		var _init = {
+			list: {
+				//查询课程列表
+				"_url": "http://www.imiaoxiu.com/babypass-server/cardShop/querySku",
+				"_type": "POST",
+				"_data": _localParam,
+				"_callback": {
+					"_tag": "#shopList",
+					"tempName": "list",
+					"success": function(res){
+						$(this._tag).append(Handlebars.templates[this.tempName](res));
+						_method.isShowMore.check(_init.list._data.pageSize, res.data.length);
+							if (_method.isShowMore.result) {
+								_init.list._data.pageNo += 1; //pageNo +1
+							} else {
+								if(_init.list._data.pageNo == 1){
+									_method._loading.removeLoading(); //移除loading
+								}else{
+									_method._loading.removeLoading(); //移除loading
+									$("#shopList").after('<div class=\'no-more-tips no-more-tips-2\'>没有更多了</div>');
+								}	
+							}
+						//img lazyload
+						$("section img").lazyload({
+							effect : "fadeIn"
+						});
+					},
+					"failed": function(XMLHttpRequest, textStatus, errorThrown){
+//						console.log(XMLHttpRequest, textStatus, errorThrown);
+					}
+				}
+			}
+		}
+		// 请把页面渲染所需要的事件、方法已经click事件、方法放入_start 这个匿名函数里
+		var _start = function(){
+			// 加载页面内容
+			for(var x in _init){
+				switch(x)
+				{
+					case "list":
+						_init[x]._data = _method.objSort(["cityId","lat","lng","pageNo","pageSize","sortType","yearsFrom","yearsTo","categoryIds"],_localParam);
+						if(_method.getQueryString("keyword")){
+							// 如果url上带有"keyword"的参数执行以下
+							_init[x]._data.keyword = _method.getQueryString("keyword");
+							_method.reloadTitle(_method.getQueryString("keyword"));
+						}else if(_method.getQueryString("sortType")){
+							// 如果url上带有"sortType"的参数执行以下
+							_init[x]._data.sortType = _method.getQueryString("sortType");
+							switch(_method.getQueryString("sortType"))
+							{
+								case "2":
+								_method.reloadTitle("热门")
+								break;
+								case "3":
+								_method.reloadTitle("新品")
+								break;
+								default:
+								_method.reloadTitle("全城遛娃")
+							}
+						}
+						_method.getData(_init[x]._url, _init[x]._callback , _init[x]._type, _init[x]._data);
+						break;
+				}
+			}
+			// 滚动条加载更多事件
+			_method.scrollLoad(_init.list);
+		};
+		
+		$(function(){
+			//add fastClick
+			FastClick.attach(document.body);
+			if(_method.SS._get("queryParams")){
+				// 如果sessionStorage 里有 “queryParams” ,把queryParams所有参数赋值到_localParam
+				_localParam = _method.deepCopy(_method.SS._get("queryParams"));
+				// 执行页面渲染
+				_start();
+			}else{
+				// 如果sessionStorage 里没有 “queryParams”
+				// 判断url 有没有带入 cityId、sign、userId 三个参数
+				_method._hasMemShip._data = _method.deepCopy({
+					cityId: _method.getQueryString("cityId")?_method.getQueryString("cityId"):1,
+					sign: _method.getQueryString("sign")?_method.getQueryString("sign"):0,
+					userId: _method.getQueryString("userId")?_method.getQueryString("userId"):0,
+					openId: _method.getQueryString("openId")?_method.getQueryString("openId"):0
+				});
+				// 请求用户信息
+				_method._hasMemShip._query(_start);
+			}
+		});
+		</script>
+	</body>
+</html>
