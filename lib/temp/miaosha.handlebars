@@ -1,0 +1,88 @@
+{{#if this}}
+	{{#if albums}}
+	<div class="slide">
+		<ul>
+			{{#albums}}
+			  <li><img src="{{image}}"></li>
+			{{/albums}}
+			</ul>
+			{{dot albums}}
+	</div>
+	{{/if}}
+	
+<section>
+	<div class="skuInfo">
+		<div class="row row-1">
+			<div class="col-1">
+					<div class="row">
+					<div class="col-1">
+						<div class="discount-price"><i>￥</i>{{miaoshajia this}}</div>
+					</div>
+					<div class="col-2">
+						<div class="store-price">￥{{yuanjia this}}</div>
+						<div class="saled-num">{{appointedTimes}}已售</div>
+					</div>
+				</div>	
+			</div>
+			<div class="col-2">
+				<div class="total-num">限量{{totalNum}}份</div>
+			</div>
+		</div>
+		<div class="row row-2">
+			<div class="col-1">
+					<h1 class="shop-name">{{title}}</h1>
+			</div>
+		</div>
+		<div class="row row-3">
+			<div class="col-1">
+				<a href="" class="address" id="showMap">{{address}}</a>
+			</div>
+			<div class="col-2">
+				<p><span class="icon-location"></span>{{distance}} km</p>
+			</div>
+		</div>
+		
+		<div class="count-down" id="countDown">
+			<div class="row">
+				<div class="col-1">
+					<ul class="time-down" id="timer">
+						<li><span id="timerHH">00</span></li>
+						<li><span id="timerMM">00</span></li>
+						<li><span id="timerSS">00</span></li>
+					</ul>
+				</div>
+				<div class="col-2">
+					<span class="jijiangkaishi">即将开始...</span>
+				</div>
+			</div>
+			<!--<div class="mask"></div>
+			<span class="sold-out"></span>
+			<input type="button" name="" id="submit" value="已秒完" class="submit_null" disabled="disabled" />-->
+			<!--<input type="button" name="" id="submit" value="立即秒杀" class="submit" disabled="disabled" />-->
+		</div>
+	</div>
+</section>
+			
+<section class="notice">
+	<h1><span>购买须知</span></h1>
+	<div class="content">
+		<dl>
+			<dt>有效期</dt>
+			<dd>工作日周末通用，法定节假日以商户营业时间为准</dd>
+			{{#if valid}}
+				<dd>{{valid}}</dd>
+			{{/if}}
+		</dl>
+		{{#if intro}}
+		<dl>
+			<dt>温馨提示</dt>
+			<dd>{{intro}}</dd>
+		</dl>
+		{{/if}}
+	</div>
+</section>
+{{else}}
+<div class="noData" id="noData">
+	啊哦，没有符合你要求的商户哦~
+</div>
+{{/if}}

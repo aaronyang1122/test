@@ -302,6 +302,23 @@
 							});
 						}
 					})
+			},
+			zhye: function(){
+				// 首页豆腐块登录&充值
+				$("#zhye").on("click",function(){
+					var _childId = $(this).children().find("a").prop("id");
+					switch(_childId)
+					{
+						case "btnCZ":
+						// 充值
+							window.location.href = "chongzhi.html";
+						break;
+						case "btnLogin":
+						// 登录
+							window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx3fa0c56bd36c7469&redirect_uri=http%3a%2f%2fwww.imiaoxiu.com%2fbabypass-server%2fuser%2fbind%3fcityId%3d1&response_type=code&scope=snsapi_base&state=123#wechat_redirect";
+						break;
+					}
+				})
 			}
 		}
 		// 注册底部菜单
@@ -315,6 +332,11 @@
 					_menu.config.hasBYK = (_localParam.sign && _localParam.userId)?_localParam.hasMemShip:false;
 					var _res = _method.isBYK(result.menu,this.config.hasBYK);
 					_res.menu[this.config.current].current = true;
+					if(_menu.config.hasBYK) {
+						_res.menu[1].url = _res.menu[1].url + "&cityId=" + _localParam.cityId +
+							"&lat=" + _localParam.lat + "&lng=" + _localParam.lng + "&openId=" + _localParam.openId + 
+							"&userId=" + _localParam.userId + "&sign=" + _localParam.sign;
+					}
 					$(".wrap").append(Handlebars.templates.menu(_res));
 				},this));
 			}

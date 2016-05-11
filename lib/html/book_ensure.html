@@ -85,7 +85,6 @@
 			var adultPrice = skuCatData.discountPrice;
 			var balance;
 			var needCharge;
-			console.log(skuCatData);
 			$('#shop-name').text(skuCatData.shopName);
 			if(skuCatData.isMerchantAlwaysOK == 1){
 				$('#refund-alltime').show();
@@ -119,6 +118,7 @@
 					"sign": _localParam.sign,//skuCatData.sign,
 					"userId": _localParam.userId//skuCatData.userId
 				}
+				
 				$.ajax({
 					type: "post",
 					url: "http://www.imiaoxiu.com/babypass-server/cardUser/balance",
@@ -152,27 +152,26 @@
 					    btn: ['去选择']
 					});
 				}
+				var strDate = "";
+				if(skuCatData.appointDate != null) {
+					if(skuCatData.appointDate.length >= 10) {
+						strDate = skuCatData.appointDate.substring(0,10);
+					}
+				}
+				var adultNum = 0;
+				var childNum = 0;
 					//点击支付
 				$("#btnPay").on("click", function() {
 					//余额
-					var strDate = "";
-					if(skuCatData.appointDate != null) {
-						if(skuCatData.appointDate.length >= 10) {
-							strDate = skuCatData.appointDate.substring(0,10);
-						}
-					}
-					var adultNum = 0;
-					var childNum = 0;
 					if(adultPrice>0){
-						adultNum = $('#adultNum').val();
+						adultNum = $("#adultNum").val();
 					}
 					if(childPrice>0){
-						childNum = $('#childNum').val();
+						childNum = $("#childNum").val();
 					}
 					_method.SS._set("adultNum", adultNum);
 					_method.SS._set("childNum", childNum);
 					_method.SS._set("strDate", strDate);
-					
 					var needPay = $('#childNum').val() * childPrice + $('#adultNum').val() * adultPrice;
 					needCharge = needPay - balance;
 					if (needPay <= 0) {
@@ -201,7 +200,19 @@
 							success: function(data) {
 								if (data.data.status == 1) {
 									_method.SS._set("appoint", data.data.appoint);
-									window.location.href = "book_result.html";
+									_method.SS._set("appointUserSign", data.data.privateKey);
+									$.get("http://www.imiaoxiu.com/babypass-server/shop_center/calendarScheduleCzk",{ userId: _localParam.userId, flag: 1, sign: _localParam.sign },
+						    		function(_res){
+						    			var _arr = _res.data.appointments;
+						    			for(var i = 0; i< _arr.length; i++){
+						    				if(data.appoint.id == _arr[i].id){
+						    					_method.SS._set("tempOrderData", _arr[i]);
+						    					window.location.href = "book_result.html";
+						    				}
+						    			}
+					  			});
+									
+
 								}
 							}
 						});

@@ -67,12 +67,12 @@
 		// 注册click事件
 		var _event = {
 			daka: function(){
-				$("#list").on("click",".btn-daka", function(){
+				$("#list").on("click",".item", function(){
 					event.preventDefault();
-					var _userId = $(this).parents(".item").attr("data-userid");
-					var _userSign = $(this).parents(".item").attr("data-usersign");
-					var _category = $(this).parents(".item").attr("data-category");
-					var _id = $(this).parents(".item").attr("data-id");
+					var _userId = $(this).attr("data-userid");
+					var _userSign = $(this).attr("data-usersign");
+					var _category = $(this).attr("data-category");
+					var _id = $(this).attr("data-id");
 					var redirect_url = _localParam.url;
 					
 					for(var i = 0; i< appointmentsList.length; i++){
@@ -85,11 +85,11 @@
           {
           	case "2":
           	// 储值卡
-          		redirect_url += "&userId=" + _userId  + "&userSign=" + _userSign + "&cityId=" + _localParam.cityId + "&redirect=card";
+          		redirect_url += "&userId=" + _userId  + "&userSign=" + _userSign + "&cityId=" + _localParam.cityId + "&redirect=card"+ "&openId=" + _localParam.openId;
           		break;
           	case "1":
           	// 包月卡
-          		redirect_url += "&userId=" + _userId  + "&userSign=" + _userSign + "&cityId=" + _localParam.cityId
+          		redirect_url += "&userId=" + _userId  + "&userSign=" + _userSign + "&cityId=" + _localParam.cityId + "&openId=" + _localParam.openId;
           }
 //        console.log(redirect_url)
 					window.location.href = redirect_url;
@@ -100,8 +100,6 @@
 		$(function(){
 			// add fastClick
 			FastClick.attach(document.body);
-			
-			
 			
 			// 加载页面内容
 			for(var x in _init){

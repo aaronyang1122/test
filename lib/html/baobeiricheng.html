@@ -66,6 +66,7 @@
 	      })
 	    });
     }
+    var _BYKres = null;
 		// 注册底部菜单
 		var _menu = {
 			config: {
@@ -77,6 +78,11 @@
 					_menu.config.hasBYK = (_localParam.sign && _localParam.userId)?_localParam.hasMemShip:false;
 					var _res = _method.isBYK(result.menu,this.config.hasBYK);
 					_res.menu[this.config.current].current = true;
+					if(_menu.config.hasBYK) {
+						_res.menu[1].url = _res.menu[1].url + "&cityId=" + _localParam.cityId +
+							"&lat=" + _localParam.lat + "&lng=" + _localParam.lng + "&openId=" + _localParam.openId + 
+							"&userId=" + _localParam.userId + "&sign=" + _localParam.sign;
+					}
 					$(".wrap").append(Handlebars.templates.menu(_res));
 				},this));
 			}
@@ -157,6 +163,7 @@
 			},
 			_callback: {
 				success: function(res){
+					_BYKres = res.data.appointments;
 					var template = Handlebars.templates.richengOld;
 					var html = template(res.data);
 					$("#listOld").html(html);
@@ -174,6 +181,36 @@
 						var _newData = {};
 						$("#listOld").html(Handlebars.templates.richengOld(_newData));
 					}
+			}
+		}
+		
+		// 取消预约
+		var _cancelAppointment = {
+			_url: "http://www.imiaoxiu.com/babypass-server/cardAppoint/cancelAppointment",
+			_type: "POST",
+			_data: {},
+			_callback: {
+				success: function(res){
+					_BYKschedule._query();
+				},
+				failed: function(XMLHttpRequest, textStatus, errorThrown){
+					layer.open({
+						shade: true,
+						className: 'toast',
+						style:'width:100%;max-width:240px;font-size:14px;text-align:center;padding:0;border:none',
+					    content: '<p>取消失败，请重试</p>',
+					    shadeClose: true,
+					    time: 2
+					});
+//			console.log(XMLHttpRequest, textStatus, errorThrown);
+				}
+			},
+			_query: function(appointId){
+				_cancelAppointment._data.userId = _localParam.userId;
+				_cancelAppointment._data.sign = _localParam.sign;
+				_cancelAppointment._data.cityId = _localParam.cityId;
+				_cancelAppointment._data.appointId = appointId;
+				_method.getData(this._url,this._callback,this._type,this._data);
 			}
 		}
 		
@@ -210,6 +247,7 @@
 					event.preventDefault();
 					// 扫描打卡
 					if($(this).hasClass("daka")){
+						_method.SS._set("tempOrderData",_resData[$(this).parents(".item").index()]);
 						if($(this).parents(".item").attr("data-isok") == "0" && $(this).parents(".item").attr("data-date") != _method._newDate(0)){
 							layer.open({
 								shade: true,
@@ -220,10 +258,10 @@
 							    time: 2
 							});
 						}else{
-							_method._wxScan(_localParam.userId,_localParam.sign,_localParam.cityId,$(this).parents(".item").attr("data-category"));
+							_method._wxScan(_localParam.userId,_resData[$(this).parents(".item").index()].privateKey,_localParam.cityId,$(this).parents(".item").attr("data-category"));
 						}
 					}else{
-						_method._wxScan(_localParam.userId,_localParam.sign,_localParam.cityId,$(this).parents(".lesson-link").attr("data-category"));
+						_method._wxScan(_localParam.userId,_BYKres[$(this).parents(".lesson-link").index()].privateKey,_localParam.cityId,$(this).parents(".lesson-link").attr("data-category"));
 					}
 				})
 			},
@@ -233,6 +271,11 @@
 						_method.SS._set("tempOrderData",_resData[$(this).parents(".item").index()]);
 						setTimeout("window.location.href = \"order_detail.html\"",100)
 					}
+				})
+			},
+			cancelBtn: function(){
+				$("#listOld").on("click",".cancel-btn", function(){
+					_cancelAppointment._query($(this).parents(".lesson-link").attr("data-id"));
 				})
 			}
 		}

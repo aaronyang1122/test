@@ -101,6 +101,19 @@
 						paramMap.lat = res.data.shop.lat;
 						// 渲染页面
 						$(".wrap").prepend(Handlebars.templates.detail(res.data));
+						//slide init
+						$('.slide').swipeSlide({
+							autoSwipe: true,
+							continuousScroll: true,
+							lazyLoad: true,
+							transitionType: 'cubic-bezier(0.22, 0.69, 0.72, 0.88)',
+							firstCallback: function(i, sum, me) {
+								me.find('.dot').children().first().addClass('cur');
+							},
+							callback: function(i, sum, me) {
+								me.find('.dot').children().eq(i).addClass('cur').siblings().removeClass('cur');
+							}
+						});
 						// 写入页面title
 						_method.reloadTitle(res.data.name);
 						// 删除loading
@@ -134,21 +147,6 @@
 							}
 							
 						}
-						
-						//slide init
-						$('.slide').swipeSlide({
-							autoSwipe: true,
-							continuousScroll: true,
-							lazyLoad: true,
-							transitionType: 'cubic-bezier(0.22, 0.69, 0.72, 0.88)',
-							firstCallback: function(i, sum, me) {
-								me.find('.dot').children().first().addClass('cur');
-							},
-							callback: function(i, sum, me) {
-								me.find('.dot').children().eq(i).addClass('cur').siblings().removeClass('cur');
-							}
-						});
-						
 						// 生成日历
 						$("#selecterDate").datepicker({
 							isShow: true,
