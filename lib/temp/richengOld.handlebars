@@ -4,14 +4,14 @@
 	</div>				
 	{{else}}
 	{{#appointments}}
-  <div class="lesson-link {{lessonClassName sku.categoryId}} reservation-list {{statusClassName this}}" data-shopId = "{{sku.shop.id}}" data-address= "{{sku.shop.address}}" data-status="{{status}}" data-category="{{category}}" data-id="{{id}}">
+  <div class="lesson-link {{lessonClassName sku.categoryId}} reservation-list {{statusClassName this}}" data-shopId = "{{sku.shop.id}}" data-address= "{{sku.shop.address}}" data-status="{{status}}" data-category="{{category}}">
 		<div class="lesson-pic">
 			<span></span>
 		</div>
 		<div class="lesson-content">
 			<span class="name">{{sku.name}}</span>
 			<span class="shop-name">{{sku.shop.name}}</span>
-			<span class="start-time">{{#dateChuZhi this}}{{cutDate date}} {{showWeeks date}} {{sku.from}}{{/dateChuZhi}}</span>
+			<span class="start-time">{{#dateChuZhi this}}{{date}} {{startTime}}{{/dateChuZhi}}</span>
 		</div>
 		<div class="lesson-status">
 			<span>{{showSecurityCode this}}</span>

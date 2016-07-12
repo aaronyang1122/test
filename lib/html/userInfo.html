@@ -59,29 +59,15 @@
 				if(_localParam.user){
 					// 初始化用户性别
 					
-					if(_localParam.user.headPic){
-						$(".photo").html("<img src=\"" + _localParam.user.headPic + "\" />");
+					if(_localParam.user.sex == 1){
+						$(".selectSex").find("option[value='1']").attr("selected",true);
+						$(".photo").html("<img src=\"../img/pic-boy.png\" />");
+					}else if(_localParam.user.sex == 2){
+						$(".selectSex").find("option[value='2']").attr("selected",true);
+						$(".photo").html("<img src=\"../img/pic-girl.png\" />");
 					}else{
-						if(_localParam.user.sex == 1){
-							$(".selectSex").find("option[value='1']").attr("selected",true);
-							$(".photo").html("<img src=\"../img/pic-boy.png\" />");
-						}else if(_localParam.user.sex == 2){
-							$(".selectSex").find("option[value='2']").attr("selected",true);
-							$(".photo").html("<img src=\"../img/pic-girl.png\" />");
-						}else{
-							$(".selectSex").find("option[value='1']").attr("selected",true);
-							$(".photo").html("<img src=\"../img/pic-boy.png\" />");
-						}
-						
-						$(".selectSex").on("change",function(){
-							var _currentValue = $(this).find("option:selected").attr("value");
-							if(_currentValue == 1){
-								$(".photo").html("<img src=\"../img/pic-boy.png\" />")
-							}else if(_currentValue == 2){
-								$(".photo").html("<img src=\"../img/pic-girl.png\" />")
-							}
-						})
-						
+						$(".selectSex").find("option[value='1']").attr("selected",true);
+						$(".photo").html("<img src=\"../img/pic-boy.png\" />");
 					}
 					
 					// 初始化昵称
@@ -97,6 +83,15 @@
 						$("#birthday").val(_birthdayMonth);
 					}
 				}
+				
+				$(".selectSex").on("change",function(){
+					var _currentValue = $(this).find("option:selected").attr("value");
+					if(_currentValue == 1){
+						$(".photo").html("<img src=\"../img/pic-boy.png\" />")
+					}else if(_currentValue == 2){
+						$(".photo").html("<img src=\"../img/pic-girl.png\" />")
+					}
+				})
 				
 				$("#birthday").on("change",function(){
 					$(this).attr("data-birthday",$(this).val()+"-01");

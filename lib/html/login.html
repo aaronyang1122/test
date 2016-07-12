@@ -151,7 +151,7 @@
 							res.text(this.currentTime+"s");
 							this.currentTime--;
 						}
-						setTimeout(function() {
+						_timer = setTimeout(function() {
 							_this.action(res);
 						}, 1000);
 					}

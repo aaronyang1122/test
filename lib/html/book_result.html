@@ -52,7 +52,7 @@
     </p>
 </div>
 <script>
-		var _localParam = _method.SS._get("queryParams"); // 本地变量_localParam，所有请求参数均从此调用
+		var _localParam = {}; // 本地变量_localParam，所有请求参数均从此调用
 		var appoint = _method.SS._get("appoint");
 		$("#_pay").text(appoint.order.amount);
 		$("#_orderId").text(appoint.order.serial);
@@ -81,7 +81,6 @@
 			}
 		});
 		var skuCatData = _method.SS._get("skuCatData");
-		var appointUserSign = _method.SS._get("appointUserSign");
 		if(skuCatData.isMerchantAlwaysOK == 1){
 			$("#_toTime").text(appoint.toTime.substring(0, 10));
 			$("#no-book").show();
@@ -106,8 +105,7 @@
 				      })
 				    });
     				}
-			    alert(_localParam.userId+" "+appointUserSign+" "+_localParam.cityId+" "+2);
-			    _method._wxScan(_localParam.userId,appointUserSign,_localParam.cityId,2);
+			    _method._wxScan(_localParam.userId,_localParam.sign,_localParam.cityId,2);
 			});
 		} else {
 			$("#_orderTime").text(appoint.date.substring(0, 10) + " " + appoint.skuTime.from);
